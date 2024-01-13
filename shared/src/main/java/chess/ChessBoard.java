@@ -46,4 +46,25 @@ public class ChessBoard {
     public void resetBoard() {
         throw new RuntimeException("Not implemented");
     }
+
+
+    //i made this, returns true is the position is open
+    public boolean isValid(ChessPosition pos)
+    {
+        if (pos.getRow() < 0 || pos.getRow() >= 8)
+        {
+            return false;
+        }
+        if (pos.getColumn() < 0 || pos.getColumn() >= 8)
+        {
+            return false;
+        }
+        //if position is empty, it returns null
+        if (squares[pos.getRow()][pos.getColumn()] == null)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
 }
