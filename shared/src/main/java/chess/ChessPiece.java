@@ -57,7 +57,7 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         HashSet<ChessMove> set = new HashSet<>();
-        ChessPosition[] testThese = new ChessPosition[0];
+        ChessPosition[] testThese = new ChessPosition[64];
 
 
         if(type == PieceType.KING)
@@ -67,7 +67,7 @@ public class ChessPiece {
             //return set
 
 
-            ChessPosition[] testTheseKing = new ChessPosition[0];
+            ChessPosition[] testTheseKing = new ChessPosition[9];
 
             //first top left, then top middle, then top right
 
@@ -138,20 +138,34 @@ public class ChessPiece {
             //if it is add it to set
 
             //I make 4 for loops to test each possible direction
+
             for (int i = 0; i < 7; ++i)
             {
+                //top left
+                //ChessPosition[] testThese = new ChessPosition[64];
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn()+i);
+                testThese[i] = testPosBishop;
 
             }
             for (int i = 0; i < 7; ++i)
             {
+                //top right
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn()-i);
+                testThese[i+8] = testPosBishop;
 
             }
             for (int i = 0; i < 7; ++i)
             {
+                // bottom right
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()+i);
+                testThese[i+16] = testPosBishop;
 
             }
             for (int i = 0; i < 7; ++i)
             {
+                //bottom left
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()-i);
+                testThese[i+24] = testPosBishop;
 
             }
 

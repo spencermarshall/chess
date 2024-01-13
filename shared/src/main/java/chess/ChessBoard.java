@@ -51,6 +51,10 @@ public class ChessBoard {
     //i made this, returns true is the position is open
     public boolean isValid(ChessPosition pos)
     {
+        if (pos == null)
+        {
+            return false;
+        }
         if (pos.getRow() < 0 || pos.getRow() >= 8)
         {
             return false;

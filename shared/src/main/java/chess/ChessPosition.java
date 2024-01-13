@@ -14,9 +14,40 @@ public class ChessPosition {
     // I made this bool to make life easier
     boolean isValidPos;
     public ChessPosition(int row, int col) {
-        this.row = row;
-        this.col = col;
-        this.isValidPos = true;
+        if (row < 0)
+        {
+            //all this 6 and excess stuff might not be necessary
+            this.row = 6;
+            this.col = 6;
+            isValidPos = false;
+            return;
+        }
+        else if (col < 0)
+        {
+            this.col = 6;
+            this.row = 6;
+            isValidPos = false;
+            return;
+        }
+        else if (col > 7)
+        {
+            this.col = 6;
+            this.row = 6;
+            isValidPos = false;
+            return;
+        }
+        else if (row > 7)
+        {
+            this.row = 6;
+            this.col = 6;
+            isValidPos = false;
+            return;
+        }
+            this.row = row;
+            this.col = col;
+            this.isValidPos = true;
+
+
     }
 
     /**
@@ -29,7 +60,7 @@ public class ChessPosition {
     //then returned 0 so it wouldnt give an error
     //but in ChessMove() if it's not valid it won't add it
     public int getRow() {
-        if (row < 0)
+        if (row < 0 || row > 7)
         {
             isValidPos = false;
             return 0;
@@ -48,7 +79,7 @@ public class ChessPosition {
     //then returned 0 so it wouldnt give an error
     //but in ChessMove() if it's not valid it won't add it
     public int getColumn() {
-        if (col < 0)
+        if (col < 0 || col > 7)
         {
             isValidPos = false;
             return 0;
