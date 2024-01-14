@@ -80,33 +80,9 @@ public class ChessPiece {
             testThese[4] = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+1);
 
             //lastly, bottom left, bottom straight, bottom right
-            testThese[5] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
-            testThese[6] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
-            testThese[7] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+1);
-            
-
-
-
-
-
-
-
-
-
-            /*if (board.getPiece(check) == null)
-                {
-                    ChessMove potMove = new ChessMove(myPosition, newPos, null);
-                    set.add(potMove);
-
-                }
-
-
-                // then 2 next to
-
-                // then 3 below
-                ChessPosition endPos = new ChessPosition(1,2);
-               // ChessMove possibleMove = new ChessMove(myPosition,/* end position *///,null);
-                //set.add(possibleMove);
+            testThese[5] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
+            testThese[6] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
+            testThese[7] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+1);
 
         }
         else if(type == PieceType.QUEEN)
@@ -115,12 +91,103 @@ public class ChessPiece {
             //everywhere she can move add it set
             //return set
 
+            // maybe copy and paste code from rook and bishop and see if it'll work lol
+            //edit: it worked
+            //first rook
+            for (int i = 0; i < 8; ++i)
+            {
+                //row stays same, col moves down, piece looks to left
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-i);
+                testThese[i] = testPosQueen;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                //row moves up, column stays same, piece looks up
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn());
+                testThese[i+7] = testPosQueen;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                // row stays same, column looks to right, piece looks right
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+i);
+                testThese[i+14] = testPosQueen;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                // row moves down, col stays same, piece looks down
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn());
+                testThese[i+21] = testPosQueen;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                //top left
+                //ChessPosition[] testThese = new ChessPosition[64];
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn()+i);
+                testThese[i+28] = testPosQueen;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                //top right
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn()-i);
+                testThese[i+35] = testPosQueen;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                // bottom right
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()+i);
+                testThese[i+42] = testPosQueen;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                //bottom left
+                ChessPosition testPosQueen = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()-i);
+                testThese[i+49] = testPosQueen;
+
+            }
         }
         else if(type == PieceType.ROOK)
         {
             //look at position and board
             //everywhere he can move add it set
             //return set
+            /// similar to bishop he needs to look in all 4 directions
+
+
+            for (int i = 0; i < 8; ++i)
+            {
+                //row stays same, col moves down, piece looks to left
+                ChessPosition testPosRook = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-i);
+                testThese[i] = testPosRook;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                //row moves up, column stays same, piece looks up
+                ChessPosition testPosRook = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn());
+                testThese[i+7] = testPosRook;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                // row stays same, column looks to right, piece looks right
+                ChessPosition testPosRook = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+i);
+                testThese[i+14] = testPosRook;
+
+            }
+            for (int i = 0; i < 8; ++i)
+            {
+                // row moves down, col stays same, piece looks down
+                ChessPosition testPosRook = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn());
+                testThese[i+21] = testPosRook;
+
+            }
 
         }
         else if(type == PieceType.KNIGHT)
@@ -128,6 +195,7 @@ public class ChessPiece {
             //look at position and board
             //everywhere he can move add it set
             //return set
+            // hard code 8 positions, sorry bro
 
         }
         else if(type == PieceType.BISHOP)
@@ -139,7 +207,7 @@ public class ChessPiece {
 
             //I make 4 for loops to test each possible direction
 
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 8; ++i)
             {
                 //top left
                 //ChessPosition[] testThese = new ChessPosition[64];
@@ -147,25 +215,25 @@ public class ChessPiece {
                 testThese[i] = testPosBishop;
 
             }
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 8; ++i)
             {
                 //top right
                 ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn()-i);
-                testThese[i+8] = testPosBishop;
+                testThese[i+7] = testPosBishop;
 
             }
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 8; ++i)
             {
                 // bottom right
                 ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()+i);
-                testThese[i+16] = testPosBishop;
+                testThese[i+14] = testPosBishop;
 
             }
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 8; ++i)
             {
                 //bottom left
                 ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()-i);
-                testThese[i+24] = testPosBishop;
+                testThese[i+21] = testPosBishop;
 
             }
 
@@ -180,6 +248,8 @@ public class ChessPiece {
             //look at position and board
             //everywhere he can move add it set
             //return set
+            //how do I know what color/direction he goes?
+            //do i implement advancement now?
 
         }
         else {
