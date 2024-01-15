@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -35,13 +36,16 @@ public class ChessPiece {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that = (ChessPiece) o;
+        return type == that.type && color == that.color;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public int hashCode() {
+        return Objects.hash(type, color);
     }
 
     /**
@@ -207,6 +211,28 @@ public class ChessPiece {
             //return set
             // hard code 8 positions, sorry bro
 
+
+            // create 8 positions on where the knight could potentially end up, test them
+            //clock wise starting at noon, loop at bottom will check if out of bounds
+            ChessPosition knightPos0 = new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()+1);
+            ChessPosition knightPos1 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+2);
+            ChessPosition knightPos2 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+2);
+            ChessPosition knightPos3 = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()+1);
+            ChessPosition knightPos4 = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()-1);
+            ChessPosition knightPos5 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-2);
+            ChessPosition knightPos6 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-2);
+            ChessPosition knightPos7 = new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()-1);
+            testThese[0] = knightPos0;
+            testThese[1] = knightPos1;
+            testThese[2] = knightPos2;
+            testThese[3] = knightPos3;
+            testThese[4] = knightPos4;
+            testThese[5] = knightPos5;
+            testThese[6] = knightPos6;
+            testThese[7] = knightPos7;
+            //these add the 8 pos to the testThese
+
+
         }
         else if(type == PieceType.BISHOP)
         {
@@ -253,7 +279,7 @@ public class ChessPiece {
 
 
         }
-        else if(type == PieceType.PAWN)
+        else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.WHITE)
         {
             //look at position and board
             //everywhere he can move add it set
@@ -261,7 +287,11 @@ public class ChessPiece {
             //how do I know what color/direction he goes?
             //do i implement advancement now?
 
+            //two cases, 1 for white, 1 for black
+
+
         }
+        else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK)
         else {
             int error = 3;
         }
