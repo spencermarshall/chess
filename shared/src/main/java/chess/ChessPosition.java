@@ -12,6 +12,7 @@ public class ChessPosition {
 
     private final int row;
     private final int col;
+    boolean hasEnemy = false;
 
     // I made this bool to make life easier
     boolean isValidPos;
@@ -69,6 +70,11 @@ public class ChessPosition {
         }
         return row;
     }
+    public boolean hasEnemy()
+    {
+        return hasEnemy;
+    }
+
 
     /**
      * @return which column this position is in

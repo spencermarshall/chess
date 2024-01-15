@@ -85,18 +85,36 @@ public class ChessPiece {
 
             //first top left, then top middle, then top right
 
-            testThese[0] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
-            testThese[1] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
-            testThese[2] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+1);
+            testTheseKing[0] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
+            testTheseKing[1] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
+            testTheseKing[2] = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+1);
 
             //then immediate left, then immediate right
-            testThese[3] = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-1);
-            testThese[4] = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+1);
+            testTheseKing[3] = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-1);
+            testTheseKing[4] = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+1);
 
             //lastly, bottom left, bottom straight, bottom right
-            testThese[5] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
-            testThese[6] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
-            testThese[7] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+1);
+            testTheseKing[5] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
+            testTheseKing[6] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
+            testTheseKing[7] = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+1);
+            for (int i = 0; i < 8; ++i)
+            {
+                ChessPosition kingPos = testTheseKing[i];
+                boolean isOpen;
+                boolean isEnemy = false;
+                isOpen = kingPos.isValid() && board.isValid(kingPos);
+
+                if ((board.getPiece(kingPos) != null) && board.getPiece(kingPos).color != this.color) {
+                    isEnemy = true;
+                    kingPos.hasEnemy = true;
+                }
+                if (isOpen || isEnemy) {
+                    testThese[i] = kingPos;
+                }
+                if (isEnemy) {
+                    break;
+                }
+            }
 
         }
         else if(type == PieceType.QUEEN)
@@ -234,8 +252,7 @@ public class ChessPiece {
 
 
         }
-        else if(type == PieceType.BISHOP)
-        {
+        else if(type == PieceType.BISHOP) {
             //make 4 array's of 7 positions each along the diagonal
             //because it could be anywhere
             //test if the pos is valid
@@ -243,42 +260,106 @@ public class ChessPiece {
 
             //I make 4 for loops to test each possible direction
 
-            for (int i = 0; i < 8; ++i)
-            {
+            for (int i = 1; i < 8; ++i) {
                 //top left
-                //ChessPosition[] testThese = new ChessPosition[64];
-                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn()+i);
-                testThese[i] = testPosBishop;
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() + i);
+                boolean isOpen;
+                boolean isEnemy = false;
+                isOpen = testPosBishop.isValid() && board.isValid(testPosBishop);
+
+                if ((board.getPiece(testPosBishop) != null) && board.getPiece(testPosBishop).color != this.color) {
+                    isEnemy = true;
+                    testPosBishop.hasEnemy = true;
+                }
+                if (isOpen || isEnemy) {
+                    testThese[i] = testPosBishop;
+                }
+                if (isEnemy) {
+                    break;
+                }
+                if (!isOpen)
+                {
+                    break;
+                }
+
+
 
             }
-            for (int i = 0; i < 8; ++i)
-            {
+            for (int i = 1; i < 8; ++i) {
                 //top right
-                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()+i, myPosition.getColumn()-i);
-                testThese[i+7] = testPosBishop;
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() - i);
+
+                boolean isOpen;
+                boolean isEnemy = false;
+                isOpen = testPosBishop.isValid() && board.isValid(testPosBishop);
+                if ((board.getPiece(testPosBishop) != null) && board.getPiece(testPosBishop).color != this.color) {
+                    isEnemy = true;
+                    testPosBishop.hasEnemy = true;
+                }
+                if (isOpen || isEnemy) {
+                    testThese[i + 7] = testPosBishop;
+                }
+                if (isEnemy) {
+                    break;
+                }
+                if (!isOpen)
+                {
+                    break;
+                }
 
             }
-            for (int i = 0; i < 8; ++i)
-            {
+            for (int i = 1; i < 8; ++i) {
                 // bottom right
-                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()+i);
-                testThese[i+14] = testPosBishop;
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow() - i, myPosition.getColumn() + i);
+                boolean isOpen;
+                boolean isEnemy = false;
+                isOpen = testPosBishop.isValid() && board.isValid(testPosBishop);
+                if ((board.getPiece(testPosBishop) != null) && board.getPiece(testPosBishop).color != this.color) {
+                    isEnemy = true;
+                    testPosBishop.hasEnemy = true;
+                }
+                if (isOpen || isEnemy) {
+                    testThese[i + 14] = testPosBishop;
+                }
+                if (isEnemy) {
+                    break;
+                }
+                if (!isOpen)
+                {
+                    break;
+                }
 
             }
-            for (int i = 0; i < 8; ++i)
-            {
+            for (int i = 1; i < 8; ++i) {
                 //bottom left
-                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow()-i, myPosition.getColumn()-i);
-                testThese[i+21] = testPosBishop;
+                ChessPosition testPosBishop = new ChessPosition(myPosition.getRow() - i, myPosition.getColumn() - i);
+                boolean isOpen;
+                boolean isEnemy = false;
+                isOpen = testPosBishop.isValid() && board.isValid(testPosBishop);
+                if ((board.getPiece(testPosBishop) != null) && board.getPiece(testPosBishop).color != this.color) {
+                    isEnemy = true;
+                    testPosBishop.hasEnemy = true;
+                }
+                if (isOpen || isEnemy) {
+                    testThese[i + 21] = testPosBishop;
+                }
+                if (isEnemy) {
+                    break;
+                }
+                if (!isOpen)
+                {
+                    break;
+                }
 
             }
-
-
-
-
-
-
         }
+
+
+
+
+
+
+
         else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.WHITE)
         {
             //look at position and board
@@ -287,11 +368,43 @@ public class ChessPiece {
             //how do I know what color/direction he goes?
             //do i implement advancement now?
 
-            //two cases, 1 for white, 1 for black
+            //white starts on bottom... (always?)
+            int counter = 0;
+            //counter counts num of times we add something to testThese
 
+
+            ChessPosition myPawnPos0 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
+            testThese[counter] = myPawnPos0;
+            counter++;
+
+            // if pawn's first move then his row is always on 2, bidirectional
+            if (myPosition.getColumn() == 2)
+            {
+                ChessPosition myPawnPos1 = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn());
+                testThese[counter] = myPawnPos1;
+                counter++;
+            }
 
         }
         else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK)
+        {
+            //black starts on bottom... (always?)
+            int counter = 0;
+            //counter counts num of times we add something to testThese
+
+
+            ChessPosition myPawnPos0 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
+            testThese[counter] = myPawnPos0;
+            counter++;
+
+            // if pawn's first move then his row is always on 2, bidirectional
+            if (myPosition.getColumn() == 2)
+            {
+                ChessPosition myPawnPos1 = new ChessPosition(myPosition.getRow()-2, myPosition.getColumn());
+                testThese[counter] = myPawnPos1;
+                counter++;
+            }
+        }
         else {
             int error = 3;
         }
@@ -300,9 +413,15 @@ public class ChessPiece {
         //we add the array of testThese pos to the set
         for (int i = 0; i < testThese.length; ++i)
         {
-            if (board.isValid(testThese[i]) && testThese[i].isValid())
-            {
-                set.add(new ChessMove(myPosition,testThese[i],null));
+            if (testThese[i] != null) {
+
+                boolean isEnemy = testThese[i].hasEnemy();
+                //checks if enemy then auto add
+                // if ((board.getPiece(testThese[i]).type != null) && board.getPiece(testThese[i]).color != this.color)
+
+                if ((isEnemy) || board.isValid(testThese[i]) && testThese[i].isValid()) {
+                    set.add(new ChessMove(myPosition, testThese[i], null));
+                }
             }
         }
 
