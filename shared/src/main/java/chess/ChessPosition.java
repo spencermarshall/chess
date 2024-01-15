@@ -90,4 +90,20 @@ public class ChessPosition {
     {
         return isValidPos;
     }
+    public String toString()
+    {
+        String row = Integer.toString(this.row);
+        String col = Integer.toString(this.col);
+        return row + " " + col;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

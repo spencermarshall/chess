@@ -34,6 +34,16 @@ public class ChessPiece {
         PAWN
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
     /**
      * @return Which team this chess piece belongs to
      */
