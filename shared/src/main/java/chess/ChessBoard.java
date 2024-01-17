@@ -57,11 +57,11 @@ public class ChessBoard {
         {
             return false;
         }
-        if (pos.getRow() < 0 || pos.getRow() >= 8)
+        if (pos.getRow() < 0 || pos.getRow() > 8)
         {
             return false;
         }
-        if (pos.getColumn() < 0 || pos.getColumn() >= 8)
+        if (pos.getColumn() < 0 || pos.getColumn() > 8)
         {
             return false;
         }

@@ -63,12 +63,13 @@ public class ChessPosition {
     //then returned 0 so it wouldnt give an error
     //but in ChessMove() if it's not valid it won't add it
     public int getRow() {
-        if (row < 0 || row >= 8)
+        if (row < 0 || row > 9)
         {
             //isValidPos = false;
             return 0;
         }
         return row;
+        //returns the +1 because chess has 1-8 grid but our array starts at 0-7
     }
     public boolean hasEnemy()
     {
@@ -87,12 +88,13 @@ public class ChessPosition {
     //then returned 0 so it wouldnt give an error
     //but in ChessMove() if it's not valid it won't add it
     public int getColumn() {
-        if (col < 0 || col >= 8)
+        if (col < 0 || col > 9)
         {
             //isValidPos = false;
             return 0;
         }
         return col;
+        //returns the +1 because chess has 1-8 grid but our array starts at 0-7
     }
     public boolean isValid()
     {
