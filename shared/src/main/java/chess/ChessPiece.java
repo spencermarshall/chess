@@ -622,35 +622,88 @@ public class ChessPiece {
             //counter counts num of times we add something to testThese
 
 
+            //move forward 1
             ChessPosition myPawnPos0 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
-            testThese[counter] = myPawnPos0;
-            counter++;
-
-            // if pawn's first move then his row is always on 2, bidirectional
-            if (myPosition.getRow() == 2)
+            //can't move 1 if enemy is there
+            if (board.isValid(myPawnPos0))
             {
-                ChessPosition myPawnPos1 = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn());
-                testThese[counter] = myPawnPos1;
+                testThese[counter] = myPawnPos0;
                 counter++;
             }
 
+
+            // if pawn's first move then his row is always on 2, bidirectional statement of fact
+            if (myPosition.getRow() == 2)
+            {
+                ChessPosition myPawnPos1 = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn());
+                //can't move there if enemy tho
+
+                if (board.isValid(myPawnPos1))
+                {
+                    testThese[counter] = myPawnPos1;
+                    counter++;
+                }
+            }
+
+            //now needs to check the two diagonal
+            ChessPosition myPawnPos2 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
+            ChessPosition myPawnPos3 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+1);
+            if (board.getPiece(myPawnPos2) != null && board.getPiece(myPawnPos2).color == ChessGame.TeamColor.BLACK)
+            {
+                myPawnPos2.hasEnemy = true;
+                testThese[counter] = myPawnPos2;
+                counter++;
+            }
+            if (board.getPiece(myPawnPos3) != null && board.getPiece(myPawnPos3).color == ChessGame.TeamColor.BLACK)
+            {
+                myPawnPos3.hasEnemy = true;
+                testThese[counter] = myPawnPos2;
+                counter++;
+            }
         }
         else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK)
         {
-            //black starts on bottom... (always?)
+            //black starts on top... (always?)
             int counter = 0;
             //counter counts num of times we add something to testThese
 
 
+            //move forward 1
             ChessPosition myPawnPos0 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
-            testThese[counter] = myPawnPos0;
-            counter++;
+            //can't move 1 if enemy is there
+            if (board.isValid(myPawnPos0))
+            {
+                testThese[counter] = myPawnPos0;
+                counter++;
+            }
 
-            // if pawn's first move then his row is always on 2, bidirectional
-            if (myPosition.getColumn() == 2)
+
+            // if pawn's first move then his row is always on 2, bidirectional statement of fact
+            if (myPosition.getRow() == 7)
             {
                 ChessPosition myPawnPos1 = new ChessPosition(myPosition.getRow()-2, myPosition.getColumn());
-                testThese[counter] = myPawnPos1;
+                //can't move there if enemy tho
+
+                if (board.isValid(myPawnPos1))
+                {
+                    testThese[counter] = myPawnPos1;
+                    counter++;
+                }
+            }
+
+            //now needs to check the two diagonal
+            ChessPosition myPawnPos2 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
+            ChessPosition myPawnPos3 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+1);
+            if (board.getPiece(myPawnPos2) != null && board.getPiece(myPawnPos2).color == ChessGame.TeamColor.WHITE)
+            {
+                myPawnPos2.hasEnemy = true;
+                testThese[counter] = myPawnPos2;
+                counter++;
+            }
+            if (board.getPiece(myPawnPos3) != null && board.getPiece(myPawnPos3).color == ChessGame.TeamColor.WHITE)
+            {
+                myPawnPos3.hasEnemy = true;
+                testThese[counter] = myPawnPos2;
                 counter++;
             }
         }
