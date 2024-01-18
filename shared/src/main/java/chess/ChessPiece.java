@@ -625,7 +625,7 @@ public class ChessPiece {
             //move forward 1
             ChessPosition myPawnPos0 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
             //can't move 1 if enemy is there
-            if (board.isValid(myPawnPos0))
+            if (myPosition.getRow() != 7 && board.isValid(myPawnPos0))
             {
                 testThese[counter] = myPawnPos0;
                 counter++;
@@ -637,13 +637,14 @@ public class ChessPiece {
             {
                 ChessPosition myPawnPos1 = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn());
                 //can't move there if enemy tho
-
-                if (board.isValid(myPawnPos1))
+                ChessPosition blockPos = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
+                if (board.isValid(myPawnPos1) && board.isValid(blockPos))
                 {
                     testThese[counter] = myPawnPos1;
                     counter++;
                 }
             }
+
 
             //now needs to check the two diagonal
             ChessPosition myPawnPos2 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
@@ -657,8 +658,25 @@ public class ChessPiece {
             if (board.getPiece(myPawnPos3) != null && board.getPiece(myPawnPos3).color == ChessGame.TeamColor.BLACK)
             {
                 myPawnPos3.hasEnemy = true;
-                testThese[counter] = myPawnPos2;
+                testThese[counter] = myPawnPos3;
                 counter++;
+            }
+            //4 possible positions for advancement to get to other side
+            if (myPosition.getRow() == 7)
+            {
+                //create the 4 posible pieces then carry it thru the poisition to myPawnAdv0
+
+                ChessPosition myPawnAdv0 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn(), PieceType.QUEEN );
+                ChessPosition myPawnAdv1 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn(),PieceType.ROOK );
+                ChessPosition myPawnAdv2 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn(),PieceType.BISHOP);
+                ChessPosition myPawnAdv3 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn(),PieceType.KNIGHT );
+                testThese[counter] = myPawnAdv0;
+                testThese[counter+1] = myPawnAdv1;
+                testThese[counter+2] = myPawnAdv2;
+                testThese[counter+3] = myPawnAdv3;
+                counter += 4;
+
+
             }
         }
         else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK)
@@ -671,7 +689,7 @@ public class ChessPiece {
             //move forward 1
             ChessPosition myPawnPos0 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
             //can't move 1 if enemy is there
-            if (board.isValid(myPawnPos0))
+            if (myPosition.getRow() != 2 && board.isValid(myPawnPos0))
             {
                 testThese[counter] = myPawnPos0;
                 counter++;
@@ -683,8 +701,9 @@ public class ChessPiece {
             {
                 ChessPosition myPawnPos1 = new ChessPosition(myPosition.getRow()-2, myPosition.getColumn());
                 //can't move there if enemy tho
+                ChessPosition blockPos = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
 
-                if (board.isValid(myPawnPos1))
+                if (board.isValid(myPawnPos1) && board.isValid(blockPos))
                 {
                     testThese[counter] = myPawnPos1;
                     counter++;
@@ -703,8 +722,24 @@ public class ChessPiece {
             if (board.getPiece(myPawnPos3) != null && board.getPiece(myPawnPos3).color == ChessGame.TeamColor.WHITE)
             {
                 myPawnPos3.hasEnemy = true;
-                testThese[counter] = myPawnPos2;
+                testThese[counter] = myPawnPos3;
                 counter++;
+            }
+            if (myPosition.getRow() == 2)
+            {
+                //create the 4 posible pieces then carry it thru the poisition to myPawnAdv0
+
+                ChessPosition myPawnAdv0 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn(), PieceType.QUEEN );
+                ChessPosition myPawnAdv1 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn(),PieceType.ROOK );
+                ChessPosition myPawnAdv2 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn(),PieceType.BISHOP);
+                ChessPosition myPawnAdv3 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn(),PieceType.KNIGHT );
+                testThese[counter] = myPawnAdv0;
+                testThese[counter+1] = myPawnAdv1;
+                testThese[counter+2] = myPawnAdv2;
+                testThese[counter+3] = myPawnAdv3;
+                counter += 4;
+
+
             }
         }
         else {
@@ -723,7 +758,11 @@ public class ChessPiece {
                 //checks if enemy then auto add
                 // if ((board.getPiece(testThese[i]).type != null) && board.getPiece(testThese[i]).color != this.color)
 
-                if ((isEnemy) || board.isValid(testThese[i]) && testThese[i].isValid()) {
+                if (testThese[i].getPiece() == PieceType.ROOK ||testThese[i].getPiece() == PieceType.QUEEN || testThese[i].getPiece() == PieceType.BISHOP || testThese[i].getPiece() == PieceType.KNIGHT)
+                {
+                    set.add(new ChessMove(myPosition,testThese[i], testThese[i].getPiece()));
+                }
+                else if ((isEnemy) || board.isValid(testThese[i]) && testThese[i].isValid()) {
                     set.add(new ChessMove(myPosition, testThese[i], null));
                 }
             }
