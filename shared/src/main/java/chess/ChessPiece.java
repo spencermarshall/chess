@@ -789,7 +789,7 @@ public class ChessPiece {
             }
             if (myPosition.getRow() == 2)
             {
-                //create the 4 posible pieces then carry it thru the poisition to myPawnAdv0
+                //create the 4 posible pieces then carry it thru  the poisition to myPawnAdv0
 
                 ChessPosition myPawnAdv0 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn(), PieceType.QUEEN );
                 ChessPosition myPawnAdv1 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn(),PieceType.ROOK );
