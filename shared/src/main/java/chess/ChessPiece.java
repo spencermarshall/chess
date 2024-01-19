@@ -649,17 +649,47 @@ public class ChessPiece {
             //now needs to check the two diagonal
             ChessPosition myPawnPos2 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
             ChessPosition myPawnPos3 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+1);
+
             if (board.getPiece(myPawnPos2) != null && board.getPiece(myPawnPos2).color == ChessGame.TeamColor.BLACK)
             {
                 myPawnPos2.hasEnemy = true;
                 testThese[counter] = myPawnPos2;
                 counter++;
+                if (myPawnPos2.getRow() == 8)
+                {
+                    ChessPosition newPos0 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.QUEEN);
+                    ChessPosition newPos1 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.BISHOP);
+                    ChessPosition newPos2 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.KNIGHT);
+                    ChessPosition newPos3 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.ROOK);
+
+                    testThese[counter] = newPos0;
+                    testThese[counter+1] = newPos1;
+                    testThese[counter+2] = newPos2;
+                    testThese[counter+3] = newPos3;
+                    counter += 4;
+                }
             }
             if (board.getPiece(myPawnPos3) != null && board.getPiece(myPawnPos3).color == ChessGame.TeamColor.BLACK)
             {
                 myPawnPos3.hasEnemy = true;
                 testThese[counter] = myPawnPos3;
                 counter++;
+                //this means enemy capture in last row
+                if (myPawnPos3.getRow() == 8)
+                {
+
+                    ChessPosition newPos0 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.QUEEN);
+                    ChessPosition newPos1 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.BISHOP);
+                    ChessPosition newPos2 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.KNIGHT);
+                    ChessPosition newPos3 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.ROOK);
+
+                    testThese[counter] = newPos0;
+                    testThese[counter+1] = newPos1;
+                    testThese[counter+2] = newPos2;
+                    testThese[counter+3] = newPos3;
+                    counter += 4;
+                }
+
             }
             //4 possible positions for advancement to get to other side
             if (myPosition.getRow() == 7)
@@ -716,14 +746,46 @@ public class ChessPiece {
             if (board.getPiece(myPawnPos2) != null && board.getPiece(myPawnPos2).color == ChessGame.TeamColor.WHITE)
             {
                 myPawnPos2.hasEnemy = true;
-                testThese[counter] = myPawnPos2;
-                counter++;
+                if (myPawnPos2.getRow() == 1)
+                {
+                    ChessPosition newPos0 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.QUEEN);
+                    ChessPosition newPos1 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.BISHOP);
+                    ChessPosition newPos2 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.KNIGHT);
+                    ChessPosition newPos3 = new ChessPosition(myPawnPos2.getRow(), myPawnPos2.getColumn(), PieceType.ROOK);
+
+                    testThese[counter] = newPos0;
+                    testThese[counter+1] = newPos1;
+                    testThese[counter+2] = newPos2;
+                    testThese[counter+3] = newPos3;
+                    counter += 4;
+                }
+                else {
+                    testThese[counter] = myPawnPos2;
+                    counter++;
+                }
             }
             if (board.getPiece(myPawnPos3) != null && board.getPiece(myPawnPos3).color == ChessGame.TeamColor.WHITE)
             {
                 myPawnPos3.hasEnemy = true;
-                testThese[counter] = myPawnPos3;
-                counter++;
+                if (myPawnPos3.getRow() == 1)
+                {
+                    ChessPosition newPos0 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.QUEEN);
+                    ChessPosition newPos1 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.BISHOP);
+                    ChessPosition newPos2 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.KNIGHT);
+                    ChessPosition newPos3 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), PieceType.ROOK);
+
+                    testThese[counter] = newPos0;
+                    testThese[counter+1] = newPos1;
+                    testThese[counter+2] = newPos2;
+                    testThese[counter+3] = newPos3;
+                    counter += 4;
+                }
+                else
+                {
+                    testThese[counter] = myPawnPos3;
+                    counter++;
+                }
+
             }
             if (myPosition.getRow() == 2)
             {
