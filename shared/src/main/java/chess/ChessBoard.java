@@ -20,12 +20,14 @@ public class ChessBoard {
 
     public String toString()
     {
+
         String output = "";
         for (int r = 1; r < 9; ++r)
         {
             for (int c = 1; c < 9; ++c)
             {
-                output += this.squares[r][c].toString();
+                if (this.squares[r][c] != null)
+                    output += this.squares[r][c].toString();
             }
             output += "\n";
         }

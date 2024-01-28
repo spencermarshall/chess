@@ -875,6 +875,7 @@ public class ChessPiece {
         {
             return "k";
         }
-        return "?";
+        else
+            return "?";
     }
 }
