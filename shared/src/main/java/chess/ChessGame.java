@@ -157,7 +157,7 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         Collection<ChessMove> possibleMoves = validMoves(move.getStartPosition());
-        if (!possibleMoves.contains(move))
+        if (!possibleMoves.contains(move) || board.getPiece(move.getStartPosition()) == null)
         {
             throw new InvalidMoveException();
         }
@@ -276,7 +276,21 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        return true;
+        //find king see if his moves is 0
+        for (int r = 1; r < 9; ++r)
+        {
+            for (int c = 1; c < 9; ++c)
+            {
+                ChessPosition testPos = new ChessPosition(r,c);
+                if (board.getPiece(testPos)!= null && board.getPiece(testPos).getPieceType() == ChessPiece.PieceType.KING && board.getPiece(testPos).getTeamColor() == teamColor)
+                {
+                    //this is king
+                    Collection<ChessMove> kingMoves = validMoves(testPos);
+                    return kingMoves.isEmpty();
+                }
+            }
+        }
+        return false;
     }
 
     /**

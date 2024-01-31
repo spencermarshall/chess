@@ -814,7 +814,7 @@ public class ChessPiece {
         {
 
 
-            if (testThese[i] != null) {
+            if (testThese[i] != null && testThese[i].isValidPos) {
 
                 boolean isEnemy = testThese[i].hasEnemy();
                 //checks if enemy then auto add
