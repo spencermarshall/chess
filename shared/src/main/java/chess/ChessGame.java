@@ -1,9 +1,6 @@
 package chess;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -63,9 +60,10 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+
         //myPiece is piece we start with
-        int count = 0;
         ChessPiece myPiece = new ChessPiece(board.getPiece(startPosition).getTeamColor(),board.getPiece(startPosition).getPieceType());
+
         Collection<ChessMove> moves = new HashSet<>();
         moves = myPiece.pieceMoves(this.board,startPosition);
         // check for when king could be threatened
@@ -75,41 +73,80 @@ public class ChessGame {
         if (myPiece.getPieceType() != ChessPiece.PieceType.KING)
             return moves;
         //now we know it's king
+        //TODO need to check if moving a piece puts king in check, if it does then remove move
+        Collection<ChessMove> actualMoves = new HashSet<>();
+        ChessMove[] myMoves = moves.toArray(new ChessMove[0]);
+
         for (int r = 1; r < 9; ++r)
         {
             for (int c = 1; c < 9; ++c)
             {
-                ChessPosition testEnemyPos = new ChessPosition(r,c);
-                if (board.getPiece(testEnemyPos)!=null && board.getPiece(testEnemyPos).getTeamColor() != myPiece.getTeamColor())
+                ChessPosition testPos = new ChessPosition(r,c);
+                if (board.getPiece(testPos) != null && board.getPiece(testPos).getTeamColor() != myPiece.getTeamColor())
                 {
-                    //now we know it's enemy piece
-                    ChessPiece enemy = board.getPiece(testEnemyPos);
-                    Collection<ChessMove> possibleMoves = enemy.pieceMoves(board,testEnemyPos);
-                    //moves of enemy piece
-                    ChessMove[] posArray = possibleMoves.toArray(new ChessMove[0]);
-                    ChessMove[] enemyArray = moves.toArray(new ChessMove[0]);
-                    for (int runPos = 0; runPos < posArray.length; ++runPos)
-                    {
-                        for (int en = 0; en < enemyArray.length; ++en)
-                        {
-                            if (board.getPiece(testEnemyPos).getPieceType() == ChessPiece.PieceType.PAWN)
-                            {
-                                //IT CURRENTLY is looking at pawn moving forward
-                                //not accounting for if pawn can move diagnoally once he moves here
-                            }
-                            if (Objects.equals(posArray[runPos].end.toString(), enemyArray[en].end.toString()))
-                            {
-                                //ugh oh, we actually can't move there, remove from list
-                                moves.remove(enemyArray[en]);
+                    Collection<ChessMove> enemyMoves = board.getPiece(testPos).pieceMoves(board,testPos);
 
-                            }
-                        }
+                    if (board.getPiece(testPos).getPieceType() == ChessPiece.PieceType.PAWN && myPiece.getTeamColor() == TeamColor.WHITE)
+                    {
+                        //remove old pawn attack pos, enemy is black pawn
+                        ChessPosition endOldPawn = new ChessPosition(testPos.getRow()-1, testPos.getColumn());
+                        ChessMove oldPawn = new ChessMove(startPosition, endOldPawn, null);
+                        enemyMoves.remove(oldPawn);
+                        ChessPosition pawn1 = new ChessPosition(testPos.getRow()-1, testPos.getColumn()-1);
+                        ChessPosition pawn2 = new ChessPosition(testPos.getRow()-1, testPos.getColumn()+1);
+                        ChessMove pawnAttack1 = new ChessMove(startPosition, pawn1, null);
+                        ChessMove pawnAttack2 = new ChessMove(startPosition, pawn2, null);
+                        enemyMoves.add(pawnAttack1);
+                        enemyMoves.add(pawnAttack2);
+                        int dw = 2;
+
                     }
+                    if (board.getPiece(testPos).getPieceType() == ChessPiece.PieceType.PAWN && myPiece.getTeamColor() == TeamColor.BLACK)
+                    {
+                        //remove old pawn attack pos, enemy is white pawn
+                        ChessPosition endOldPawn = new ChessPosition(testPos.getRow()+1, testPos.getColumn());
+                        ChessMove oldPawn = new ChessMove(startPosition, endOldPawn, null);
+                        enemyMoves.remove(oldPawn);
+                        ChessPosition pawn1 = new ChessPosition(testPos.getRow()+1, testPos.getColumn()-1);
+                        ChessPosition pawn2 = new ChessPosition(testPos.getRow()+1, testPos.getColumn()+1);
+                        ChessMove pawnAttack1 = new ChessMove(startPosition, pawn1, null);
+                        ChessMove pawnAttack2 = new ChessMove(startPosition, pawn2, null);
+                        enemyMoves.add(pawnAttack1);
+                        enemyMoves.add(pawnAttack2);
+                        int dw = 2;
+                    }
+
+                        //this removes pos where king can't go because it's in enemy line of sight
+                    moves = removeBadKingPos(moves, enemyMoves);
                     int h = 3;
                 }
             }
         }
         return moves;
+    }
+
+
+
+    //TODO takes moves and removes the moves that enemyMoves prohibits, we assume piece is king
+    public Collection<ChessMove> removeBadKingPos(Collection<ChessMove>moves, Collection<ChessMove> enemyMoves)
+    {
+        Collection<ChessMove> returnValues = moves;
+        ChessMove[]myMoves = moves.toArray(new ChessMove[0]);
+        ChessMove[]enemyMovesArray = enemyMoves.toArray(new ChessMove[0]);
+        for (int i = 0; i < enemyMovesArray.length; ++i)
+        {
+            for (int j = 0; j < myMoves.length; ++j)
+            {
+                if (enemyMovesArray[i].getEndPosition().equals(myMoves[j].getEndPosition()))
+                {
+                    //end pos are equal, king can't move there
+                    returnValues.add(myMoves[j]);
+                    ChessMove removeit = myMoves[j];
+                    returnValues.remove(removeit);
+                }
+            }
+        }
+        return returnValues;
     }
 
     /**
@@ -126,6 +163,7 @@ public class ChessGame {
         }
         //this adds the piece to the pos of where we want lol
         board.addPiece(move.getEndPosition(),board.getPiece(move.getStartPosition()));
+        board.addPiece(move.getStartPosition(),null);
 
 
     }
@@ -175,6 +213,7 @@ public class ChessGame {
                         ChessMove kingMove = new ChessMove(testPos,kingPos,null);
                         if (possibleMoves.contains(kingMove))
                         {
+                            /// TODO
                             //if it's a possible move for the enemy at this pos
                             // to attack the king
                             //returns true, is in Check
