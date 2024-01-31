@@ -246,6 +246,12 @@ public class ChessGame {
     public boolean isInCheckmate(TeamColor teamColor) {
         //loop thru board, find all ally pieces, if they have any valid moves return false
         //at end return true;
+
+        //if im not even in check, can't be in checkmate
+        if (!isInCheck(teamColor))
+        {
+            return false;
+        }
         boolean flag = true;
         for (int r = 1; r < 9; ++r)
         {
