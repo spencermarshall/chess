@@ -161,8 +161,18 @@ public class ChessGame {
         {
             throw new InvalidMoveException();
         }
+        //if we advance pawn and change piece type
+        if (board.getPiece(move.getStartPosition()) != null && move.promotion != null)
+        {
+            ChessPiece adv = new ChessPiece(board.getPiece(move.getStartPosition()).getTeamColor(), move.promotion);
+            board.addPiece(move.getEndPosition(),adv);
+        }
+        else
+        { // this is the always the case unless we advance a pawn
+            board.addPiece(move.getEndPosition(),board.getPiece(move.getStartPosition()));
+        }
         //this adds the piece to the pos of where we want lol
-        board.addPiece(move.getEndPosition(),board.getPiece(move.getStartPosition()));
+
         board.addPiece(move.getStartPosition(),null);
 
 
