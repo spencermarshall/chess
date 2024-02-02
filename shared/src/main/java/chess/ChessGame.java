@@ -77,14 +77,45 @@ public class ChessGame {
         Collection<ChessMove> actualMoves = new HashSet<>();
         ChessMove[] myMoves = moves.toArray(new ChessMove[0]);
 
+        if (myMoves.length == 0)
+        {
+            return new HashSet<ChessMove>();
+        }
+
+        ChessPosition startTemp = new ChessPosition(startPosition.getRow(), startPosition.getColumn());
+
         for (int r = 1; r < 9; ++r)
         {
             for (int c = 1; c < 9; ++c)
             {
                 ChessPosition testPos = new ChessPosition(r,c);
+
                 if (board.getPiece(testPos) != null && board.getPiece(testPos).getTeamColor() != myPiece.getTeamColor())
                 {
                     Collection<ChessMove> enemyMoves = board.getPiece(testPos).pieceMoves(board,testPos);
+
+                    //loop thru possible king moves
+                    for (int k = 0; k < myMoves.length; ++k)
+                    {
+                        ChessPosition potLoc = myMoves[k].getEndPosition();
+                        ChessPiece testPiece = board.getPiece(myMoves[k].getEndPosition());
+                        board.addPiece(potLoc,myPiece);
+                        ChessGame.TeamColor reverse = TeamColor.WHITE;
+                        if (isWhiteTurn)
+                        {
+                            reverse = TeamColor.BLACK;
+                        }
+                        board.addPiece(potLoc,testPiece);
+                        boolean futureCheck = isInCheck(reverse);
+                       // board.addPiece(potLoc,testPiece);
+                        if (futureCheck)
+                        {
+                            //if it'll put me in check remove it from an option to move there
+                            moves.remove(myMoves[k]);
+                        }
+                    }
+
+
 
                     if (board.getPiece(testPos).getPieceType() == ChessPiece.PieceType.PAWN && myPiece.getTeamColor() == TeamColor.WHITE)
                     {
@@ -137,6 +168,7 @@ public class ChessGame {
         {
             for (int j = 0; j < myMoves.length; ++j)
             {
+
                 if (enemyMovesArray[i].getEndPosition().equals(myMoves[j].getEndPosition()))
                 {
                     //end pos are equal, king can't move there
@@ -144,6 +176,8 @@ public class ChessGame {
                     ChessMove removeit = myMoves[j];
                     returnValues.remove(removeit);
                 }
+
+
             }
         }
         return returnValues;
@@ -215,7 +249,9 @@ public class ChessGame {
                 if (this.board.getPiece(testPos)!= null &&
                     this.board.getPiece(testPos).getTeamColor() != teamColor)
                 {
-                    Collection<ChessMove> possibleMoves = validMoves(testPos);
+                    Collection<ChessMove> possibleMoves = board.getPiece(testPos).pieceMoves(board,testPos);
+
+                 //   Collection<ChessMove> possibleMoves = validMoves(testPos);
                     //for every enemy we see if it can attack coordinates of king
                     for (int i = 0; i < possibleMoves.size(); ++i)
                     {
