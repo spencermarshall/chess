@@ -100,10 +100,10 @@ public class ChessGame {
                     for (int i = 0; i < allyMovesArr.length; ++i)
                     {
                         boolean check = checkAfterMove(allyMovesArr[i]);
-                        if (!check)
+                        if (isInCheck(getTeamTurn()) && !check)
                         {
                             //not in check, add it to moves
-                         //   moves.add(allyMovesArr[i]);
+                            moves.add(allyMovesArr[i]);
                         }
                     }
 
@@ -176,22 +176,22 @@ public class ChessGame {
             }
         }
         //check for if we in check
-        if (isInCheck(getTeamTurn()))
-        {
-            ChessMove [] manyMoves = moves.toArray(new ChessMove[0]);
-            for (int i = 0; i < manyMoves.length; ++i)
-            {
-                //test if each move if still in check remove from moves
-                boolean check = checkAfterMove(manyMoves[i]);
-                if (check)
-                {
-                    //we are still in check, can't do that move
-                    moves.remove(manyMoves[i]);
-                }
+    //    if (isInCheck(getTeamTurn()))
 
+        ChessMove [] manyMoves = moves.toArray(new ChessMove[0]);
+        for (int i = 0; i < manyMoves.length; ++i)
+        {
+            //test if each move if still in check remove from moves
+            boolean check = checkAfterMove(manyMoves[i]);
+            if (check)
+            {
+                //we are still in check, can't do that move
+                moves.remove(manyMoves[i]);
             }
 
         }
+
+
 
 
         return moves;
