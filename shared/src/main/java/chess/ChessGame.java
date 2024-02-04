@@ -254,6 +254,11 @@ public class ChessGame {
         Collection<ChessMove> possibleMoves = validMoves(move.getStartPosition());
         //it's not ur turn
         ChessGame.TeamColor moveColor = board.getPiece(move.getStartPosition()).getTeamColor();
+        if (moveColor != getTeamTurn())
+        {
+            throw new InvalidMoveException();
+        }
+
 
 
         if (!possibleMoves.contains(move) || board.getPiece(move.getStartPosition()) == null)
@@ -262,23 +267,7 @@ public class ChessGame {
         }
 
         //if king is in check, move has to put him not in check
-        if (isInCheck(this.getTeamTurn()))
-        {
-            ///todo this if might not even work lol
-            //actually do the move so we can sees if still in check
-            board.addPiece(move.getEndPosition(),board.getPiece(move.getStartPosition()));
-            board.addPiece(move.getStartPosition(),null);
-            boolean checkSoCantMove = isInCheck(this.getTeamTurn());
-            if (checkSoCantMove)
-            {
-                //move back cuz it's an invalid move
-                board.addPiece(move.getStartPosition(),board.getPiece(move.getEndPosition()));
-                board.addPiece(move.getEndPosition(), null);
-                return;
-            }
 
-
-        }
 
         //if we advance pawn and change piece type
         if (board.getPiece(move.getStartPosition()) != null && move.promotion != null)
@@ -293,6 +282,14 @@ public class ChessGame {
         //this adds the piece to the pos of where we want lol
 
         board.addPiece(move.getStartPosition(),null);
+        if (isWhiteTurn)
+        {
+            setTeamTurn(TeamColor.BLACK);
+        }
+        else
+        {
+            setTeamTurn(TeamColor.WHITE);
+        }
 
 
     }
