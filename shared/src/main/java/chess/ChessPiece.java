@@ -808,7 +808,7 @@ public class ChessPiece {
             int error = 3;
         }
 
-        //now we know what piece it was and added all possible pos to testThese
+        //now we know what piece it was and added all possible pos to testThes e
         //we add the array of testThese pos to the set
         for (int i = 0; i < testThese.length; ++i)
         {
