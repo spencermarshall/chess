@@ -87,8 +87,8 @@ public class ChessGame {
         //if piece is king
         //loop thru enemies, if enemy pieceMove() coordinates is in king Piece moves
         // then remove it from king piece moves
-        boolean checktest = isInCheck(getTeamTurn());
-        if (myPiece.getPieceType() != ChessPiece.PieceType.KING && !checktest)
+
+        if (myPiece.getPieceType() != ChessPiece.PieceType.KING)
             return moves;
         //now we know it's king
         //TODO need to check if moving a piece puts king in check, if it does then remove move
@@ -206,6 +206,7 @@ public class ChessGame {
         ChessPosition endPos = test.getEndPosition();
         ChessPiece testingPiece = board.getPiece(test.getStartPosition());
         board.addPiece(endPos, testingPiece);
+        //this is null b/c we move our piece so there's nothing at old pos
         board.addPiece(startPos, null);
         check = isInCheck(color);
 
