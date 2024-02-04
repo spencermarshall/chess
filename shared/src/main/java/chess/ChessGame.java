@@ -64,13 +64,14 @@ public class ChessGame {
         //myPiece is piece we start with
         ChessPiece myPiece = new ChessPiece(board.getPiece(startPosition).getTeamColor(),board.getPiece(startPosition).getPieceType());
 
+
         Collection<ChessMove> moves = new HashSet<>();
         moves = myPiece.pieceMoves(this.board,startPosition);
         ChessMove [] manyMoves = moves.toArray(new ChessMove[0]);
         for (int i = 0; i < manyMoves.length; ++i)
         {
             //test if each move if still in check remove from moves
-            boolean check = checkAfterMove(manyMoves[i]);
+            boolean check = checkAfterMove(manyMoves[i],myPiece.getTeamColor());
             if (check)
             {
                 //we are still in check, can't do that move
@@ -115,7 +116,7 @@ public class ChessGame {
                     ChessMove[] allyMovesArr = allyMoves.toArray(new ChessMove[0]);
                     for (int i = 0; i < allyMovesArr.length; ++i)
                     {
-                        boolean check = checkAfterMove(allyMovesArr[i]);
+                        boolean check = checkAfterMove(allyMovesArr[i], getTeamTurn());
                         if (isInCheck(getTeamTurn()) && !check)
                         {
                             //not in check, add it to moves
@@ -196,7 +197,7 @@ public class ChessGame {
     }
 
     ///todo, moves, checks if still in test, undo and if still in check return true
-    boolean checkAfterMove(ChessMove test)
+    boolean checkAfterMove(ChessMove test, ChessGame.TeamColor color )
     {
         ChessPiece pieceAtEnd = board.getPiece(test.getEndPosition());
 
@@ -205,8 +206,8 @@ public class ChessGame {
         ChessPosition endPos = test.getEndPosition();
         ChessPiece testingPiece = board.getPiece(test.getStartPosition());
         board.addPiece(endPos, testingPiece);
-        board.addPiece(startPos, pieceAtEnd);
-        check = isInCheck(getTeamTurn());
+        board.addPiece(startPos, null);
+        check = isInCheck(color);
 
         //moves everything back to original, like it never happened
         board.addPiece(startPos,testingPiece);
