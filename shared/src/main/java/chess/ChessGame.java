@@ -70,7 +70,8 @@ public class ChessGame {
         //if piece is king
         //loop thru enemies, if enemy pieceMove() coordinates is in king Piece moves
         // then remove it from king piece moves
-        if (myPiece.getPieceType() != ChessPiece.PieceType.KING)
+        boolean checktest = isInCheck(getTeamTurn());
+        if (myPiece.getPieceType() != ChessPiece.PieceType.KING && !checktest)
             return moves;
         //now we know it's king
         //TODO need to check if moving a piece puts king in check, if it does then remove move
@@ -89,6 +90,27 @@ public class ChessGame {
             for (int c = 1; c < 9; ++c)
             {
                 ChessPosition testPos = new ChessPosition(r,c);
+                //account for ally pieces that can block check
+                if (board.getPiece(testPos) != null && board.getPiece(testPos).getTeamColor() == myPiece.getTeamColor() && board.getPiece(testPos).getPieceType() != ChessPiece.PieceType.KING)
+                {
+                    //if my color piece is at this square and not my king
+                    //do the move
+                    Collection<ChessMove> allyMoves = board.getPiece(testPos).pieceMoves(board,testPos);
+                    ChessMove[] allyMovesArr = allyMoves.toArray(new ChessMove[0]);
+                    for (int i = 0; i < allyMovesArr.length; ++i)
+                    {
+                        boolean check = checkAfterMove(allyMovesArr[i]);
+                        if (!check)
+                        {
+                            //not in check, add it to moves
+                         //   moves.add(allyMovesArr[i]);
+                        }
+                    }
+
+                }
+
+
+
 
                 if (board.getPiece(testPos) != null && board.getPiece(testPos).getTeamColor() != myPiece.getTeamColor())
                 {
@@ -153,7 +175,46 @@ public class ChessGame {
                 }
             }
         }
+        //check for if we in check
+        if (isInCheck(getTeamTurn()))
+        {
+            ChessMove [] manyMoves = moves.toArray(new ChessMove[0]);
+            for (int i = 0; i < manyMoves.length; ++i)
+            {
+                //test if each move if still in check remove from moves
+                boolean check = checkAfterMove(manyMoves[i]);
+                if (check)
+                {
+                    //we are still in check, can't do that move
+                    moves.remove(manyMoves[i]);
+                }
+
+            }
+
+        }
+
+
         return moves;
+    }
+
+    ///todo, moves, checks if still in test, undo and if still in check return true
+    boolean checkAfterMove(ChessMove test)
+    {
+        ChessPiece pieceAtEnd = board.getPiece(test.getEndPosition());
+
+        boolean check = false;
+        ChessPosition startPos = test.getStartPosition();
+        ChessPosition endPos = test.getEndPosition();
+        ChessPiece testingPiece = board.getPiece(test.getStartPosition());
+        board.addPiece(endPos, testingPiece);
+        board.addPiece(startPos, pieceAtEnd);
+        check = isInCheck(getTeamTurn());
+
+        //moves everything back to original, like it never happened
+        board.addPiece(startPos,testingPiece);
+        board.addPiece(endPos, pieceAtEnd);
+
+        return check;
     }
 
 
@@ -194,6 +255,25 @@ public class ChessGame {
         if (!possibleMoves.contains(move) || board.getPiece(move.getStartPosition()) == null)
         {
             throw new InvalidMoveException();
+        }
+
+        //if king is in check, move has to put him not in check
+        if (isInCheck(this.getTeamTurn()))
+        {
+            ///todo this if might not even work lol
+            //actually do the move so we can sees if still in check
+            board.addPiece(move.getEndPosition(),board.getPiece(move.getStartPosition()));
+            board.addPiece(move.getStartPosition(),null);
+            boolean checkSoCantMove = isInCheck(this.getTeamTurn());
+            if (checkSoCantMove)
+            {
+                //move back cuz it's an invalid move
+                board.addPiece(move.getStartPosition(),board.getPiece(move.getEndPosition()));
+                board.addPiece(move.getEndPosition(), null);
+                return;
+            }
+
+
         }
         //if we advance pawn and change piece type
         if (board.getPiece(move.getStartPosition()) != null && move.promotion != null)
