@@ -66,6 +66,22 @@ public class ChessGame {
 
         Collection<ChessMove> moves = new HashSet<>();
         moves = myPiece.pieceMoves(this.board,startPosition);
+        ChessMove [] manyMoves = moves.toArray(new ChessMove[0]);
+        for (int i = 0; i < manyMoves.length; ++i)
+        {
+            //test if each move if still in check remove from moves
+            boolean check = checkAfterMove(manyMoves[i]);
+            if (check)
+            {
+                //we are still in check, can't do that move
+                moves.remove(manyMoves[i]);
+            }
+
+        }
+
+
+
+
         // check for when king could be threatened
         //if piece is king
         //loop thru enemies, if enemy pieceMove() coordinates is in king Piece moves
@@ -175,24 +191,6 @@ public class ChessGame {
                 }
             }
         }
-        //check for if we in check
-    //    if (isInCheck(getTeamTurn()))
-
-        ChessMove [] manyMoves = moves.toArray(new ChessMove[0]);
-        for (int i = 0; i < manyMoves.length; ++i)
-        {
-            //test if each move if still in check remove from moves
-            boolean check = checkAfterMove(manyMoves[i]);
-            if (check)
-            {
-                //we are still in check, can't do that move
-                moves.remove(manyMoves[i]);
-            }
-
-        }
-
-
-
 
         return moves;
     }
@@ -252,6 +250,10 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         Collection<ChessMove> possibleMoves = validMoves(move.getStartPosition());
+        //it's not ur turn
+        ChessGame.TeamColor moveColor = board.getPiece(move.getStartPosition()).getTeamColor();
+
+
         if (!possibleMoves.contains(move) || board.getPiece(move.getStartPosition()) == null)
         {
             throw new InvalidMoveException();
@@ -275,6 +277,7 @@ public class ChessGame {
 
 
         }
+
         //if we advance pawn and change piece type
         if (board.getPiece(move.getStartPosition()) != null && move.promotion != null)
         {
