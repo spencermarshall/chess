@@ -267,6 +267,21 @@ public class ChessGame {
         }
 
         //if king is in check, move has to put him not in check
+        if (board.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.PAWN)
+        {
+            //check for white and black
+            if (board.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.WHITE && move.getEndPosition().getRow() == 4 && move.getStartPosition().getRow() == 2)
+            {
+                //white pawn, starts at 2 and ends at 4
+                board.getPiece(move.getStartPosition()).movedTwo(true);
+
+            }
+            if (board.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.BLACK && move.getEndPosition().getRow() == 5 && move.getStartPosition().getRow() == 7)
+            {
+                //black pawn, starts at 7 ends at 5
+                board.getPiece(move.getStartPosition()).movedTwo(true);
+            }
+        }
 
 
         //if we advance pawn and change piece type
@@ -277,10 +292,12 @@ public class ChessGame {
         }
         else
         { // this is the always the case unless we advance a pawn
+            //check if pawn && if moving 2, if yes then make enPassantPossible true
+
             board.addPiece(move.getEndPosition(),board.getPiece(move.getStartPosition()));
+
         }
         //this adds the piece to the pos of where we want lol
-
         board.addPiece(move.getStartPosition(),null);
         if (isWhiteTurn)
         {
@@ -290,6 +307,18 @@ public class ChessGame {
         {
             setTeamTurn(TeamColor.WHITE);
         }
+        ///todo pawn enpassant implementation i gave up on
+        /*ChessPosition testEn1 = new ChessPosition(move.getStartPosition().getRow(), move.getStartPosition().getColumn()+1);
+        ChessPosition testEn2 = new ChessPosition(move.getStartPosition().getRow(), move.getStartPosition().getColumn()-1);
+        if (board.getPiece(testEn1).justDidEnPassant)
+        {
+
+        }
+        if (board.getPiece(testEn2).justDidEnPassant)
+        {
+
+        }*/
+
 
 
     }

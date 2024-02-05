@@ -14,15 +14,27 @@ public class ChessPiece {
 
     private PieceType type;
     private ChessGame.TeamColor color;
+    private boolean movedTwo;
+    public boolean justDidEnPassant;
    // private TeamColor thisTeam;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type) {
         this.type = type;
         this.color = pieceColor;
+        this.movedTwo = false;
+        this.justDidEnPassant = false;
 
 
     }
 
+    public void movedTwo(boolean set)
+    {
+        movedTwo = set;
+    }
+    public boolean getMovedTwo()
+    {
+        return movedTwo;
+    }
     /**
      * The various different chess piece options
      */
@@ -708,6 +720,38 @@ public class ChessPiece {
 
 
             }
+            //check for enpassant, add moves to testThese
+
+
+            ///todo pawn enpassant implementation i gave up on lol
+           /* if (myPosition.getRow() == 5)
+            {
+                //test for 2 pos of pawns next to me
+                ChessPosition test1 = new ChessPosition(5, myPosition.getColumn()+1);
+                ChessPosition test2 = new ChessPosition(5, myPosition.getColumn()-1);
+                ChessPosition actual1 = new ChessPosition(6, myPosition.getColumn() + 1);
+                ChessPosition actual2 = new ChessPosition(6, myPosition.getColumn() - 1);
+
+                if (board.getPiece(test1) != null && board.getPiece(test1).getMovedTwo() && board.getPiece(actual1) == null)
+                {
+                    //valid enpassant
+                    board.isValid(test1);
+                    board.isValid(actual1);
+                    testThese[counter] = actual1;
+                    counter++;
+                    this.justDidEnPassant = true;
+                }
+                if (board.getPiece(test2) != null && board.getPiece(test2).getMovedTwo() && board.getPiece(actual2) == null)
+                {
+                    //valid enpassant
+                    board.isValid(test2);
+                    board.isValid(actual2);
+                    testThese[counter] = actual2;
+                    counter++;
+                    this.justDidEnPassant = true;
+                }
+
+            }*/
         }
         else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK)
         {
