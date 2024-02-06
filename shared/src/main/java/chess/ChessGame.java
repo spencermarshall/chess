@@ -258,15 +258,24 @@ public class ChessGame {
         {
             throw new InvalidMoveException();
         }
-
-
-
         if (!possibleMoves.contains(move) || board.getPiece(move.getStartPosition()) == null)
         {
             throw new InvalidMoveException();
         }
 
-        //if king is in check, move has to put him not in check
+        //loop thru every piece and reset if it just movedTwo
+        for (int r = 1; r < 9; ++r)
+        {
+            for (int c = 1; c < 9; ++c)
+            {
+                ChessPosition test = new ChessPosition(r,c);
+                if (board.getPiece(test) != null)
+                {
+                    board.getPiece(test).movedTwo(false);
+                }
+            }
+        }
+
         if (board.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.PAWN)
         {
             //check for white and black
@@ -307,17 +316,16 @@ public class ChessGame {
         {
             setTeamTurn(TeamColor.WHITE);
         }
-        ///todo pawn enpassant implementation i gave up on
-        /*ChessPosition testEn1 = new ChessPosition(move.getStartPosition().getRow(), move.getStartPosition().getColumn()+1);
-        ChessPosition testEn2 = new ChessPosition(move.getStartPosition().getRow(), move.getStartPosition().getColumn()-1);
-        if (board.getPiece(testEn1).justDidEnPassant)
-        {
 
+        //todo pawn enpassant implementation
+        boolean enPassant = board.getPiece(move.getEndPosition()).justDidEnPassant;
+        int newCol = move.getEndPosition().getColumn();
+        if (enPassant)
+        {
+            ChessPosition removePos = new ChessPosition(move.getStartPosition().getRow(), newCol);
+            board.addPiece(removePos, null);
         }
-        if (board.getPiece(testEn2).justDidEnPassant)
-        {
 
-        }*/
 
 
 

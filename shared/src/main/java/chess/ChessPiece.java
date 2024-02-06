@@ -723,8 +723,8 @@ public class ChessPiece {
             //check for enpassant, add moves to testThese
 
 
-            ///todo pawn enpassant implementation i gave up on lol
-           /* if (myPosition.getRow() == 5)
+            ///todo pawn enpassant implementation
+            if (myPosition.getRow() == 5)
             {
                 //test for 2 pos of pawns next to me
                 ChessPosition test1 = new ChessPosition(5, myPosition.getColumn()+1);
@@ -732,26 +732,26 @@ public class ChessPiece {
                 ChessPosition actual1 = new ChessPosition(6, myPosition.getColumn() + 1);
                 ChessPosition actual2 = new ChessPosition(6, myPosition.getColumn() - 1);
 
-                if (board.getPiece(test1) != null && board.getPiece(test1).getMovedTwo() && board.getPiece(actual1) == null)
+                if (board.getPiece(test1) != null && board.getPiece(test1).getPieceType() == PieceType.PAWN && board.getPiece(actual1) == null && board.getPiece(test1).movedTwo)
                 {
                     //valid enpassant
                     board.isValid(test1);
                     board.isValid(actual1);
                     testThese[counter] = actual1;
                     counter++;
-                    this.justDidEnPassant = true;
+                    board.getPiece(myPosition).justDidEnPassant = true;
                 }
-                if (board.getPiece(test2) != null && board.getPiece(test2).getMovedTwo() && board.getPiece(actual2) == null)
+                if (board.getPiece(test2) != null && board.getPiece(test2).getPieceType() == PieceType.PAWN && board.getPiece(actual2) == null && board.getPiece(test2).movedTwo)
                 {
                     //valid enpassant
                     board.isValid(test2);
                     board.isValid(actual2);
                     testThese[counter] = actual2;
                     counter++;
-                    this.justDidEnPassant = true;
+                    board.getPiece(myPosition).justDidEnPassant = true;
                 }
 
-            }*/
+            }
         }
         else if(type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK)
         {
@@ -845,6 +845,35 @@ public class ChessPiece {
                 testThese[counter+3] = myPawnAdv3;
                 counter += 4;
 
+
+            }
+            ///todo pawn enpassant implementation i gave up on lol
+            if (myPosition.getRow() == 4)
+            {
+                //test for 2 pos of pawns next to me
+                ChessPosition test1 = new ChessPosition(4, myPosition.getColumn()+1);
+                ChessPosition test2 = new ChessPosition(4, myPosition.getColumn()-1);
+                ChessPosition actual1 = new ChessPosition(3, myPosition.getColumn() + 1);
+                ChessPosition actual2 = new ChessPosition(3, myPosition.getColumn() - 1);
+
+                if (board.getPiece(test1) != null && board.getPiece(test1).getPieceType() == PieceType.PAWN && board.getPiece(actual1) == null && board.getPiece(test1).movedTwo)
+                {
+                    //valid enpassant
+                    board.isValid(test1);
+                    board.isValid(actual1);
+                    testThese[counter] = actual1;
+                    counter++;
+                    board.getPiece(myPosition).justDidEnPassant = true;
+                }
+                if (board.getPiece(test2) != null && board.getPiece(test2).getPieceType() == PieceType.PAWN && board.getPiece(actual2) == null && board.getPiece(test2).movedTwo)
+                {
+                    //valid enpassant
+                    board.isValid(test2);
+                    board.isValid(actual2);
+                    testThese[counter] = actual2;
+                    counter++;
+                    board.getPiece(myPosition).justDidEnPassant = true;
+                }
 
             }
         }
