@@ -17,14 +17,20 @@ public class ChessPiece {
     private boolean movedTwo;
     public boolean justDidEnPassant;
    // private TeamColor thisTeam;
+    private boolean hasMoved;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type) {
         this.type = type;
         this.color = pieceColor;
         this.movedTwo = false;
         this.justDidEnPassant = false;
+        this.hasMoved = false;
 
 
+    }
+    public void hasMoved(boolean set)
+    {
+        this.hasMoved = set;
     }
 
     public void movedTwo(boolean set)
@@ -880,6 +886,12 @@ public class ChessPiece {
         else {
             int error = 3;
         }
+        //this adds moves for castling
+        ChessPosition[] addMore = addCastling();
+        for (int castle = 0; castle < addMore.length; ++castle)
+        {
+         ///todo   testThese[testThese.length + castle] = addMore[castle];
+        }
 
         //now we know what piece it was and added all possible pos to testThes e
         //we add the array of testThese pos to the set
@@ -891,7 +903,7 @@ public class ChessPiece {
 
                 boolean isEnemy = testThese[i].hasEnemy();
                 //checks if enemy then auto add
-                // if ((board.getPiece(testThese[i]).type != null) && board.getPiece(testThese[i]).color != this.color)
+                // if ((board.getPiece(testThese[i]).type != null) &&  board.getPiece(testThese[i]).color != this.color)
 
                 if (testThese[i].getPiece() == PieceType.ROOK ||testThese[i].getPiece() == PieceType.QUEEN || testThese[i].getPiece() == PieceType.BISHOP || testThese[i].getPiece() == PieceType.KNIGHT)
                 {
@@ -904,6 +916,14 @@ public class ChessPiece {
         }
 
         return set;
+    }
+
+    public ChessPosition[] addCastling()
+    {
+        ChessPosition[] castleMoves = new ChessPosition[10];
+
+        return castleMoves;
+
     }
 
     public String toString()

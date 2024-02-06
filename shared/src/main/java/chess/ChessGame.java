@@ -275,6 +275,8 @@ public class ChessGame {
                 }
             }
         }
+        //since we gonna be moving, for the point in the move.startPos(), set that piece to true for hasMoved
+                board.getPiece(move.getStartPosition()).hasMoved(true);
 
         if (board.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.PAWN)
         {
@@ -325,6 +327,7 @@ public class ChessGame {
             ChessPosition removePos = new ChessPosition(move.getStartPosition().getRow(), newCol);
             board.addPiece(removePos, null);
         }
+
 
 
 
