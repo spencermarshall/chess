@@ -1,7 +1,14 @@
 package server;
 import spark.*;
+import model.GameData;
+import model.AuthData;
+import model.UserData;
 
 public class Server {
+    public Server()
+    {
+
+    }
 
     public int run(int desiredPort)
     {
