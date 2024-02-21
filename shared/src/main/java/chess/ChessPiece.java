@@ -873,7 +873,7 @@ public class ChessPiece {
                 }
                 if (board.getPiece(test2) != null && board.getPiece(test2).getPieceType() == PieceType.PAWN && board.getPiece(actual2) == null && board.getPiece(test2).movedTwo)
                 {
-                    //valid enpassant
+                    //valid   enpassant
                     board.isValid(test2);
                     board.isValid(actual2);
                     testThese[counter] = actual2;
