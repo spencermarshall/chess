@@ -12,6 +12,8 @@ public class Server {
 
     public int run(int desiredPort)
     {
+        Server server = new Server();
+        server.run(8080);
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
@@ -27,7 +29,10 @@ public class Server {
         Spark.stop();
         Spark.awaitStop();
     }
-
+    public int port()
+    {
+        return Spark.port();
+    }
     private Object deleteAllGames(Request req, Response res)
     {
         res.status(400);
