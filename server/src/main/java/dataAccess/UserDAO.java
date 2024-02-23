@@ -4,7 +4,8 @@ import model.UserData;
 
 public interface UserDAO {
 
-    public void clearAllUsers();
-    public void registerUser(UserData user) throws DataAccessException;
+    void clearAllUsers();
+    void registerUser(UserData user) throws DataAccessException;
+    void isValid(UserData user) throws DataAccessException;
 
 }

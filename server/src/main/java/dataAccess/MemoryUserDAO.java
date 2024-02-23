@@ -9,6 +9,18 @@ public class MemoryUserDAO implements UserDAO {
     {
         this.allUsers = new Vector<UserData>();
     }
+    public void isValid(UserData user) throws DataAccessException
+    {
+        if(!this.allUsers.contains(user))
+        {
+            throw new DataAccessException ("403");
+        }
+
+        if (user.getUsername() == null || user.getEmail() == null || user.getPassword() == null)
+        {
+            throw new DataAccessException("400");
+        }
+    }
 
     public void clearAllUsers()
     {
@@ -16,7 +28,6 @@ public class MemoryUserDAO implements UserDAO {
     }
     public void registerUser(UserData user)
     {
-       // user.register(user["username"],);
         this.allUsers.add(user);
     }
 }

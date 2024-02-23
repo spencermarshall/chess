@@ -13,6 +13,14 @@ public class UserData {
     {
         return this.username;
     }
+    public String getEmail()
+    {
+        return this.email;
+    }
+    public String getPassword()
+    {
+        return this.password;
+    }
     public void register(String username, String password, String email)
     {
         this.username = username;

@@ -17,16 +17,25 @@ public class UserService {
     {
         this.dataAccessUser = new MemoryUserDAO();
     }
+    public void isValid(UserData user) throws DataAccessException
+    {
+        try
+        {
+            this.dataAccessUser.isValid(user);
+        } catch (DataAccessException message)
+        {
+            throw new DataAccessException(message.getMessage());
+        }
+
+
+
+    }
 
     public AuthData register(UserData user) throws DataAccessException{
-      if (user == null)
-      {
-          throw new DataAccessException("user is null bruh");
-      }
-      this.dataAccessUser.registerUser(user);
 
-      //create Auth token with the users username and returns AuthData
-      return new AuthData(user.getUsername());
+        this.dataAccessUser.registerUser(user);
+        //create Auth token with the users username and returns AuthData
+        return new AuthData(user.getUsername());
 
 
   }

@@ -16,6 +16,8 @@ import model.UserData;
 
 import com.google.gson.Gson;
 
+import java.util.Objects;
+
 public class Server {
     private UserService userService;
     private GameService gameService;
@@ -45,22 +47,33 @@ public class Server {
     }
     private Object registerNewUser(Request req, Response res) throws DataAccessException {
         var user = new Gson().fromJson(req.body(), UserData.class);
+
         AuthData myAuth = userService.register(user);
         //todo not sure how/when it's a bad request but i think i need more here
         boolean isBadRequest = false;
-        if (isBadRequest)
+        String errorCode = "200";
+        try
+        {
+            this.userService.isValid(user);
+
+        } catch (DataAccessException errorMessage)
+        {
+            errorCode = errorMessage.getMessage();
+        }
+
+        if (Objects.equals(errorCode, "400"))
         {
             res.status(400);
             JsonObject badRequest = new JsonObject();
             badRequest.addProperty("message","Error: bad request");
         }
-        if (myAuth == null)
+        if (Objects.equals(errorCode, "403"))
         {
             res.status(403);
             JsonObject alreadyTakenError = new JsonObject();
             alreadyTakenError.addProperty("message","Error: already taken");
         }
-        if (user == null)
+        if (Objects.equals(errorCode, "500"))
         {
             res.status(500);
             JsonObject genericError = new JsonObject();
