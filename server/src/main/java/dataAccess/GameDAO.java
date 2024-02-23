@@ -1,4 +1,7 @@
 package dataAccess;
 
-public interface GameDAO {
+public interface GameDAO
+{
+  void clearAllGames();
+
 }

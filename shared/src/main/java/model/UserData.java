@@ -9,6 +9,16 @@ public class UserData {
     {
 
     }
+    public String getUsername()
+    {
+        return this.username;
+    }
+    public void register(String username, String password, String email)
+    {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
     public void clearAll()
     {
       username = "";
