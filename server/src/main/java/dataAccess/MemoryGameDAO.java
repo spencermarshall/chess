@@ -13,4 +13,8 @@ public class MemoryGameDAO implements GameDAO
   {
       this.allGames.clear();
   }
+  public boolean isEmpty()
+  {
+      return allGames.isEmpty();
+  }
 }

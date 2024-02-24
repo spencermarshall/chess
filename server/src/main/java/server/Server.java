@@ -41,7 +41,7 @@ public class Server {
         Spark.delete("/db",this::deleteAllGames);
         Spark.post("/user",this::registerNewUser);
         Spark.post("/session", this::login);
-        Spark.delete("/session",this::logout);
+        Spark.delete("/session", this::logout);
         Spark.get("/game",this::listGames);
         Spark.post("/game",this::createGame);
         Spark.put("/game",this::joinGame);
@@ -98,6 +98,8 @@ public class Server {
             JsonObject finalRet = new JsonObject();
             finalRet.addProperty("username",user.getUsername());
             finalRet.addProperty("authToken",myAuth.getAuthString());
+            authService.addAuth(myAuth);
+
             //finalRet is JSON
             return finalRet;
         }
@@ -139,6 +141,8 @@ public class Server {
             JsonObject finalRet = new JsonObject();
             finalRet.addProperty("username",user.getUsername());
             finalRet.addProperty("authToken",loginAuth.getAuthString());
+            //add auth to authService
+            authService.addAuth(loginAuth);
             //finalRet is JSON
             return finalRet;
         }
@@ -146,7 +150,32 @@ public class Server {
     }
     private Object logout(Request req, Response res)
     {
-        return "";
+        String header = req.headers("Authorization");
+        boolean validAuthToken = false;
+        try
+        {
+            validAuthToken = this.authService.verifyAuth(header);
+        } catch (DataAccessException errorMessage)
+        {
+            res.status(401); //unauthorized
+            JsonObject genericError = new JsonObject();
+            genericError.addProperty("message","Error: unauthorized");
+            //finalRet is JSON
+            return genericError;
+        }
+
+        if (validAuthToken)
+        {
+            res.status(200); //200 is success
+            JsonObject success = new JsonObject();
+            authService.removeAuth(header);
+            success.addProperty("message","");
+            //finalRet is JSON
+            return success;
+
+        }
+        return "{something wrong}";
+
     }
     private Object listGames(Request req, Response res)
     {
@@ -174,7 +203,15 @@ public class Server {
         this.authService.clearAllAuth();
         this.gameService.clearAllGame();
         this.userService.clearAllUsers();
-        res.status(200);
+        if (authService.isEmpty() && gameService.isEmpty() && userService.isEmpty())
+        {
+            res.status(200);
+
+        }
+        else
+        {
+            res.status(401);
+        }
         return "{}"; // maybe return '', or maybe return null
     }
 }

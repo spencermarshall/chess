@@ -16,4 +16,33 @@ public class MemoryAuthDAO implements AuthDAO {
     {
         allAuthInfo.clear();
     }
+    public boolean isEmpty()
+    {
+        return allAuthInfo.isEmpty();
+    }
+    public void removeAuth(String auth)
+    {
+        for (int i = 0; i < allAuthInfo.size(); ++i)
+        {
+            if (Objects.equals(allAuthInfo.get(i).getAuthString(), auth))
+            {
+                //loops thru Auth, when we are at the auth it removes it
+                allAuthInfo.remove(allAuthInfo.get(i));
+            }
+        }
+    }
+    public boolean hasUsername(String auth) throws DataAccessException
+    {
+        for (int i = 0; i < allAuthInfo.size(); ++i)
+        {
+            if (Objects.equals(allAuthInfo.get(i).getAuthString(), auth))
+            {
+                return true;
+            }
+        }
+        throw new DataAccessException("401");
+
+
+    }
+
 }

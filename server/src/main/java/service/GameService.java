@@ -18,6 +18,10 @@ public class GameService {
     {
         this.dataAccessGame = new MemoryGameDAO();
     }
+    public boolean isEmpty()
+    {
+        return dataAccessGame.isEmpty();
+    }
 
 
 

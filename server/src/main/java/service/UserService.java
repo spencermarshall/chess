@@ -1,11 +1,8 @@
 package service;
 
-import dataAccess.DataAccessException;
-import dataAccess.UserDAO;
-import dataAccess.DataAccess;
+import dataAccess.*;
 import model.AuthData;
 import model.UserData;
-import dataAccess.MemoryUserDAO;
 import org.eclipse.jetty.server.Authentication;
 
 
@@ -16,6 +13,10 @@ public class UserService {
     public UserService()
     {
         this.dataAccessUser = new MemoryUserDAO();
+    }
+    public boolean isEmpty()
+    {
+        return this.dataAccessUser.isEmpty();
     }
     public void isValid(UserData user) throws DataAccessException
     {
@@ -43,9 +44,11 @@ public class UserService {
         {
             throw new DataAccessException(message.getMessage());
         }
+
         return ret;
 
     }
+
 
     public AuthData register(UserData user) throws DataAccessException{
 

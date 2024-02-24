@@ -23,6 +23,10 @@ public class MemoryUserDAO implements UserDAO {
             throw new DataAccessException("400");
         }
     }
+    public boolean isEmpty()
+    {
+        return allUsers.isEmpty();
+    }
     public boolean testLogin(UserData user) throws DataAccessException
     {
         boolean valid = false;
@@ -54,4 +58,5 @@ public class MemoryUserDAO implements UserDAO {
     {
         this.allUsers.add(user);
     }
+
 }

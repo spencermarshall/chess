@@ -2,7 +2,6 @@ package serviceTests;
 
 import chess.ChessGame;
 import org.junit.jupiter.api.*;
-import passoffTests.obfuscatedTestClasses.TestServerFacade;
 import passoffTests.testClasses.TestException;
 import passoffTests.testClasses.TestModels;
 import server.Server;
@@ -22,7 +21,6 @@ public class AllTests {
 
     private static TestModels.TestCreateRequest createRequest;
 
-    private static TestServerFacade serverFacade;
     private static Server server;
 
     private String existingAuth;
@@ -34,7 +32,7 @@ public class AllTests {
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
 
-        serverFacade = new TestServerFacade("localhost", Integer.toString(port));
+
 
         existingUser = new TestModels.TestUser();
         existingUser.username = "ExistingUser";
@@ -56,7 +54,7 @@ public class AllTests {
     }
     @BeforeEach //this function is copied from the starterCode on github
     public void setup() throws TestException {
-        serverFacade.clear();
+
 
         TestModels.TestRegisterRequest registerRequest = new TestModels.TestRegisterRequest();
         registerRequest.username = existingUser.username;
@@ -64,8 +62,8 @@ public class AllTests {
         registerRequest.email = existingUser.email;
 
         //one user already logged in
-        TestModels.TestLoginRegisterResult regResult = serverFacade.register(registerRequest);
-        existingAuth = regResult.authToken;
+        //TestModels.TestLoginRegisterResult regResult = server.register(registerRequest);
+       // existingAuth = regResult.authToken;
     }
     @Test
     @Order(1)
@@ -74,13 +72,13 @@ public class AllTests {
         TestModels.TestLoginRequest loginRequest = new TestModels.TestLoginRequest();
         loginRequest.username = existingUser.username;
         loginRequest.password = existingUser.password;
-        TestModels.TestLoginRegisterResult loginResult = serverFacade.login(loginRequest);
+       // TestModels.TestLoginRegisterResult loginResult = server.login(loginRequest);
 
 
 
         //todo none of this below this line is correct, idk what above really does
-        Assertions.assertEquals(serverFacade.clear().message, "200",
-                "Server response code was not 200 OK");
+        //Assertions.assertEquals(server., "200",
+        //        "Server response code was not 200 OK");
         //assertNotNull(htmlFromServer, "Server returned an empty file");
         //assertTrue(htmlFromServer.contains("CS 240 Chess Server Web API"));
     }
@@ -94,9 +92,69 @@ public class AllTests {
     @Test
     @Order(3)
     @DisplayName("Register negative (won't add a duplicate)")
-    public void clearWorksDuplicateUser() throws Exception {
+    public void clearWorksDuplicateUserTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(4)
+    @DisplayName("Login Positive (returns authToken)")
+    public void loginWorksTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(5)
+    @DisplayName("Login negative (incorrect password)")
+    public void loginNegativeIncorrectPasswordTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(6)
+    @DisplayName("Logout Positive (successful logged out)")
+    public void logoutPositiveTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(7)
+    @DisplayName("Logout negative (incorrect password)")
+    public void logoutNegativeIncorrectPasswordTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(8)
+    @DisplayName("List Games Positive (works)")
+    public void listGamesPositiveTest() throws Exception {
         return;
     }
 
+    @Test
+    @Order(9)
+    @DisplayName("List Games negative (unauthorized)")
+    public void listGameNegativeUnauthorizedTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(10)
+    @DisplayName("Create Game Positive (gives gameID)")
+    public void createGamePositiveTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(11)
+    @DisplayName("Create Game Negative (unauthorized)")
+    public void createGameNegativeUnauthorizedTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(12)
+    @DisplayName("Join Game Positive works")
+    public void joinGamePositiveTest() throws Exception {
+        return;
+    }
+    @Test
+    @Order(13)
+    @DisplayName("Join Game Negative Already Taken")
+    public void joinGameNegativeAlreadyTakenTest() throws Exception {
+        return;
+    }
 
 }

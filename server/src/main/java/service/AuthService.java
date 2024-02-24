@@ -15,6 +15,23 @@ public class AuthService {
         this.dataAccessAuth = new MemoryAuthDAO();
     }
 
+    public boolean verifyAuth(String auth) throws DataAccessException
+    {
+        return dataAccessAuth.hasUsername(auth);
+    }
+    public void removeAuth(String auth)
+    {
+        dataAccessAuth.removeAuth(auth);
+    }
+    public void addAuth(AuthData auth)
+    {
+        dataAccessAuth.addAuth(auth);
+    }
+    public boolean isEmpty()
+    {
+        return dataAccessAuth.isEmpty();
+    }
+
     public void clearAllAuth()
     {
         this.dataAccessAuth = new MemoryAuthDAO();
