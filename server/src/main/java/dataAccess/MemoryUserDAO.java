@@ -11,11 +11,13 @@ public class MemoryUserDAO implements UserDAO {
     }
     public void isValid(UserData user) throws DataAccessException
     {
-        if(!this.allUsers.contains(user))
+        for (int i = 0; i < allUsers.size(); ++i)
         {
-            throw new DataAccessException ("403");
+            if (Objects.equals(allUsers.get(i).getUsername(), user.getUsername()))
+            {
+                throw new DataAccessException ("403");
+            }
         }
-
         if (user.getUsername() == null || user.getEmail() == null || user.getPassword() == null)
         {
             throw new DataAccessException("400");

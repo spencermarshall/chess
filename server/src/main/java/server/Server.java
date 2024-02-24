@@ -48,7 +48,7 @@ public class Server {
     private Object registerNewUser(Request req, Response res) throws DataAccessException {
         var user = new Gson().fromJson(req.body(), UserData.class);
 
-        AuthData myAuth = userService.register(user);
+
         //todo not sure how/when it's a bad request but i think i need more here
         boolean isBadRequest = false;
         String errorCode = "200";
@@ -66,25 +66,38 @@ public class Server {
             res.status(400);
             JsonObject badRequest = new JsonObject();
             badRequest.addProperty("message","Error: bad request");
+            return badRequest;
+
         }
-        if (Objects.equals(errorCode, "403"))
+        else if (Objects.equals(errorCode, "403"))
         {
             res.status(403);
             JsonObject alreadyTakenError = new JsonObject();
             alreadyTakenError.addProperty("message","Error: already taken");
+            //finalRet is JSON
+            return alreadyTakenError;
+
         }
-        if (Objects.equals(errorCode, "500"))
+        else if (Objects.equals(errorCode, "500"))
         {
             res.status(500);
             JsonObject genericError = new JsonObject();
             genericError.addProperty("message","Error: description");
+            //finalRet is JSON
+            return genericError;
         }
-        res.status(200); //200 is success
-        JsonObject finalRet = new JsonObject();
-        finalRet.addProperty("username",user.getUsername());
-        finalRet.addProperty("authToken",myAuth.getAuthString());
-        //finalRet is JSON
-        return finalRet;
+        else
+        {
+            AuthData myAuth = userService.register(user);
+            res.status(200); //200 is success
+            JsonObject finalRet = new JsonObject();
+            finalRet.addProperty("username",user.getUsername());
+            finalRet.addProperty("authToken",myAuth.getAuthString());
+            //finalRet is JSON
+            return finalRet;
+        }
+
+
     }
     private Object login(Request req, Response res)
     {
