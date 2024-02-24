@@ -3,6 +3,8 @@ package model;
 import chess.ChessGame;
 import chess.ChessPiece;
 
+import java.util.Objects;
+
 public class GameData {
   private int gameID;
   private String whiteUsername;
@@ -21,6 +23,17 @@ public class GameData {
   public String getBlackUsername()
   {
     return this.blackUsername;
+  }
+  public void addUser(String color, String username)
+  {
+    if (Objects.equals(color, "WHITE"))
+    {
+      this.whiteUsername = username;
+    }
+    else if (Objects.equals(color, "BLACK"))
+    {
+      this.blackUsername = username;
+    }
   }
 
   public void setGameID(int id)

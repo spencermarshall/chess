@@ -1,6 +1,7 @@
 package service;
 
 import dataAccess.DataAccess;
+import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.AuthData;
 import model.GameData;
@@ -35,6 +36,14 @@ public class GameService {
     public Vector<GameData> returnAllGames()
     {
         return this.dataAccessGame.returnAllGames();
+    }
+    public GameData getGame(int id) throws DataAccessException
+    {
+        return this.dataAccessGame.getGame(id);
+    }
+    public void setColor(int id, String color, String username)
+    {
+        this.dataAccessGame.setColor(id, color, username);
     }
 
 

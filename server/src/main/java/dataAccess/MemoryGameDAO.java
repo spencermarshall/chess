@@ -21,10 +21,38 @@ public class MemoryGameDAO implements GameDAO
   public void addGame(GameData game)
   {
       allGames.add(game);
+      //refactor gameID everytime one is added or removed
+      for (int i = 0; i < this.allGames.size(); ++i)
+      {
+          this.allGames.get(i).setGameID(i+1);
+      }
   }
   public Vector<GameData> returnAllGames()
   {
       return this.allGames;
+  }
+  public void setColor(int id, String color, String username)
+  {
+      for (int i = 0; i < this.allGames.size(); ++i)
+      {
+          if (this.allGames.get(i).getGameID() == id)
+          {
+              this.allGames.get(i).addUser(color, username);
+              return;
+          }
+      }
+  }
+  public GameData getGame(int id) throws DataAccessException
+  {
+      for (int i = 0; i < allGames.size(); ++i)
+      {
+          if (allGames.get(i).getGameID() == id)
+          {
+              return allGames.get(i);
+          }
+      }
+      //this means gameID doesn't exist so, it's a bad request
+      throw new DataAccessException("400");
   }
 
 

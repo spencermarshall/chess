@@ -171,6 +171,8 @@ public class Server {
         JsonObject success = new JsonObject();
         Vector<GameData> allGames = this.gameService.returnAllGames();
 
+        JsonObject []jsonGames = new JsonObject[99];
+        JsonObject everyGame = null;
 
         for (int i = 0; i < allGames.size(); ++i)
         {
@@ -180,8 +182,12 @@ public class Server {
             instance.addProperty("whiteUsername",allGames.get(i).getWhiteUsername());
             instance.addProperty("blackUsername",allGames.get(i).getBlackUsername());
             instance.addProperty("gameName",allGames.get(i).getGameName());
-            success.addProperty("games",instance.toString());
+            jsonGames[i] = instance;
+            success.addProperty("games:",instance.toString());
+
+
         }
+
         //finalRet is JSON
         return success;
 
@@ -204,10 +210,11 @@ public class Server {
             return error400(res);
         }
         //add it to games thru GameService
-        gameService.addGame(game, new AuthData(header));
+        AuthData myAuth = new AuthData(header);
+        gameService.addGame(game, myAuth);
         res.status(200); //200 is success
         JsonObject success = new JsonObject();
-        authService.removeAuth(header);
+        this.authService.addAuth(myAuth);
         success.addProperty("gameID",game.getGameID());
         //finalRet is JSON
         return success;
@@ -215,7 +222,19 @@ public class Server {
     }
     private Object joinGame(Request req, Response res)
     {
+        res.status(200); //200 is success
         String header = req.headers("Authorization");
+        String body = req.body();
+        String color = "EMPTY";
+        if (body.contains("WHITE"))
+        {
+            color = "WHITE";
+        }
+        else if (body.contains("BLACK"))
+        {
+            color = "BLACK";
+        }
+
         boolean validAuthToken = false;
         try
         {
@@ -224,6 +243,49 @@ public class Server {
         {
             return error401(res);
         }
+        //verify gameID exists
+        String gameID = body.substring(body.indexOf("gameID")+8);
+        gameID = gameID.substring(0,gameID.length()-1);
+        int intGameID = Integer.parseInt(gameID);
+        GameData myGame = null;
+        try
+        {
+            myGame = this.gameService.getGame(intGameID);
+
+        } catch (DataAccessException error)
+        {
+            //game id does not exist bruh
+            return error400(res);
+        }
+        //watch or play
+        if (color.equals("EMPTY"))
+        {
+            //add as spectator; not needed for this phase
+            res.status(200);
+            return "{}";
+        }
+        if (color.equals("BLACK"))
+        {
+            if (!Objects.equals(myGame.getBlackUsername(), null))
+            {
+                //black is already taken
+                return error403(res);
+            }
+            //else add them
+            this.gameService.setColor(intGameID,color,"someone");
+        }
+        else if (color.equals("WHITE"))
+        {
+            if (!Objects.equals(myGame.getWhiteUsername(), null))
+            {
+                //white is already taken
+                return error403(res);
+            }
+            //else add them
+            this.gameService.setColor(intGameID,color,"someone");
+        }
+        //else we chose a color and it is available, so join
+        return "{}";
     }
 
     public void stop()
