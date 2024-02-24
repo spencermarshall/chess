@@ -5,6 +5,8 @@ import model.AuthData;
 import model.UserData;
 import org.eclipse.jetty.server.Authentication;
 
+import java.util.UUID;
+
 
 public class UserService {
    // private DataAccess dataAcessUser;
@@ -83,7 +85,7 @@ public class UserService {
     }
     public void logout(UserData user)
     {
-       return;
+       this.dataAccessUser.logout(user);
     }
 
 

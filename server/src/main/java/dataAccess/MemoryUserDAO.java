@@ -1,5 +1,7 @@
 package dataAccess;
 import model.UserData;
+import org.eclipse.jetty.server.Authentication;
+
 import java.util.*;
 
 public class MemoryUserDAO implements UserDAO {
@@ -39,6 +41,10 @@ public class MemoryUserDAO implements UserDAO {
     public int getSize()
     {
         return allUsers.size();
+    }
+    public void logout(UserData user)
+    {
+        this.allUsers.remove(user);
     }
     public boolean testLogin(UserData user) throws DataAccessException
     {

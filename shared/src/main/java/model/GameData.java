@@ -12,8 +12,11 @@ public class GameData {
   public GameData()
   {
     //default so we know if the user never sets one
-      this.gameID = 1;
+    gameID = 1;
+
+
   }
+
   public void setGameID(int id)
   {
     this.gameID = id;
@@ -33,7 +36,7 @@ public class GameData {
     whiteUsername = "";
     blackUsername = "";
     gameName = "";
-    myGame = new ChessGame();
+   // myGame = new ChessGame();
     return;
   }
 }

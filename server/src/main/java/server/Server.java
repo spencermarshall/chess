@@ -191,7 +191,7 @@ public class Server {
             return error400(res);
         }
         //add it to games thru GameService
-        gameService.addGame(game);
+        gameService.addGame(game, new AuthData(header));
         res.status(200); //200 is success
         JsonObject success = new JsonObject();
         authService.removeAuth(header);

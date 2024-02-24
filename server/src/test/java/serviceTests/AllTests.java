@@ -2,6 +2,8 @@ package serviceTests;
 
 import chess.ChessGame;
 import dataAccess.DataAccessException;
+import model.AuthData;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import passoffTests.testClasses.TestException;
@@ -98,25 +100,35 @@ public class AllTests {
     @Order(4)
     @DisplayName("Login Positive (returns authToken)")
     public void loginWorksTest() throws Exception {
+        AuthData valid = this.userService.validLogin(existingUser);
+        assertNotNull(valid);
+
+
         return;
     }
     @Test
     @Order(5)
-    @DisplayName("Login negative (incorrect password)")
-    public void loginNegativeIncorrectPasswordTest() throws Exception {
-        return;
+    @DisplayName("Login negative (incorrect username or password)")
+    public void loginNegativeIncorrectPasswordTest() throws DataAccessException {
+        AuthData valid = this.userService.login(newUser);
+        assertNull(valid);
+        //will be null if it couldn't login, meaning incorrect username or password
     }
     @Test
     @Order(6)
     @DisplayName("Logout Positive (successful logged out)")
     public void logoutPositiveTest() throws Exception {
-        return;
+        this.userService.logout(existingUser);
+        //will yell if not empty
+        assertTrue(this.userService.isEmpty());
     }
     @Test
     @Order(7)
     @DisplayName("Logout negative (incorrect password)")
     public void logoutNegativeIncorrectPasswordTest() throws Exception {
-        return;
+        this.userService.logout(newUser);
+        assertFalse(this.userService.isEmpty());
+
     }
     @Test
     @Order(8)
@@ -135,13 +147,21 @@ public class AllTests {
     @Order(10)
     @DisplayName("Create Game Positive (gives gameID)")
     public void createGamePositiveTest() throws Exception {
-        return;
+        AuthData auth = new AuthData(existingUserUsername);
+        GameData game = new GameData();
+        this.gameService.addGame(game, auth);
+        assertFalse(this.gameService.isEmpty());
+
+
     }
     @Test
     @Order(11)
     @DisplayName("Create Game Negative (unauthorized)")
     public void createGameNegativeUnauthorizedTest() throws Exception {
-        return;
+        AuthData auth = null;
+        GameData game = new GameData();
+        this.gameService.addGame(game, auth);
+        assertTrue(game.getGameID() > 0);
     }
     @Test
     @Order(12)

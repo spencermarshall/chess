@@ -23,8 +23,12 @@ public class GameService {
     {
         return dataAccessGame.isEmpty();
     }
-    public void addGame(GameData game)
+    public void addGame(GameData game, AuthData auth)
     {
+        if (auth == null)
+        {
+            return;
+        }
         dataAccessGame.addGame(game);
     }
 

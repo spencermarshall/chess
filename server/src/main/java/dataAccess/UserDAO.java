@@ -17,4 +17,5 @@ public interface UserDAO {
     int getSize();
 
     void validUsername(String username) throws DataAccessException;
+    void logout(UserData user);
 }
