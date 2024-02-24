@@ -6,6 +6,7 @@ import model.AuthData;
 import model.GameData;
 import model.UserData;
 import dataAccess.MemoryGameDAO;
+import java.util.Vector;
 
 public class GameService {
    // private DataAccess dataAccessGame;
@@ -30,6 +31,10 @@ public class GameService {
             return;
         }
         dataAccessGame.addGame(game);
+    }
+    public Vector<GameData> returnAllGames()
+    {
+        return this.dataAccessGame.returnAllGames();
     }
 
 

@@ -8,6 +8,7 @@ import spark.*;
 import model.GameData;
 import model.AuthData;
 import model.UserData;
+import java.util.Vector;
 
 
 
@@ -166,12 +167,24 @@ public class Server {
         {
             return error401(res);
         }
+        res.status(200); //200 is success
+        JsonObject success = new JsonObject();
+        Vector<GameData> allGames = this.gameService.returnAllGames();
 
 
-        //list games
+        for (int i = 0; i < allGames.size(); ++i)
+        {
+            JsonObject instance = new JsonObject();
+            //there are 4 variables in each game so we add each to json object
+            instance.addProperty("gameID",allGames.get(i).getGameID());
+            instance.addProperty("whiteUsername",allGames.get(i).getWhiteUsername());
+            instance.addProperty("blackUsername",allGames.get(i).getBlackUsername());
+            instance.addProperty("gameName",allGames.get(i).getGameName());
+            success.addProperty("games",instance.toString());
+        }
+        //finalRet is JSON
+        return success;
 
-
-        return "";
     }
     private Object createGame(Request req, Response res)
     {
@@ -202,7 +215,15 @@ public class Server {
     }
     private Object joinGame(Request req, Response res)
     {
-        return "";
+        String header = req.headers("Authorization");
+        boolean validAuthToken = false;
+        try
+        {
+            validAuthToken = this.authService.verifyAuth(header);
+        } catch (DataAccessException errorMessage)
+        {
+            return error401(res);
+        }
     }
 
     public void stop()

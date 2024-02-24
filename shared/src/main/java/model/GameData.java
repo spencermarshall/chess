@@ -13,8 +13,14 @@ public class GameData {
   {
     //default so we know if the user never sets one
     gameID = 1;
-
-
+  }
+  public String getWhiteUsername()
+  {
+    return this.whiteUsername;
+  }
+  public String getBlackUsername()
+  {
+    return this.blackUsername;
   }
 
   public void setGameID(int id)

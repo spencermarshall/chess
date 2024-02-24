@@ -1,6 +1,7 @@
 package dataAccess;
 import model.GameData;
 import java.util.*;
+import java.util.Vector;
 public class MemoryGameDAO implements GameDAO
 {
 
@@ -21,5 +22,10 @@ public class MemoryGameDAO implements GameDAO
   {
       allGames.add(game);
   }
+  public Vector<GameData> returnAllGames()
+  {
+      return this.allGames;
+  }
+
 
 }
