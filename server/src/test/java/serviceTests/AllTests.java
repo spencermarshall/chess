@@ -1,10 +1,15 @@
 package serviceTests;
 
 import chess.ChessGame;
+import dataAccess.DataAccessException;
+import model.UserData;
 import org.junit.jupiter.api.*;
 import passoffTests.testClasses.TestException;
 import passoffTests.testClasses.TestModels;
 import server.Server;
+import service.AuthService;
+import service.GameService;
+import service.UserService;
 
 import java.net.HttpURLConnection;
 import java.util.Arrays;
@@ -15,15 +20,24 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AllTests {
-    private static TestModels.TestUser existingUser;
 
-    private static TestModels.TestUser newUser;
-
-    private static TestModels.TestCreateRequest createRequest;
 
     private static Server server;
 
     private String existingAuth;
+    private UserService userService = new UserService();
+    private GameService gameService = new GameService();
+    private AuthService authService = new AuthService();
+    public UserData existingUser = new UserData();
+    public UserData newUser = new UserData();
+    String existingUserUsername = "ExistingUser";
+    String existingUserPassword = "existingUserPassword";
+    String existingUserEmail = "e@mail.com";
+
+
+    String newUserUsername = "NewUser";
+    String newUserPassword = "newUserPassword";
+    String newUserEmail = "new@mail.com";
 
 
     @BeforeAll //this function is copied from the starterCode on github
@@ -34,18 +48,6 @@ public class AllTests {
 
 
 
-        existingUser = new TestModels.TestUser();
-        existingUser.username = "ExistingUser";
-        existingUser.password = "existingUserPassword";
-        existingUser.email = "eu@mail.com";
-
-        newUser = new TestModels.TestUser();
-        newUser.username = "NewUser";
-        newUser.password = "newUserPassword";
-        newUser.email = "nu@mail.com";
-
-        createRequest = new TestModels.TestCreateRequest();
-        createRequest.gameName = "testGame";
     }
     @AfterAll  //this function is copied from the starterCode on github
     public static void stop()
@@ -53,13 +55,11 @@ public class AllTests {
         server.stop();
     }
     @BeforeEach //this function is copied from the starterCode on github
-    public void setup() throws TestException {
+    public void setup() throws TestException, DataAccessException {
 
+        this.existingUser.register(existingUserUsername,existingUserPassword,existingUserEmail);
+        this.userService.register(existingUser);
 
-        TestModels.TestRegisterRequest registerRequest = new TestModels.TestRegisterRequest();
-        registerRequest.username = existingUser.username;
-        registerRequest.password = existingUser.password;
-        registerRequest.email = existingUser.email;
 
         //one user already logged in
         //TestModels.TestLoginRegisterResult regResult = server.register(registerRequest);
@@ -68,31 +68,30 @@ public class AllTests {
     @Test
     @Order(1)
     @DisplayName("Clear All")
-    public void clearWorks() throws Exception {
-        TestModels.TestLoginRequest loginRequest = new TestModels.TestLoginRequest();
-        loginRequest.username = existingUser.username;
-        loginRequest.password = existingUser.password;
-       // TestModels.TestLoginRegisterResult loginResult = server.login(loginRequest);
+    public void clearWorksTest() throws Exception {
+        //user is already added
+        userService.clearAllUsers();
 
+        assertTrue(userService.isEmpty());
 
-
-        //todo none of this below this line is correct, idk what above really does
-        //Assertions.assertEquals(server., "200",
-        //        "Server response code was not 200 OK");
-        //assertNotNull(htmlFromServer, "Server returned an empty file");
-        //assertTrue(htmlFromServer.contains("CS 240 Chess Server Web API"));
     }
     @Test
     @Order(2)
     @DisplayName("Register Positive (will add)")
-    public void clearWorksTest() throws Exception {
+    public void registerWorksTest() throws Exception {
+        newUser.register(newUserUsername,newUserPassword,newUserEmail);
+        this.userService.register(newUser);
+        assertTrue(userService.getSize() == 2);
+
 
         return;
     }
     @Test
     @Order(3)
     @DisplayName("Register negative (won't add a duplicate)")
-    public void clearWorksDuplicateUserTest() throws Exception {
+    public void registerWorksDuplicateUserTest() throws Exception {
+        this.userService.register(existingUser); //tries to add an existing User
+        assertTrue(userService.getSize() == 1);
         return;
     }
     @Test

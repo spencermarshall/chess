@@ -18,6 +18,10 @@ public class UserService {
     {
         return this.dataAccessUser.isEmpty();
     }
+    public int getSize()
+    {
+        return dataAccessUser.getSize();
+    }
     public void isValid(UserData user) throws DataAccessException
     {
         try
@@ -51,6 +55,14 @@ public class UserService {
 
 
     public AuthData register(UserData user) throws DataAccessException{
+        //check if username is already used
+        try
+        {
+            this.dataAccessUser.validUsername(user.getUsername());
+        } catch (DataAccessException message)
+        {
+            throw new DataAccessException(message.getMessage());
+        }
 
         this.dataAccessUser.registerUser(user);
         //create Auth token with the users username and returns AuthData

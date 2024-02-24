@@ -23,9 +23,22 @@ public class MemoryUserDAO implements UserDAO {
             throw new DataAccessException("400");
         }
     }
+    public void validUsername(String username) throws DataAccessException {
+        for (int i = 0; i < this.allUsers.size(); ++i)
+        {
+            if (Objects.equals(allUsers.get(i).getUsername(), username))
+            {
+                throw new DataAccessException("403");
+            }
+        }
+    }
     public boolean isEmpty()
     {
         return allUsers.isEmpty();
+    }
+    public int getSize()
+    {
+        return allUsers.size();
     }
     public boolean testLogin(UserData user) throws DataAccessException
     {
