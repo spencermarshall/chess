@@ -1,9 +1,6 @@
 package server;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import dataAccess.DataAccess;
 import dataAccess.DataAccessException;
-import dataAccess.MemoryUserDAO;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
@@ -68,19 +65,12 @@ public class Server {
 
         if (Objects.equals(errorCode, "400"))
         {
-            res.status(400);
-            JsonObject badRequest = new JsonObject();
-            badRequest.addProperty("message","Error: bad request");
-            return badRequest;
+            return error400(res);
 
         }
         else if (Objects.equals(errorCode, "403"))
         {
-            res.status(403);
-            JsonObject alreadyTakenError = new JsonObject();
-            alreadyTakenError.addProperty("message","Error: already taken");
-            //finalRet is JSON
-            return alreadyTakenError;
+            return error403(res);
 
         }
         else if (Objects.equals(errorCode, "500"))
@@ -121,19 +111,11 @@ public class Server {
         }
         if (Objects.equals(errorCode, "401"))
         {
-            res.status(401);
-            JsonObject genericError = new JsonObject();
-            genericError.addProperty("message","Error: unauthorized");
-            //finalRet is JSON
-            return genericError;
+            return error401(res);
         }
         else if (Objects.equals(errorCode, "500"))
         {
-            res.status(500);
-            JsonObject genericError = new JsonObject();
-            genericError.addProperty("message","Error: description");
-            //finalRet is JSON
-            return genericError;
+            return error500(res);
         }
         else
         {
@@ -157,11 +139,7 @@ public class Server {
             validAuthToken = this.authService.verifyAuth(header);
         } catch (DataAccessException errorMessage)
         {
-            res.status(401); //unauthorized
-            JsonObject genericError = new JsonObject();
-            genericError.addProperty("message","Error: unauthorized");
-            //finalRet is JSON
-            return genericError;
+            return error401(res);
         }
 
         if (validAuthToken)
@@ -179,11 +157,48 @@ public class Server {
     }
     private Object listGames(Request req, Response res)
     {
+        String header = req.headers("Authorization");
+        boolean validAuthToken = false;
+        try
+        {
+            validAuthToken = this.authService.verifyAuth(header);
+        } catch (DataAccessException errorMessage)
+        {
+            return error401(res);
+        }
+
+
+        //list games
+
+
         return "";
     }
     private Object createGame(Request req, Response res)
     {
-        return "";
+        String header = req.headers("Authorization");
+        boolean validAuthToken = false;
+        try
+        {
+            validAuthToken = this.authService.verifyAuth(header);
+        } catch (DataAccessException errorMessage)
+        {
+            return error401(res);
+        }
+        //create game
+        var game = new Gson().fromJson(req.body(), GameData.class);
+        if (Objects.equals(game.getGameName(), null))
+        {
+            return error400(res);
+        }
+        //add it to games thru GameService
+        gameService.addGame(game);
+        res.status(200); //200 is success
+        JsonObject success = new JsonObject();
+        authService.removeAuth(header);
+        success.addProperty("gameID",game.getGameID());
+        //finalRet is JSON
+        return success;
+
     }
     private Object joinGame(Request req, Response res)
     {
@@ -214,4 +229,49 @@ public class Server {
         }
         return "{}"; // maybe return '', or maybe return null
     }
+
+
+
+
+
+
+
+
+    //error or success for code decomposition, 200 is not included because of different display messages
+
+
+    private JsonObject error400(Response res)
+    {
+        res.status(400);
+        JsonObject badRequest = new JsonObject();
+        badRequest.addProperty("message","Error: bad request");
+        return badRequest;
+    }
+    private JsonObject error401(Response res)
+    {
+        res.status(401); //unauthorized
+        JsonObject genericError = new JsonObject();
+        genericError.addProperty("message","Error: unauthorized");
+        //finalRet is JSON
+        return genericError;
+    }
+    private JsonObject error403(Response res)
+    {
+        res.status(403);
+        JsonObject alreadyTakenError = new JsonObject();
+        alreadyTakenError.addProperty("message","Error: already taken");
+        //finalRet is JSON
+        return alreadyTakenError;
+    }
+    private JsonObject error500(Response res)
+    {
+        res.status(500);
+        JsonObject genericError = new JsonObject();
+        genericError.addProperty("message","Error: description");
+        //finalRet is JSON
+        return genericError;
+    }
+
+
+
 }

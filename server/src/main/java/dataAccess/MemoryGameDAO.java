@@ -17,4 +17,9 @@ public class MemoryGameDAO implements GameDAO
   {
       return allGames.isEmpty();
   }
+  public void addGame(GameData game)
+  {
+      allGames.add(game);
+  }
+
 }

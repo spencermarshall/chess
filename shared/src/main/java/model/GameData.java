@@ -1,6 +1,7 @@
 package model;
 
 import chess.ChessGame;
+import chess.ChessPiece;
 
 public class GameData {
   private int gameID;
@@ -10,7 +11,20 @@ public class GameData {
   private ChessGame myGame;
   public GameData()
   {
-
+    //default so we know if the user never sets one
+      this.gameID = 1;
+  }
+  public void setGameID(int id)
+  {
+    this.gameID = id;
+  }
+  public int getGameID()
+  {
+    return this.gameID;
+  }
+  public String getGameName()
+  {
+    return this.gameName;
   }
 
   public void clearAll()
