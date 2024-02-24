@@ -39,7 +39,7 @@ public class MemoryUserDAO implements UserDAO {
                 {
                     //username is correct but password is incorrect
                     //unauthorized 500
-                    throw new DataAccessException("500");
+                    throw new DataAccessException("401");
                 }
             }
         }
