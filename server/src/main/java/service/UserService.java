@@ -26,8 +26,19 @@ public class UserService {
         {
             throw new DataAccessException(message.getMessage());
         }
-
-
+    }
+    public AuthData validLogin(UserData user) throws DataAccessException
+    {
+        AuthData ret = new AuthData(user.getUsername());
+        boolean exists = false;
+        try
+        {
+            exists = this.dataAccessUser.testLogin(user);
+        } catch (DataAccessException message)
+        {
+            throw new DataAccessException(message.getMessage());
+        }
+        return ret;
 
     }
 

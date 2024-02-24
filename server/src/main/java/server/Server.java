@@ -41,6 +41,11 @@ public class Server {
         Spark.delete("/db",this::deleteAllGames);
         Spark.post("/user",this::registerNewUser);
         Spark.post("/session", this::login);
+        Spark.delete("/session",this::logout);
+        Spark.get("/game",this::listGames);
+        Spark.post("/game",this::createGame);
+        Spark.put("/game",this::joinGame);
+
 
         Spark.awaitInitialization();
         return Spark.port();
@@ -99,7 +104,59 @@ public class Server {
 
 
     }
-    private Object login(Request req, Response res)
+    private Object login(Request req, Response res) throws DataAccessException
+    {
+        var user = new Gson().fromJson(req.body(), UserData.class);
+        AuthData loginAuth = null;
+
+        String errorCode = "200";
+        try
+        {
+            loginAuth = this.userService.validLogin(user);
+        } catch (DataAccessException errorMessage)
+        {
+            errorCode = errorMessage.getMessage();
+        }
+        if (Objects.equals(errorCode, "401"))
+        {
+            res.status(401);
+            JsonObject genericError = new JsonObject();
+            genericError.addProperty("message","Error: unauthorized");
+            //finalRet is JSON
+            return genericError;
+        }
+        else if (Objects.equals(errorCode, "500"))
+        {
+            res.status(500);
+            JsonObject genericError = new JsonObject();
+            genericError.addProperty("message","Error: description");
+            //finalRet is JSON
+            return genericError;
+        }
+        else
+        {
+            res.status(200); //200 is success
+            JsonObject finalRet = new JsonObject();
+            finalRet.addProperty("username",user.getUsername());
+            finalRet.addProperty("authToken",loginAuth.getAuthString());
+            //finalRet is JSON
+            return finalRet;
+        }
+
+    }
+    private Object logout(Request req, Response res)
+    {
+        return "";
+    }
+    private Object listGames(Request req, Response res)
+    {
+        return "";
+    }
+    private Object createGame(Request req, Response res)
+    {
+        return "";
+    }
+    private Object joinGame(Request req, Response res)
     {
         return "";
     }

@@ -67,6 +67,36 @@ public class AllTests {
         TestModels.TestLoginRegisterResult regResult = serverFacade.register(registerRequest);
         existingAuth = regResult.authToken;
     }
+    @Test
+    @Order(1)
+    @DisplayName("Clear All")
+    public void clearWorks() throws Exception {
+        TestModels.TestLoginRequest loginRequest = new TestModels.TestLoginRequest();
+        loginRequest.username = existingUser.username;
+        loginRequest.password = existingUser.password;
+        TestModels.TestLoginRegisterResult loginResult = serverFacade.login(loginRequest);
+
+
+
+        //todo none of this below this line is correct, idk what above really does
+        Assertions.assertEquals(serverFacade.clear().message, "200",
+                "Server response code was not 200 OK");
+        //assertNotNull(htmlFromServer, "Server returned an empty file");
+        //assertTrue(htmlFromServer.contains("CS 240 Chess Server Web API"));
+    }
+    @Test
+    @Order(2)
+    @DisplayName("Register Positive (will add)")
+    public void clearWorksTest() throws Exception {
+
+        return;
+    }
+    @Test
+    @Order(3)
+    @DisplayName("Register negative (won't add a duplicate)")
+    public void clearWorksDuplicateUser() throws Exception {
+        return;
+    }
 
 
 }

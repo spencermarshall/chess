@@ -23,6 +23,28 @@ public class MemoryUserDAO implements UserDAO {
             throw new DataAccessException("400");
         }
     }
+    public boolean testLogin(UserData user) throws DataAccessException
+    {
+        boolean valid = false;
+        for (int i = 0; i < allUsers.size(); ++i)
+        {
+            if (Objects.equals(allUsers.get(i).getUsername(), user.getUsername()))
+            {
+                if (Objects.equals(allUsers.get(i).getPassword(), user.getPassword()))
+                {
+                    //username and password is correct
+                    return true;
+                }
+                else
+                {
+                    //username is correct but password is incorrect
+                    //unauthorized 500
+                    throw new DataAccessException("500");
+                }
+            }
+        }
+        return valid;
+    }
 
     public void clearAllUsers()
     {
