@@ -55,7 +55,7 @@ public class Server {
 
 
         //todo not sure how/when it's a bad request but i think i need more here
-        boolean isBadRequest = false;
+        boolean incorrectPass = false;
         String errorCode = "200";
         try
         {

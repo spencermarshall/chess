@@ -34,6 +34,11 @@ public class UserService {
         try
         {
             exists = this.dataAccessUser.testLogin(user);
+            if (!exists)
+            {
+                throw new DataAccessException("401");
+            }
+
         } catch (DataAccessException message)
         {
             throw new DataAccessException(message.getMessage());
