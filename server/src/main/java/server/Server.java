@@ -182,7 +182,7 @@ public class Server {
             instance.addProperty("whiteUsername",allGames.get(i).getWhiteUsername());
             instance.addProperty("blackUsername",allGames.get(i).getBlackUsername());
             instance.addProperty("gameName",allGames.get(i).getGameName());
-            jsonGames[i] = instance;
+            jsonGames[i] = instance; //ok this might be wrong tbh
             success.addProperty("games:",instance.toString());
 
 
