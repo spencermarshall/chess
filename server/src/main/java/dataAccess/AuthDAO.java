@@ -10,5 +10,7 @@ public interface AuthDAO {
     boolean hasUsername(String auth) throws DataAccessException;
     boolean isEmpty();
     void removeAuth(String auth);
+    String getUsername(String auth);
+
 
 }

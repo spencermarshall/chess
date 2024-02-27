@@ -14,8 +14,8 @@ public class GameData {
   public GameData()
   {
     //default so we know if the user never sets one
-    whiteUsername = "";
-    blackUsername = "";
+    whiteUsername = null;
+    blackUsername = null;
     gameID = 1;
   }
   public String getWhiteUsername()
@@ -54,8 +54,8 @@ public class GameData {
   public void clearAll()
   {
     gameID = -1;
-    whiteUsername = "";
-    blackUsername = "";
+    whiteUsername = null;
+    blackUsername = null;
     gameName = "";
     myGame = new ChessGame();
 

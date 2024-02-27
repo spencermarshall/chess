@@ -20,6 +20,17 @@ public class MemoryAuthDAO implements AuthDAO {
     {
         return allAuthInfo.isEmpty();
     }
+    public String getUsername(String auth)
+    {
+        for (int i = 0; i < this.allAuthInfo.size(); ++i)
+        {
+            if (Objects.equals(this.allAuthInfo.get(i).getAuthString(), auth))
+            {
+                return this.allAuthInfo.get(i).getUsername();
+            }
+        }
+        return null;
+    }
     public void removeAuth(String auth)
     {
         for (int i = 0; i < allAuthInfo.size(); ++i)

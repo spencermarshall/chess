@@ -9,6 +9,9 @@ import spark.*;
 import model.GameData;
 import model.AuthData;
 import model.UserData;
+
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -180,6 +183,9 @@ public class Server {
             return error401(res);
         }
         res.status(200); //200 is success
+        res.type("application/json");
+
+
         if (allGames == null || allGames.isEmpty())
         {
             JsonObject nothing = new JsonObject();
@@ -214,14 +220,23 @@ public class Server {
         String finalResult = all.toString();
 //        var user = new Gson().fromJson(req.body(), UserData.class);
         Vector<GameData> allGamesVector = this.gameService.returnAllGames(myAuth);
+
         this.games = new GameData[allGamesVector.size()];
         for (int j = 0; j < allGamesVector.size(); ++j)
         {
             this.games[j] = allGamesVector.get(j);
         }
+        JsonObject me = new JsonObject();
+        String listGame = new Gson().toJson(this.games);
+        if (this.games.length == 0)
+        {
+            return new Gson().toJson(Map.of("games",""));
+        }
+        return new Gson().toJson(Map.of("games",this.games));
 
-        success.addProperty("games", new Gson().toJson(this.games));
-        return success;
+
+      //  success.addProperty("games", new Gson().toJson(this.games));
+
 
     }
     private Object createGame(Request req, Response res)
@@ -278,6 +293,9 @@ public class Server {
         //verify gameID exists
         String gameID = body.substring(body.indexOf("gameID")+8);
         gameID = gameID.substring(0,gameID.length()-1);
+        String username = this.authService.getUsername(header);
+
+
         int intGameID = Integer.parseInt(gameID);
         GameData myGame = null;
         try
@@ -298,23 +316,23 @@ public class Server {
         }
         if (color.equals("BLACK"))
         {
-            if (!Objects.equals(myGame.getBlackUsername(), ""))
+            if (!Objects.equals(myGame.getBlackUsername(), null))
             {
                 //black is already taken
                 return error403(res);
             }
             //else add them
-            this.gameService.setColor(intGameID,color,"someone");
+            this.gameService.setColor(intGameID,color, username);
         }
         else if (color.equals("WHITE"))
         {
-            if (!Objects.equals(myGame.getWhiteUsername(), ""))
+            if (!Objects.equals(myGame.getWhiteUsername(), null))
             {
                 //white is already taken
                 return error403(res);
             }
             //else add them
-            this.gameService.setColor(intGameID,color,"someone");
+            this.gameService.setColor(intGameID,color, username);
         }
         //else we chose a color and it is available, so join
         return "{}";

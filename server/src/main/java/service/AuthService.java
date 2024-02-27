@@ -19,6 +19,10 @@ public class AuthService {
     {
         return dataAccessAuth.hasUsername(auth);
     }
+    public String getUsername(String auth)
+    {
+        return this.dataAccessAuth.getUsername(auth);
+    }
     public void removeAuth(String auth)
     {
         dataAccessAuth.removeAuth(auth);
