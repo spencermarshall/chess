@@ -6,11 +6,27 @@ public class AuthData
 {
   private String authToken;
   private String username;
+  private boolean isGame;
 
   public AuthData(String username)
   {
       authToken = UUID.randomUUID().toString();
       this.username = username;
+  }
+  public boolean isGame()
+  {
+    return this.isGame;
+  }
+  public AuthData(String uuid, boolean isUUIDString)
+  {
+      if (isUUIDString)
+      {
+        this.authToken = uuid;
+      }
+  }
+  public void setAuthAsGame(boolean isGame)
+  {
+    this.isGame = isGame;
   }
   public void clearAll()
   {

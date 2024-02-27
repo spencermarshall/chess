@@ -14,10 +14,7 @@ import service.GameService;
 import service.UserService;
 
 import java.net.HttpURLConnection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Locale;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -83,28 +80,27 @@ public class AllTests {
     public void registerWorksTest() throws Exception {
         newUser.register(newUserUsername,newUserPassword,newUserEmail);
         this.userService.register(newUser);
-        assertTrue(userService.getSize() == 2);
+        assertEquals(2, userService.getSize());
 
-
-        return;
     }
     @Test
     @Order(3)
     @DisplayName("Register negative (won't add a duplicate)")
     public void registerWorksDuplicateUserTest() throws Exception {
-        this.userService.register(existingUser); //tries to add an existing User
-        assertTrue(userService.getSize() == 1);
-        return;
+        //this.userService.register(existingUser);
+       // assertEquals(1, userService.getSize());
+        assertThrows(DataAccessException.class, () -> {
+            this.userService.register(existingUser);
+        });
+
     }
     @Test
     @Order(4)
     @DisplayName("Login Positive (returns authToken)")
     public void loginWorksTest() throws Exception {
         AuthData valid = this.userService.validLogin(existingUser);
+        //it will be null if it's not a valid login, or throw an error depending
         assertNotNull(valid);
-
-
-        return;
     }
     @Test
     @Order(5)
@@ -134,13 +130,25 @@ public class AllTests {
     @Order(8)
     @DisplayName("List Games Positive (works)")
     public void listGamesPositiveTest() throws Exception {
-        return;
+        AuthData auth = new AuthData(existingAuth);
+        auth.setAuthAsGame(true);
+        GameData newGame = new GameData();
+        this.gameService.addGame(newGame, auth);
+        Vector<GameData> allGames = this.gameService.returnAllGames(auth);
+        assertEquals(1, allGames.size());
     }
 
     @Test
     @Order(9)
     @DisplayName("List Games negative (unauthorized)")
     public void listGameNegativeUnauthorizedTest() throws Exception {
+        AuthData auth = new AuthData(existingAuth);
+        auth.setAuthAsGame(true);
+        GameData newGame = new GameData();
+        this.gameService.addGame(newGame, auth);
+        AuthData notRealAuth = new AuthData("fake");
+        Vector<GameData> allGames = this.gameService.returnAllGames(notRealAuth);
+        assertNull(allGames);
         return;
     }
     @Test
@@ -161,12 +169,19 @@ public class AllTests {
         AuthData auth = null;
         GameData game = new GameData();
         this.gameService.addGame(game, auth);
-        assertTrue(game.getGameID() > 0);
+        assertTrue(this.gameService.isEmpty());
     }
     @Test
     @Order(12)
     @DisplayName("Join Game Positive works")
     public void joinGamePositiveTest() throws Exception {
+        GameData myGame = new GameData();
+        AuthData userAuth = new AuthData(existingUserUsername);
+        AuthData gameAuth = new AuthData(userAuth.getAuthString(), true);
+        UserData myUser = new UserData();
+        this.userService.register(myUser);
+        this.gameService.addGame(myGame, gameAuth);
+
         return;
     }
     @Test

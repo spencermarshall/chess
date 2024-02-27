@@ -6,6 +6,7 @@ public class MemoryGameDAO implements GameDAO
 {
 
   private Vector<GameData> allGames;
+
   public MemoryGameDAO()
   {
       this.allGames = new Vector<GameData>();
@@ -29,6 +30,10 @@ public class MemoryGameDAO implements GameDAO
   }
   public Vector<GameData> returnAllGames()
   {
+      if (this.allGames == null)
+      {
+          return new Vector<GameData>();
+      }
       return this.allGames;
   }
   public void setColor(int id, String color, String username)

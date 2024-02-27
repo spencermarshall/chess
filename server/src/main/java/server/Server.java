@@ -159,6 +159,11 @@ public class Server {
     private Object listGames(Request req, Response res)
     {
         String header = req.headers("Authorization");
+        JsonObject success = new JsonObject();
+
+        AuthData myAuth = new AuthData(header, true);
+        Vector<GameData> allGames = this.gameService.returnAllGames(myAuth);
+
         boolean validAuthToken = false;
         try
         {
@@ -168,12 +173,15 @@ public class Server {
             return error401(res);
         }
         res.status(200); //200 is success
-        JsonObject success = new JsonObject();
-        Vector<GameData> allGames = this.gameService.returnAllGames();
+        if (allGames == null || allGames.isEmpty())
+        {
+            JsonObject nothing = new JsonObject();
+            return "{games: []}";
+        }
 
-        JsonObject []jsonGames = new JsonObject[99];
+
+        JsonObject []jsonGames = new JsonObject[allGames.size()];
         JsonObject everyGame = null;
-
         for (int i = 0; i < allGames.size(); ++i)
         {
             JsonObject instance = new JsonObject();
@@ -184,9 +192,19 @@ public class Server {
             instance.addProperty("gameName",allGames.get(i).getGameName());
             jsonGames[i] = instance; //ok this might be wrong tbh
             success.addProperty("games:",instance.toString());
-
-
         }
+        StringBuilder all =new StringBuilder();
+        all.append("[");
+        for (int j = 0; j < jsonGames.length; ++j)
+        {
+            all.append(jsonGames[j]);
+            all.append("n");
+        }
+        all.append("]");
+        String finalResult = all.toString();
+        int test = 3;
+        success.addProperty("games:",finalResult);
+
 
         //finalRet is JSON
         return success;
@@ -298,6 +316,7 @@ public class Server {
         return Spark.port();
     }
     private Object deleteAllGames(Request req, Response res) {
+
         this.authService.clearAllAuth();
         this.gameService.clearAllGame();
         this.userService.clearAllUsers();
