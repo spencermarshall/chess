@@ -14,6 +14,8 @@ public class GameData {
   public GameData()
   {
     //default so we know if the user never sets one
+    whiteUsername = "";
+    blackUsername = "";
     gameID = 1;
   }
   public String getWhiteUsername()
@@ -55,7 +57,8 @@ public class GameData {
     whiteUsername = "";
     blackUsername = "";
     gameName = "";
-   // myGame = new ChessGame();
+    myGame = new ChessGame();
+
     return;
   }
 }

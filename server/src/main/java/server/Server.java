@@ -1,4 +1,5 @@
 package server;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dataAccess.DataAccessException;
 import service.AuthService;
@@ -20,11 +21,13 @@ public class Server {
     private UserService userService;
     private GameService gameService;
     private AuthService authService;
+    private GameData[] games;
     public Server()
     {
-        userService = new UserService();
-        gameService = new GameService();
-        authService = new AuthService();
+        this.userService = new UserService();
+        this.gameService = new GameService();
+        this.authService = new AuthService();
+        this.games = new GameData[64];
     }
 
     public int run(int desiredPort)
@@ -161,8 +164,10 @@ public class Server {
         String header = req.headers("Authorization");
         JsonObject success = new JsonObject();
 
+
         AuthData myAuth = new AuthData(header, true);
         Vector<GameData> allGames = this.gameService.returnAllGames(myAuth);
+
 
         boolean validAuthToken = false;
         try
@@ -170,13 +175,17 @@ public class Server {
             validAuthToken = this.authService.verifyAuth(header);
         } catch (DataAccessException errorMessage)
         {
+            //success.addProperty("games:", "[]");
+            //return success;
             return error401(res);
         }
         res.status(200); //200 is success
         if (allGames == null || allGames.isEmpty())
         {
             JsonObject nothing = new JsonObject();
-            return "{games: []}";
+            success.addProperty("games:", "[]");
+
+            return success;
         }
 
 
@@ -191,22 +200,27 @@ public class Server {
             instance.addProperty("blackUsername",allGames.get(i).getBlackUsername());
             instance.addProperty("gameName",allGames.get(i).getGameName());
             jsonGames[i] = instance; //ok this might be wrong tbh
-            success.addProperty("games:",instance.toString());
+           // this.gameService.listOfGames[i] = instance;
+
         }
         StringBuilder all =new StringBuilder();
         all.append("[");
         for (int j = 0; j < jsonGames.length; ++j)
         {
             all.append(jsonGames[j]);
-            all.append("n");
+
         }
         all.append("]");
         String finalResult = all.toString();
-        int test = 3;
-        success.addProperty("games:",finalResult);
+//        var user = new Gson().fromJson(req.body(), UserData.class);
+        Vector<GameData> allGamesVector = this.gameService.returnAllGames(myAuth);
+        this.games = new GameData[allGamesVector.size()];
+        for (int j = 0; j < allGamesVector.size(); ++j)
+        {
+            this.games[j] = allGamesVector.get(j);
+        }
 
-
-        //finalRet is JSON
+        success.addProperty("games", new Gson().toJson(this.games));
         return success;
 
     }
@@ -284,7 +298,7 @@ public class Server {
         }
         if (color.equals("BLACK"))
         {
-            if (!Objects.equals(myGame.getBlackUsername(), null))
+            if (!Objects.equals(myGame.getBlackUsername(), ""))
             {
                 //black is already taken
                 return error403(res);
@@ -294,7 +308,7 @@ public class Server {
         }
         else if (color.equals("WHITE"))
         {
-            if (!Objects.equals(myGame.getWhiteUsername(), null))
+            if (!Objects.equals(myGame.getWhiteUsername(), ""))
             {
                 //white is already taken
                 return error403(res);

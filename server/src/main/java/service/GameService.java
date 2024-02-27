@@ -12,9 +12,16 @@ import java.util.Vector;
 public class GameService {
    // private DataAccess dataAccessGame;
     private GameDAO dataAccessGame;
+    public GameData[] listOfGames;
+
     public GameService()
     {
         this.dataAccessGame = new MemoryGameDAO();
+        this.listOfGames = new GameData[64];
+    }
+    public void updateListOfGames(GameData[] updated)
+    {
+        this.listOfGames = updated;
     }
 
     public void clearAllGame()
