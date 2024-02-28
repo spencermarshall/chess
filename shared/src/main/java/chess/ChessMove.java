@@ -1,7 +1,5 @@
 package chess;
-
 import java.util.Objects;
-
 /**
  * Represents moving a chess piece on a chessboard
  * <p>
@@ -9,7 +7,6 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessMove {
-
     ChessPosition start;
     ChessPosition end;
     ChessPiece.PieceType promotion;
@@ -33,7 +30,6 @@ public class ChessMove {
     public ChessPosition getEndPosition() {
         return this.end;
     }
-
     /**
      * Gets the type of piece to promote a pawn to if pawn promotion is part of this
      * chess move
@@ -41,18 +37,14 @@ public class ChessMove {
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
     public ChessPiece.PieceType getPromotionPiece() {
-        if (this.promotion == null)
-        {
+        if (this.promotion == null) {
             return null;
         }
-        else
-        {
+        else {
             return this.promotion;
         }
     }
-
-    public String toString()
-    {
+    public String toString() {
         String first = this.start.toString();
         String end = this.end.toString();
         return first + ", " + end;

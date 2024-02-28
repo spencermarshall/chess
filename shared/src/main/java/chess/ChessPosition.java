@@ -1,7 +1,5 @@
 package chess;
-
 import java.util.Objects;
-
 /**
  * Represents a single square position on a chess board
  * <p>
@@ -19,30 +17,26 @@ public class ChessPosition {
     boolean isValidPos;
     public ChessPosition(int row, int col, ChessPiece.PieceType adv) {
         this.piece = adv;
-        if (row <= 0)
-        {
+        if (row <= 0) {
             //all this 6 and excess stuff might not be necessary
             this.row = 6;
             this.col = 6;
             isValidPos = false;
             return;
         }
-        else if (col <= 0)
-        {
+        else if (col <= 0) {
             this.col = 6;
             this.row = 6;
             isValidPos = false;
             return;
         }
-        else if (col > 8)
-        {
+        else if (col > 8) {
             this.col = 6;
             this.row = 6;
             isValidPos = false;
             return;
         }
-        else if (row > 8)
-        {
+        else if (row > 8) {
             this.row = 6;
             this.col = 6;
             isValidPos = false;
@@ -51,35 +45,29 @@ public class ChessPosition {
         this.row = row;
         this.col = col;
         this.isValidPos = true;
-
-
     }
     //separate constructor for 3 parameters, for adv pos
     public ChessPosition(int row, int col) {
-        if (row <= 0)
-        {
+        if (row <= 0) {
             //all this 6 and excess stuff might not be necessary
             this.row = 6;
             this.col = 6;
             isValidPos = false;
             return;
         }
-        else if (col <= 0)
-        {
+        else if (col <= 0) {
             this.col = 6;
             this.row = 6;
             isValidPos = false;
             return;
         }
-        else if (col > 8)
-        {
+        else if (col > 8) {
             this.col = 6;
             this.row = 6;
             isValidPos = false;
             return;
         }
-        else if (row > 8)
-        {
+        else if (row > 8) {
             this.row = 6;
             this.col = 6;
             isValidPos = false;
@@ -88,15 +76,11 @@ public class ChessPosition {
             this.row = row;
             this.col = col;
             this.isValidPos = true;
-
-
     }
-
     public ChessPiece.PieceType getPiece()
     {
         return this.piece;
     }
-
 
     /**
      * @return which row this position is in
@@ -108,8 +92,7 @@ public class ChessPosition {
     //then returned 0 so it wouldnt give an error
     //but in ChessMove() if it's not valid it won't add it
     public int getRow() {
-        if (row < 0 || row > 9)
-        {
+        if (row < 0 || row > 9) {
             //isValidPos = false;
             return 0;
         }
@@ -121,13 +104,11 @@ public class ChessPosition {
         return hasEnemy;
     }
 
-
     /**
      * @return which column this position is in
      * 1 codes for the left row
-     */
-
-
+     *
+     **/
     //I edited these files, the problem was it would throw error if negative index,
     //so i made a new bool isValid and if negative index made it not valid
     //then returned 0 so it wouldnt give an error

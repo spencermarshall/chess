@@ -263,52 +263,40 @@ public class ChessPiece extends MoveHelp {
 
     public String toString()
     {
-        if (this.type == PieceType.PAWN && this.color == ChessGame.TeamColor.WHITE)
-        {
+        if (this.type == PieceType.PAWN && this.color == ChessGame.TeamColor.WHITE) {
             return "P";
         }
-        else if (this.type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK)
-        {
+        else if (this.type == PieceType.PAWN && this.color == ChessGame.TeamColor.BLACK) {
             return "p";
         }
-        else if  (this.type == PieceType.BISHOP && this.color == ChessGame.TeamColor.WHITE)
-        {
+        else if  (this.type == PieceType.BISHOP && this.color == ChessGame.TeamColor.WHITE) {
             return "B";
         }
-        else if (this.type == PieceType.BISHOP && this.color == ChessGame.TeamColor.BLACK)
-        {
+        else if (this.type == PieceType.BISHOP && this.color == ChessGame.TeamColor.BLACK) {
             return "b";
         }
-        else if  (this.type == PieceType.KNIGHT && this.color == ChessGame.TeamColor.WHITE)
-        {
+        else if  (this.type == PieceType.KNIGHT && this.color == ChessGame.TeamColor.WHITE) {
             return "N";
         }
-        else if (this.type == PieceType.KNIGHT && this.color == ChessGame.TeamColor.BLACK)
-        {
+        else if (this.type == PieceType.KNIGHT && this.color == ChessGame.TeamColor.BLACK) {
             return "n";
         }
-        else if  (this.type == PieceType.QUEEN && this.color == ChessGame.TeamColor.WHITE)
-        {
+        else if  (this.type == PieceType.QUEEN && this.color == ChessGame.TeamColor.WHITE) {
             return "Q";
         }
-        else if (this.type == PieceType.QUEEN && this.color == ChessGame.TeamColor.BLACK)
-        {
+        else if (this.type == PieceType.QUEEN && this.color == ChessGame.TeamColor.BLACK) {
             return "q";
         }
-        else if  (this.type == PieceType.KING && this.color == ChessGame.TeamColor.WHITE)
-        {
+        else if  (this.type == PieceType.KING && this.color == ChessGame.TeamColor.WHITE) {
             return "K";
         }
-        else if (this.type == PieceType.KING && this.color == ChessGame.TeamColor.BLACK)
-        {
+        else if (this.type == PieceType.KING && this.color == ChessGame.TeamColor.BLACK) {
             return "k";
         }
-        else if  (this.type == PieceType.ROOK && this.color == ChessGame.TeamColor.WHITE)
-        {
+        else if  (this.type == PieceType.ROOK && this.color == ChessGame.TeamColor.WHITE) {
             return "R";
         }
-        else if (this.type == PieceType.ROOK && this.color == ChessGame.TeamColor.BLACK)
-        {
+        else if (this.type == PieceType.ROOK && this.color == ChessGame.TeamColor.BLACK) {
             return "r";
         }
         else

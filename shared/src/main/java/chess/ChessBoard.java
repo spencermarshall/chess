@@ -10,17 +10,11 @@ import java.util.Arrays;
  */
 public class ChessBoard {
     private ChessPiece[][] squares = new ChessPiece[9][9];
-
-
     public ChessBoard() {
-
-
-        
     }
 
     public String toString()
     {
-
         String output = "";
         for (int r = 1; r < 9; ++r)
         {
@@ -32,12 +26,7 @@ public class ChessBoard {
             output += "\n";
         }
         return output;
-
     }
-
-
-
-
     /**
      * Adds a chess piece to the chessboard
      *
@@ -46,13 +35,8 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         //throw new RuntimeException("Not implemented");
-
         squares[position.getRow()][position.getColumn()] = piece;
-
-
     }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,8 +49,6 @@ public class ChessBoard {
     public int hashCode() {
         return Arrays.hashCode(squares);
     }
-
-
     /**
      * Gets a chess piece on the chessboard
      *
@@ -83,26 +65,17 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        for (int row = 1; row < 9; ++row)
-        {
-
-            for (int col = 1; col < 9; ++col)
-            {
-
-
+        for (int row = 1; row < 9; ++row) {
+            for (int col = 1; col < 9; ++col) {
                 //if statement below adds row of white pawns at bottom
-                if (row == 2)
-                {
+                if (row == 2) {
                     ChessPosition pawnPos = new ChessPosition(2, col);
-
                     ChessPiece mine = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
                     this.addPiece(pawnPos, mine);
                 }
                 //if statement below adds row of black pawns at top
-                if (row == 7)
-                {
+                if (row == 7) {
                     ChessPosition pawnPos = new ChessPosition(7, col);
-
                     ChessPiece mine = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
                     this.addPiece(pawnPos, mine);
                 }
@@ -117,8 +90,6 @@ public class ChessBoard {
         this.squares[1][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
         this.squares[1][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
         this.squares[1][8] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
-
-
         //these 8 add last row for black
         this.squares[8][1] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
         this.squares[8][2] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
@@ -128,33 +99,19 @@ public class ChessBoard {
         this.squares[8][6] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
         this.squares[8][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
         this.squares[8][8] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
-
-
-        return;
     }
-
-
     //i made this, returns true is the position is open
-    public boolean isValid(ChessPosition pos)
-    {
-        if (pos == null)
-        {
+    public boolean isValid(ChessPosition pos) {
+        if (pos == null) {
             return false;
         }
-        if (pos.getRow() < 0 || pos.getRow() > 8)
-        {
+        if (pos.getRow() < 0 || pos.getRow() > 8) {
             return false;
         }
-        if (pos.getColumn() < 0 || pos.getColumn() > 8)
-        {
+        if (pos.getColumn() < 0 || pos.getColumn() > 8) {
             return false;
         }
         //if position is empty, it returns null
-        if (squares[pos.getRow()][pos.getColumn()] == null)
-        {
-            return true;
-        }
-        else
-            return false;
+        return squares[pos.getRow()][pos.getColumn()] == null;
     }
 }
