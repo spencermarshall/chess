@@ -187,9 +187,11 @@ public class ChessPiece extends MoveHelp {
                 counter++;
             }
         }
+
         if (board.getPiece(myPawnPos3) != null && board.getPiece(myPawnPos3).color == ChessGame.TeamColor.WHITE) {
             myPawnPos3.hasEnemy=true;
             if (myPawnPos3.getRow() == 1) {
+               // advancePawn(myPawnPos3, testThese, counter);
                 ChessPosition newPos0=new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.QUEEN);
                 ChessPosition newPos1=new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.BISHOP);
                 ChessPosition newPos2=new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.KNIGHT);
@@ -206,6 +208,7 @@ public class ChessPiece extends MoveHelp {
         }
         if (myPosition.getRow() == 2) {
             //create the 4 posible pieces then carry it thru  the poisition to myPawnAdv0
+            //advancePawn(myPosition,testThese, counter);
             ChessPosition myPawnAdv0=new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn(), ChessPiece.PieceType.QUEEN);
             ChessPosition myPawnAdv1=new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn(), ChessPiece.PieceType.ROOK);
             ChessPosition myPawnAdv2=new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn(), ChessPiece.PieceType.BISHOP);
@@ -238,6 +241,20 @@ public class ChessPiece extends MoveHelp {
                 testThese[counter]=actual2;
                 board.getPiece(myPosition).justDidEnPassant=true;
             }
+        }
+    }
+    public void addPawnAdv(ChessPosition myPawnPos3, ChessPosition[] testThese, int counter)
+    {
+        if (myPawnPos3.getRow() == 8) {
+            ChessPosition newPos0 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.QUEEN);
+            ChessPosition newPos1 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.BISHOP);
+            ChessPosition newPos2 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.KNIGHT);
+            ChessPosition newPos3 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.ROOK);
+            testThese[counter] = newPos0;
+            testThese[counter+1] = newPos1;
+            testThese[counter+2] = newPos2;
+            testThese[counter+3] = newPos3;
+            counter += 4;
         }
     }
 }
