@@ -410,6 +410,7 @@ public class MoveHelp {
             //this means enemy capture in last row
             if (myPawnPos3.getRow() == 8) {
                 advancePawn(myPawnPos3, testThese, counter);
+                counter += 4;
 
             }
         }
@@ -492,6 +493,5 @@ public class MoveHelp {
         testThese[counter + 1]=newPos1;
         testThese[counter + 2]=newPos2;
         testThese[counter + 3]=newPos3;
-        counter+=4;
     }
 }
