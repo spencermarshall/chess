@@ -243,18 +243,4 @@ public class ChessPiece extends MoveHelp {
             }
         }
     }
-    public void addPawnAdv(ChessPosition myPawnPos3, ChessPosition[] testThese, int counter)
-    {
-        if (myPawnPos3.getRow() == 8) {
-            ChessPosition newPos0 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.QUEEN);
-            ChessPosition newPos1 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.BISHOP);
-            ChessPosition newPos2 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.KNIGHT);
-            ChessPosition newPos3 = new ChessPosition(myPawnPos3.getRow(), myPawnPos3.getColumn(), ChessPiece.PieceType.ROOK);
-            testThese[counter] = newPos0;
-            testThese[counter+1] = newPos1;
-            testThese[counter+2] = newPos2;
-            testThese[counter+3] = newPos3;
-            counter += 4;
-        }
-    }
 }
