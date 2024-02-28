@@ -43,6 +43,14 @@ public class MemoryGameDAO implements GameDAO
       {
           if (this.allGames.get(i).getGameID() == id)
           {
+              if (Objects.equals(color, "BLACK") && this.allGames.get(i).getBlackUsername() != null)
+              {
+                  return;
+              }
+              else if (Objects.equals(color, "WHITE") && this.allGames.get(i).getWhiteUsername() != null)
+              {
+                  return;
+              }
               this.allGames.get(i).addUser(color, username);
               return;
           }

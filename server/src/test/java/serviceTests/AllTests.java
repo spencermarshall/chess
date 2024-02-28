@@ -146,7 +146,7 @@ public class AllTests {
         auth.setAuthAsGame(true);
         GameData newGame = new GameData();
         this.gameService.addGame(newGame, auth);
-        AuthData notRealAuth = new AuthData("fake");
+        AuthData notRealAuth = null;
         Vector<GameData> allGames = this.gameService.returnAllGames(notRealAuth);
         assertNull(allGames);
         return;
@@ -178,17 +178,30 @@ public class AllTests {
         GameData myGame = new GameData();
         AuthData userAuth = new AuthData(existingUserUsername);
         AuthData gameAuth = new AuthData(userAuth.getAuthString(), true);
-        UserData myUser = new UserData();
-        this.userService.register(myUser);
         this.gameService.addGame(myGame, gameAuth);
+        //this joins it
+        this.gameService.setColor(1,"WHITE","me");
+        assertFalse(this.gameService.getGame(1).getWhiteUsername().isEmpty());
 
         return;
     }
+
+
+
     @Test
     @Order(13)
     @DisplayName("Join Game Negative Already Taken")
     public void joinGameNegativeAlreadyTakenTest() throws Exception {
-        return;
+        GameData myGame = new GameData();
+        AuthData userAuth = new AuthData(existingUserUsername);
+        AuthData gameAuth = new AuthData(userAuth.getAuthString(), true);
+        this.gameService.addGame(myGame, gameAuth);
+        //this joins it
+        this.gameService.setColor(1,"WHITE","me");
+        //this tries to have another user join
+        this.gameService.setColor(1,"WHITE","next");
+        int huh = 3;
+
     }
 
 }

@@ -42,8 +42,11 @@ public class GameService {
     }
     public Vector<GameData> returnAllGames(AuthData auth)
     {
-        return this.dataAccessGame.returnAllGames();
-
+        if (auth != null)
+        {
+            return this.dataAccessGame.returnAllGames();
+        }
+        return null;
     }
     public GameData getGame(int id) throws DataAccessException
     {
