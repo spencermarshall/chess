@@ -24,15 +24,6 @@ public class AuthData
         this.authToken = uuid;
       }
   }
-  public void setAuthAsGame(boolean isGame)
-  {
-    this.isGame = isGame;
-  }
-  public void clearAll()
-  {
-    authToken = "";
-    username = "";
-  }
   public String getUsername()
   {
     return this.username;

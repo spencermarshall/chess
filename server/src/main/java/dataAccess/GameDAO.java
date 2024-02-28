@@ -6,7 +6,6 @@ import java.util.Vector;
 
 public interface GameDAO
 {
-  void clearAllGames();
   boolean isEmpty();
   void addGame(GameData game);
   Vector<GameData> returnAllGames();

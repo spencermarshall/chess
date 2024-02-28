@@ -131,7 +131,6 @@ public class AllTests {
     @DisplayName("List Games Positive (works)")
     public void listGamesPositiveTest() throws Exception {
         AuthData auth = new AuthData(existingAuth);
-        auth.setAuthAsGame(true);
         GameData newGame = new GameData();
         this.gameService.addGame(newGame, auth);
         Vector<GameData> allGames = this.gameService.returnAllGames(auth);
@@ -143,7 +142,6 @@ public class AllTests {
     @DisplayName("List Games negative (unauthorized)")
     public void listGameNegativeUnauthorizedTest() throws Exception {
         AuthData auth = new AuthData(existingAuth);
-        auth.setAuthAsGame(true);
         GameData newGame = new GameData();
         this.gameService.addGame(newGame, auth);
         AuthData notRealAuth = null;

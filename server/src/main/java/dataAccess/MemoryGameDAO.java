@@ -11,11 +11,7 @@ public class MemoryGameDAO implements GameDAO
   {
       this.allGames = new Vector<GameData>();
   }
-  public void clearAllGames()
-  {
-       this.allGames = new Vector<GameData>();
-      //this.allGames.clear();
-  }
+
   public boolean isEmpty()
   {
       return allGames.isEmpty();

@@ -27,13 +27,5 @@ public class UserData {
         this.password = password;
         this.email = email;
     }
-    public void clearAll()
-    {
-      username = "";
-      password = "";
-      email = "";
-    }
-
-
 
 }
