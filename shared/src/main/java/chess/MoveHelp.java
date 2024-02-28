@@ -459,8 +459,6 @@ public class MoveHelp {
             }
         }
     }
-    public void blackPawnMoves(ChessBoard board, ChessPosition myPosition, ChessPosition[] testThese, ChessPiece thisPiece) {
-        }
     public void kingMoves(ChessBoard board, ChessPosition myPosition, ChessPosition[] testThese, ChessPiece thisPiece) {
         //look at position and board
         //everywhere he can move add it set
