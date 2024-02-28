@@ -1,31 +1,23 @@
 package service;
 
-import dataAccess.DataAccess;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.AuthData;
 import model.GameData;
-import model.UserData;
 import dataAccess.MemoryGameDAO;
 import java.util.Vector;
 
 public class GameService {
-   // private DataAccess dataAccessGame;
+
     private GameDAO dataAccessGame;
     public GameData[] listOfGames;
 
-    public GameService()
-    {
+    public GameService() {
         this.dataAccessGame = new MemoryGameDAO();
         this.listOfGames = new GameData[64];
     }
-    public void updateListOfGames(GameData[] updated)
-    {
-        this.listOfGames = updated;
-    }
 
-    public void clearAllGame()
-    {
+    public void clearAllGame() {
         this.dataAccessGame = new MemoryGameDAO();
         this.listOfGames = new GameData[64];
     }
@@ -33,24 +25,19 @@ public class GameService {
     {
         return dataAccessGame.isEmpty();
     }
-    public void addGame(GameData game, AuthData auth)
-    {
-        if (auth == null)
-        {
+    public void addGame(GameData game, AuthData auth) {
+        if (auth == null) {
             return;
         }
         dataAccessGame.addGame(game);
     }
-    public Vector<GameData> returnAllGames(AuthData auth)
-    {
-        if (auth != null)
-        {
+    public Vector<GameData> returnAllGames(AuthData auth) {
+        if (auth != null) {
             return this.dataAccessGame.returnAllGames();
         }
         return new Vector<GameData>();
     }
-    public GameData getGame(int id) throws DataAccessException
-    {
+    public GameData getGame(int id) throws DataAccessException {
         return this.dataAccessGame.getGame(id);
     }
     public void setColor(int id, String color, String username)

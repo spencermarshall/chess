@@ -10,11 +10,11 @@ public class ChessPosition {
 
     private final int row;
     private final int col;
-    boolean hasEnemy = false;
+    protected boolean hasEnemy = false;
     ChessPiece.PieceType piece;
 
     // I made this bool to make life easier
-    boolean isValidPos;
+    protected boolean isValidPos;
     public ChessPosition(int row, int col, ChessPiece.PieceType adv) {
         this.piece = adv;
         if (row <= 0) {

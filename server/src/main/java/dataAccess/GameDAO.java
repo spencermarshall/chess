@@ -11,7 +11,7 @@ public interface GameDAO
   void addGame(GameData game);
   Vector<GameData> returnAllGames();
   GameData getGame(int id) throws DataAccessException;
-  public void setColor(int id, String color, String username);
+  void setColor(int id, String color, String username);
 
 
 

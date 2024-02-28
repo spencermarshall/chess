@@ -3,14 +3,8 @@ package service;
 import dataAccess.*;
 import model.AuthData;
 import model.UserData;
-import org.eclipse.jetty.server.Authentication;
-
-import java.util.UUID;
-
-
 public class UserService {
-   // private DataAccess dataAcessUser;
-   // private UserDAO dataAccessUser;
+
     private UserDAO dataAccessUser;
     public UserService()
     {
@@ -24,61 +18,42 @@ public class UserService {
     {
         return dataAccessUser.getSize();
     }
-    public void isValid(UserData user) throws DataAccessException
-    {
-        try
-        {
+    public void isValid(UserData user) throws DataAccessException {
+        try {
             this.dataAccessUser.isValid(user);
-        } catch (DataAccessException message)
-        {
+        } catch (DataAccessException message) {
             throw new DataAccessException(message.getMessage());
         }
     }
-    public AuthData validLogin(UserData user) throws DataAccessException
-    {
+    public AuthData validLogin(UserData user) throws DataAccessException {
         AuthData ret = new AuthData(user.getUsername());
         boolean exists = false;
-        try
-        {
+        try {
             exists = this.dataAccessUser.testLogin(user);
-            if (!exists)
-            {
+            if (!exists) {
                 throw new DataAccessException("401");
             }
-
-        } catch (DataAccessException message)
-        {
+        } catch (DataAccessException message) {
             throw new DataAccessException(message.getMessage());
         }
-
         return ret;
-
     }
-
 
     public AuthData register(UserData user) throws DataAccessException{
         //check if username is already used
-        try
-        {
+        try {
             this.dataAccessUser.validUsername(user.getUsername());
-        } catch (DataAccessException message)
-        {
+        } catch (DataAccessException message) {
             throw new DataAccessException(message.getMessage());
         }
-
         this.dataAccessUser.registerUser(user);
         //create Auth token with the users username and returns AuthData
         return new AuthData(user.getUsername());
-
-
   }
-
     public AuthData login(UserData user)
     {
         return null;
     }
-
-
     public void clearAllUsers()
     {
         this.dataAccessUser.clearAllUsers();
@@ -87,6 +62,4 @@ public class UserService {
     {
        this.dataAccessUser.logout(user);
     }
-
-
 }

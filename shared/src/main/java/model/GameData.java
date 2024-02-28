@@ -1,7 +1,5 @@
 package model;
 
-import chess.ChessGame;
-import chess.ChessPiece;
 
 import java.util.Objects;
 
@@ -10,7 +8,6 @@ public class GameData {
   private String whiteUsername;
   private String blackUsername;
   private String gameName;
-  private ChessGame myGame;
   public GameData()
   {
     //default so we know if the user never sets one
@@ -18,6 +15,7 @@ public class GameData {
     blackUsername = null;
     gameID = 1;
   }
+
   public String getWhiteUsername()
   {
     return this.whiteUsername;
@@ -37,7 +35,6 @@ public class GameData {
       this.blackUsername = username;
     }
   }
-
   public void setGameID(int id)
   {
     this.gameID = id;
@@ -49,16 +46,5 @@ public class GameData {
   public String getGameName()
   {
     return this.gameName;
-  }
-
-  public void clearAll()
-  {
-    gameID = -1;
-    whiteUsername = null;
-    blackUsername = null;
-    gameName = "";
-    //myGame = new ChessGame();
-
-    return;
   }
 }

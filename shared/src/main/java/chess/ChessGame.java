@@ -202,7 +202,6 @@ public class ChessGame {
             }
         }
         //since we gonna be moving, for the point in the move.startPos(), set that piece to true for hasMoved
-        board.getPiece(move.getStartPosition()).hasMoved(true);
         if (board.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.PAWN) {
             //check for white and black
             if (board.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.WHITE && move.getEndPosition().getRow() == 4 && move.getStartPosition().getRow() == 2) {

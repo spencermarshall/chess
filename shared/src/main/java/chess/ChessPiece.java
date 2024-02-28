@@ -17,30 +17,20 @@ public class ChessPiece extends MoveHelp {
     public ChessGame.TeamColor color;
     protected boolean movedTwo;
     protected boolean justDidEnPassant;
-    // private TeamColor thisTeam;
-    private boolean hasMoved;
+
 
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type) {
         this.type=type;
         this.color=pieceColor;
         this.movedTwo=false;
         this.justDidEnPassant=false;
-        this.hasMoved=false;
-
-
     }
 
-    public void hasMoved(boolean set) {
-        this.hasMoved=set;
-    }
 
     public void movedTwo(boolean set) {
         movedTwo=set;
     }
 
-    public boolean getMovedTwo() {
-        return movedTwo;
-    }
 
     /**
      * The various different chess piece options
@@ -126,10 +116,6 @@ public class ChessPiece extends MoveHelp {
         return set;
     }
 
-    public ChessPosition[] addCastling() {
-        ChessPosition[] castleMoves=new ChessPosition[10];
-        return castleMoves;
-    }
 
     public String toString() {
         if (this.type == PieceType.PAWN && this.color == ChessGame.TeamColor.WHITE) {
