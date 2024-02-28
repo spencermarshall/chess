@@ -8,8 +8,8 @@ import java.util.Objects;
  */
 public class ChessPosition {
 
-    private final int row;
-    private final int col;
+    private int row;
+    private int col;
     protected boolean hasEnemy = false;
     ChessPiece.PieceType piece;
 
@@ -17,6 +17,14 @@ public class ChessPosition {
     protected boolean isValidPos;
     public ChessPosition(int row, int col, ChessPiece.PieceType adv) {
         this.piece = adv;
+        computeRow(row,col);
+    }
+    //separate constructor for 3 parameters, for adv pos
+    public ChessPosition(int row, int col) {
+        computeRow(row,col);
+    }
+    public void computeRow(int row, int col)
+    {
         if (row <= 0) {
             //all this 6 and excess stuff might not be necessary
             this.row = 6;
@@ -45,37 +53,6 @@ public class ChessPosition {
         this.row = row;
         this.col = col;
         this.isValidPos = true;
-    }
-    //separate constructor for 3 parameters, for adv pos
-    public ChessPosition(int row, int col) {
-        if (row <= 0) {
-            //all this 6 and excess stuff might not be necessary
-            this.row = 6;
-            this.col = 6;
-            isValidPos = false;
-            return;
-        }
-        else if (col <= 0) {
-            this.col = 6;
-            this.row = 6;
-            isValidPos = false;
-            return;
-        }
-        else if (col > 8) {
-            this.col = 6;
-            this.row = 6;
-            isValidPos = false;
-            return;
-        }
-        else if (row > 8) {
-            this.row = 6;
-            this.col = 6;
-            isValidPos = false;
-            return;
-        }
-            this.row = row;
-            this.col = col;
-            this.isValidPos = true;
     }
     public ChessPiece.PieceType getPiece()
     {

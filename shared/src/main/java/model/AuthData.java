@@ -13,10 +13,6 @@ public class AuthData
       authToken = UUID.randomUUID().toString();
       this.username = username;
   }
-  public boolean isGame()
-  {
-    return this.isGame;
-  }
   public AuthData(String uuid, boolean isUUIDString)
   {
       if (isUUIDString)
