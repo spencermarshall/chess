@@ -148,7 +148,8 @@ public class AllTests {
         this.gameService.addGame(newGame, auth);
         AuthData notRealAuth = null;
         Vector<GameData> allGames = this.gameService.returnAllGames(notRealAuth);
-        assertNull(allGames);
+        //this means it's not listing anything because we are unauthorized
+        assertEquals(0,allGames.size());
         return;
     }
     @Test

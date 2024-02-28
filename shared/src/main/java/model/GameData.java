@@ -57,7 +57,7 @@ public class GameData {
     whiteUsername = null;
     blackUsername = null;
     gameName = "";
-    myGame = new ChessGame();
+    //myGame = new ChessGame();
 
     return;
   }

@@ -27,6 +27,7 @@ public class GameService {
     public void clearAllGame()
     {
         this.dataAccessGame = new MemoryGameDAO();
+        this.listOfGames = new GameData[64];
     }
     public boolean isEmpty()
     {
@@ -46,7 +47,7 @@ public class GameService {
         {
             return this.dataAccessGame.returnAllGames();
         }
-        return null;
+        return new Vector<GameData>();
     }
     public GameData getGame(int id) throws DataAccessException
     {

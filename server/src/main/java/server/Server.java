@@ -30,7 +30,7 @@ public class Server {
         this.userService = new UserService();
         this.gameService = new GameService();
         this.authService = new AuthService();
-        this.games = new GameData[64];
+        //this.games = new GameData;
     }
 
     public int run(int desiredPort)
@@ -189,9 +189,9 @@ public class Server {
         if (allGames == null || allGames.isEmpty())
         {
             JsonObject nothing = new JsonObject();
-            success.addProperty("games:", "[]");
+            return new Gson().toJson(Map.of("games",allGames));
 
-            return success;
+
         }
 
 
