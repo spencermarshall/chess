@@ -2,6 +2,7 @@ package service;
 
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
+import dataAccess.MySQLGameDAO;
 import model.AuthData;
 import model.GameData;
 import dataAccess.MemoryGameDAO;
@@ -13,7 +14,8 @@ public class GameService {
     public GameData[] listOfGames;
 
     public GameService() {
-        this.dataAccessGame = new MemoryGameDAO();
+        //this.dataAccessGame = new MemoryGameDAO();
+        this.dataAccessGame = new MySQLGameDAO();
         this.listOfGames = new GameData[64];
     }
 

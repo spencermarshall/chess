@@ -7,7 +7,8 @@ public class AuthService {
 
     private AuthDAO dataAccessAuth;
     public AuthService() {
-        this.dataAccessAuth = new MemoryAuthDAO();
+       // this.dataAccessAuth = new MemoryAuthDAO();
+        this.dataAccessAuth = new MySQLAuthDAO();
     }
 
     public boolean verifyAuth(String auth) throws DataAccessException {

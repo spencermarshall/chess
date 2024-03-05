@@ -55,12 +55,12 @@ public class MySQLUserDAO implements UserDAO {
 
 
     public void deletePet(Integer id) throws DataAccessException {
-        var statement = "DELETE FROM pet WHERE id=?";
+        var statement = "DELETE FROM user WHERE id=?";
         executeUpdate(statement, id);
     }
 
     public void clearAllUsers() {
-        var statement="TRUNCATE pet";
+        var statement="TRUNCATE user";
         try {
             executeUpdate(statement);
         } catch(DataAccessException ex) {
