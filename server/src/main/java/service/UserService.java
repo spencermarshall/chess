@@ -13,8 +13,7 @@ public class UserService {
     {
         return this.dataAccessUser.isEmpty();
     }
-    public int getSize()
-    {
+    public int getSize() throws DataAccessException {
         return dataAccessUser.getSize();
     }
     public void isValid(UserData user) throws DataAccessException {
@@ -56,8 +55,7 @@ public class UserService {
     public void clearAllUsers() {
         this.dataAccessUser.clearAllUsers();
     }
-    public void logout(UserData user)
-    {
+    public void logout(UserData user) throws Exception {
        this.dataAccessUser.logout(user);
     }
 

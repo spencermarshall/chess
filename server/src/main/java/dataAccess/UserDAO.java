@@ -14,8 +14,8 @@ public interface UserDAO {
 
     boolean isEmpty();
 
-    int getSize();
+    int getSize() throws DataAccessException;
 
     void validUsername(String username) throws DataAccessException;
-    void logout(UserData user);
+    void logout(UserData user) throws Exception;
 }

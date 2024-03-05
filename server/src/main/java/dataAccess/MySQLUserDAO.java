@@ -1,6 +1,8 @@
 package dataAccess;
 import com.google.gson.Gson;
 import model.UserData;
+
+import javax.xml.crypto.Data;
 import java.sql.*;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -20,7 +22,21 @@ public class MySQLUserDAO implements UserDAO {
 
     @Override
     public void isValid(UserData user) throws DataAccessException {
-
+        //is username exists we can't allow it throw exception, this is to test if we can register
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT username FROM user WHERE username = ?";
+            try (var ps = conn.prepareStatement(statement)) {
+                var realUser = executeUpdate(statement, user.getUsername(), user.getPassword());
+                try (var rs = ps.executeQuery()) {
+                    //rs.size should be 0 cuz there should be no query
+                    if (rs.getFetchSize() > 0) {
+                        throw new DataAccessException("username already exists");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -43,31 +59,57 @@ public class MySQLUserDAO implements UserDAO {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        try (var conn = DatabaseManager.getConnection()){
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM user"))
+            {
+                var rs = preparedStatement.executeQuery();
+                if(rs.getFetchSize() > 0) {
+                    return false;
+                }
+            }
+        } catch (SQLException | DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 
     @Override
-    public int getSize() {
-        return 0;
+    public int getSize() throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()){
+            try (var preparedStatement = conn.prepareStatement("SELECT COUNT(id) FROM user"))
+            {
+                var rs = preparedStatement.executeQuery();
+                rs.next();
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void validUsername(String username) throws DataAccessException {
-        var statement = "SELECT ";
+        //we wanna make sure this username isn't already taking before we register it
+        try (var conn = DatabaseManager.getConnection()){
+            try (var preparedStatement = conn.prepareStatement("SELECT username FROM user WHERE username = ?"))
+            {
+                preparedStatement.setString(1, username);
+                var rs = preparedStatement.executeQuery();
+                if (rs.getFetchSize() != 0)
+                {
+                    throw new DataAccessException("username already used");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void logout(UserData user) {
-
+    public void logout(UserData user) throws Exception {
+        var statement = "DELETE FROM user WHERE username = ?";
+        executeUpdate(statement, user.getUsername());
     }
-
-
-
-
-
-
-
-
 
     public void clearAllUsers() {
         var statement="TRUNCATE user";
