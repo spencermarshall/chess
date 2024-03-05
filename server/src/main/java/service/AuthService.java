@@ -17,10 +17,10 @@ public class AuthService {
     public String getUsername(String auth) {
         return this.dataAccessAuth.getUsername(auth);
     }
-    public void removeAuth(String auth) {
+    public void removeAuth(String auth) throws DataAccessException {
         dataAccessAuth.removeAuth(auth);
     }
-    public void addAuth(AuthData auth) {
+    public void addAuth(AuthData auth) throws DataAccessException {
         dataAccessAuth.addAuth(auth);
     }
     public boolean isEmpty() {

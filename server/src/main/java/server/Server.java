@@ -136,8 +136,7 @@ public class Server {
         }
 
     }
-    private Object logout(Request req, Response res)
-    {
+    private Object logout(Request req, Response res) throws DataAccessException {
         String header = req.headers("Authorization");
         boolean validAuthToken = false;
         try
@@ -207,7 +206,7 @@ public class Server {
         }
         return new Gson().toJson(Map.of("games",this.games));
     }
-    private Object createGame(Request req, Response res) {
+    private Object createGame(Request req, Response res) throws DataAccessException {
         String header = req.headers("Authorization");
         boolean validAuthToken = false;
         try {
