@@ -25,6 +25,19 @@ public class MySQLUserDAO implements UserDAO {
 
     @Override
     public boolean testLogin(UserData user) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT id FROM user WHERE username = ?, password = ?";
+            try (var ps = conn.prepareStatement(statement)) {
+                var realUser = executeUpdate(statement, user.getUsername(), user.getPassword());
+                try (var rs = ps.executeQuery()) {
+                    if (rs.getFetchSize() > 0) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
         return false;
     }
 
@@ -40,7 +53,7 @@ public class MySQLUserDAO implements UserDAO {
 
     @Override
     public void validUsername(String username) throws DataAccessException {
-
+        var statement = "SELECT ";
     }
 
     @Override
@@ -54,10 +67,7 @@ public class MySQLUserDAO implements UserDAO {
 
 
 
-    public void deletePet(Integer id) throws DataAccessException {
-        var statement = "DELETE FROM user WHERE id=?";
-        executeUpdate(statement, id);
-    }
+
 
     public void clearAllUsers() {
         var statement="TRUNCATE user";
@@ -96,16 +106,16 @@ public class MySQLUserDAO implements UserDAO {
 
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS  pet (
+            CREATE TABLE IF NOT EXISTS user (
               `id` int NOT NULL AUTO_INCREMENT,
-              `name` varchar(256) NOT NULL,
-              `type` ENUM('CAT', 'DOG', 'FISH', 'FROG', 'ROCK') DEFAULT 'CAT',
-              `json` TEXT DEFAULT NULL,
+              `username` varchar(256) NOT NULL,
+              `password` varchar(256) NOT NULL,
+              `email` varchar(256) NOT NULL,
               PRIMARY KEY (`id`),
-              INDEX(type),
-              INDEX(name)
+              INDEX(id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
+          //  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
     };
 
 
