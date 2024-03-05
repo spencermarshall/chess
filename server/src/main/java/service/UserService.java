@@ -48,9 +48,9 @@ public class UserService {
         //create Auth token with the users username and returns AuthData
         return new AuthData(user.getUsername());
   }
-    public AuthData login(UserData user)
+    public AuthData login(UserData user) throws DataAccessException
     {
-        return null;
+        return validLogin(user);
     }
     public void clearAllUsers() {
         this.dataAccessUser.clearAllUsers();
