@@ -6,9 +6,8 @@ import model.UserData;
 public class UserService {
 
     private UserDAO dataAccessUser;
-    public UserService()
-    {
-        this.dataAccessUser = new MemoryUserDAO();
+    public UserService() throws DataAccessException {
+        this.dataAccessUser = new MySQLUserDAO();
     }
     public boolean isEmpty()
     {
@@ -54,12 +53,13 @@ public class UserService {
     {
         return null;
     }
-    public void clearAllUsers()
-    {
+    public void clearAllUsers() {
         this.dataAccessUser.clearAllUsers();
     }
     public void logout(UserData user)
     {
        this.dataAccessUser.logout(user);
     }
+
+
 }

@@ -25,8 +25,7 @@ public class Server {
     private GameService gameService;
     private AuthService authService;
     private GameData[] games;
-    public Server()
-    {
+    public Server() throws DataAccessException {
         this.userService = new UserService();
         this.gameService = new GameService();
         this.authService = new AuthService();
@@ -290,7 +289,7 @@ public class Server {
         Spark.stop();
         Spark.awaitStop();
     }
-    private Object deleteAllGames(Request req, Response res) {
+    private Object deleteAllGames(Request req, Response res) throws DataAccessException {
         this.authService.clearAllAuth();
         this.gameService.clearAllGame();
         this.userService.clearAllUsers();
