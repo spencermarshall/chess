@@ -26,16 +26,17 @@ public class MySQLUserDAO implements UserDAO {
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT COUNT(username) FROM user WHERE username = ?";
             try (var ps = conn.prepareStatement(statement)) {
-                var realUser = executeUpdate(statement, user.getUsername());
+                ps.setString(1, user.getUsername());
                 try (var rs = ps.executeQuery()) {
                     //rs.size should be 0 cuz there should be no query
-                    if (rs.getFetchSize() > 0) {
-                        throw new DataAccessException("username already exists");
+                    while(rs.next()) {
+                        //this means there alerady is user with that username
+                        throw new DataAccessException("403");
                     }
                 }
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("403");
         }
     }
 
@@ -101,7 +102,7 @@ public class MySQLUserDAO implements UserDAO {
                 if(rs.getInt(1) == 1)
                 {
                     //user already added
-                    throw new DataAccessException("user already exists lol");
+                    throw new DataAccessException("403");
                 }
 
             }

@@ -10,15 +10,10 @@ import model.GameData;
 import model.AuthData;
 import model.UserData;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Vector;
-
+import java.util.*;
 
 
 import com.google.gson.Gson;
-
-import java.util.Objects;
 
 public class Server {
     private UserService userService;
@@ -166,7 +161,7 @@ public class Server {
 
 
         AuthData myAuth = new AuthData(header, true);
-        Vector<GameData> allGames =(Vector<GameData>) this.gameService.returnAllGames(myAuth);
+        Collection<GameData> allGames =this.gameService.returnAllGames(myAuth);
 
 
         boolean validAuthToken = false;
@@ -193,10 +188,11 @@ public class Server {
 
 
 
-        Vector<GameData> allGamesVector =(Vector<GameData>) this.gameService.returnAllGames(myAuth);
+        Collection<GameData> allGamesVector =this.gameService.returnAllGames(myAuth);
+
         this.games = new GameData[allGamesVector.size()];
         for (int j = 0; j < allGamesVector.size(); ++j) {
-            this.games[j] = allGamesVector.get(j);
+            this.games[j] = (GameData)allGamesVector.toArray()[j];
         }
         JsonObject me = new JsonObject();
         String listGame = new Gson().toJson(this.games);
@@ -273,7 +269,7 @@ public class Server {
             this.gameService.setColor(intGameID,color, username);
         }
         else if (color.equals("WHITE")) {
-            if (!Objects.equals(myGame.getWhiteUsername(), null)) {
+            if (!Objects.equals(myGame.getWhiteUsername(), "")) {
                 //white is already taken
                 return error403(res);
             }

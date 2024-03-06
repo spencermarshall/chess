@@ -24,6 +24,7 @@ public class UserService {
         }
     }
     public AuthData validLogin(UserData user) throws DataAccessException {
+        isValid(user);
         AuthData ret = new AuthData(user.getUsername());
         boolean exists = false;
         try {
