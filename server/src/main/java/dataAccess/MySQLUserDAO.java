@@ -24,9 +24,9 @@ public class MySQLUserDAO implements UserDAO {
     public void isValid(UserData user) throws DataAccessException {
         //is username exists we can't allow it throw exception, this is to test if we can register
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT username FROM user WHERE username = ?";
+            var statement = "SELECT COUNT(username) FROM user WHERE username = ?";
             try (var ps = conn.prepareStatement(statement)) {
-                var realUser = executeUpdate(statement, user.getUsername(), user.getPassword());
+                var realUser = executeUpdate(statement, user.getUsername());
                 try (var rs = ps.executeQuery()) {
                     //rs.size should be 0 cuz there should be no query
                     if (rs.getFetchSize() > 0) {
@@ -42,11 +42,12 @@ public class MySQLUserDAO implements UserDAO {
     @Override
     public boolean testLogin(UserData user) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT id FROM user WHERE username = ?, password = ?";
+            var statement = "SELECT id FROM user WHERE username = ? AND password = ?";
             try (var ps = conn.prepareStatement(statement)) {
-                var realUser = executeUpdate(statement, user.getUsername(), user.getPassword());
+                ps.setString(1,user.getUsername());
+                ps.setString(2, user.getPassword());
                 try (var rs = ps.executeQuery()) {
-                    if (rs.getFetchSize() > 0) {
+                    if (rs.next()) {
                         return true;
                     }
                 }
@@ -91,7 +92,7 @@ public class MySQLUserDAO implements UserDAO {
     public void validUsername(String username) throws DataAccessException {
         //we wanna make sure this username isn't already taking before we register it
         try (var conn = DatabaseManager.getConnection()){
-            try (var preparedStatement = conn.prepareStatement("SELECT username FROM user WHERE username = ?"))
+            try (var preparedStatement = conn.prepareStatement("SELECT username FROM user WHERE username = ?;"))
             {
                 preparedStatement.setString(1, username);
                 var rs = preparedStatement.executeQuery();
@@ -126,13 +127,16 @@ public class MySQLUserDAO implements UserDAO {
         try (var conn = DatabaseManager.getConnection()) {
             try (var ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 for (var i = 0; i < params.length; i++) {
-                    var param = params[i];
+                    var param=params[i];
                     if (param instanceof String p) ps.setString(i + 1, p);
                     else if (param instanceof Integer p) ps.setInt(i + 1, p);
                     else if (param instanceof UserData p) ps.setString(i + 1, p.toString());
                     else if (param == null) ps.setNull(i + 1, NULL);
                 }
+
                 ps.executeUpdate();
+
+
 
                 var rs = ps.getGeneratedKeys();
                 if (rs.next()) {
