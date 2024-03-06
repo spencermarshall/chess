@@ -1,19 +1,25 @@
 package model;
 
 
+import chess.ChessGame;
+
 import java.util.Objects;
 
 public class GameData {
   private int gameID;
   private String whiteUsername;
   private String blackUsername;
-  private String gameName;
+  private ChessGame myGame;
   public GameData()
   {
     //default so we know if the user never sets one
-    whiteUsername = null;
-    blackUsername = null;
+    whiteUsername = "";
+    blackUsername = "";
     gameID = 1;
+    myGame = new ChessGame();
+  }
+  public void setMyGame(ChessGame game) {
+    this.myGame = game;
   }
 
   public String getWhiteUsername()
@@ -23,6 +29,12 @@ public class GameData {
   public String getBlackUsername()
   {
     return this.blackUsername;
+  }
+  public void setWhiteUsername(String username) {
+    this.whiteUsername = username;
+  }
+  public void setBlackUsername(String username) {
+    this.blackUsername = username;
   }
   public void addUser(String color, String username)
   {
@@ -43,8 +55,8 @@ public class GameData {
   {
     return this.gameID;
   }
-  public String getGameName()
+  public String getGame()
   {
-    return this.gameName;
+    return this.myGame.toString();
   }
 }

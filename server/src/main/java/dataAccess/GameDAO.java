@@ -8,11 +8,11 @@ import java.util.Vector;
 
 public interface GameDAO
 {
-  boolean isEmpty();
+  boolean isEmpty() throws DataAccessException;
   void addGame(GameData game) throws DataAccessException;
   Collection<GameData> returnAllGames() throws DataAccessException;
   GameData getGame(int id) throws DataAccessException;
-  void setColor(int id, String color, String username);
+  void setColor(int id, String color, String username) throws DataAccessException;
 
 
   void clearAllGames();

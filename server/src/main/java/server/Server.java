@@ -215,9 +215,9 @@ public class Server {
         }
         //create game
         var game = new Gson().fromJson(req.body(), GameData.class);
-        if (Objects.equals(game.getGameName(), null)) {
-            return error400(res);
-        }
+       // if (Objects.equals(game.getGameName(), null)) {
+        //    return error400(res);
+       // }
         //add it to games thru GameService
         AuthData myAuth = new AuthData(header);
         gameService.addGame(game, myAuth);
@@ -228,7 +228,7 @@ public class Server {
         //finalRet is JSON
         return success;
     }
-    private Object joinGame(Request req, Response res) {
+    private Object joinGame(Request req, Response res) throws DataAccessException {
         res.status(200); //200 is success
         String header = req.headers("Authorization");
         String body = req.body();

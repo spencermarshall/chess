@@ -8,8 +8,9 @@ import java.util.*;
  */
 public class ChessGame {
     private ChessBoard board;
-    boolean isWhiteTurn;
+    public boolean isWhiteTurn;
     public ChessGame() {
+        this.board = new ChessBoard();
     }
     /**
      * @return Which team's turn it is
@@ -356,5 +357,9 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return this.board;
+    }
+    public String toString()
+    {
+        return board.toString();
     }
 }

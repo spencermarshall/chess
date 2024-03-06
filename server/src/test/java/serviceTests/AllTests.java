@@ -146,7 +146,7 @@ public class AllTests {
         newGame.addUser("BLACK", "blackTom");
         newGame.addUser("WHITE", "whiteJack");
         this.gameService.addGame(newGame, auth);
-        Vector<GameData> allGames =(Vector<GameData>) this.gameService.returnAllGames(auth);
+        Collection<GameData> allGames = this.gameService.returnAllGames(auth);
         assertEquals(1, allGames.size());
     }
 
@@ -158,10 +158,9 @@ public class AllTests {
         GameData newGame = new GameData();
         this.gameService.addGame(newGame, auth);
         AuthData notRealAuth = null;
-        Vector<GameData> allGames =(Vector<GameData>) this.gameService.returnAllGames(notRealAuth);
+        Collection<GameData> allGames =this.gameService.returnAllGames(notRealAuth);
         //this means it's not listing anything because we are unauthorized
         assertEquals(0,allGames.size());
-        return;
     }
     @Test
     @Order(10)
@@ -198,8 +197,6 @@ public class AllTests {
         return;
     }
 
-
-
     @Test
     @Order(13)
     @DisplayName("Join Game Negative Already Taken")
@@ -212,7 +209,7 @@ public class AllTests {
         this.gameService.setColor(1,"WHITE","me");
         //this tries to have another user join
         this.gameService.setColor(1,"WHITE","next");
-        int huh = 3;
+        assertEquals("me",this.gameService.getGame(1).getWhiteUsername());
 
     }
 

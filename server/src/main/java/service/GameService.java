@@ -25,8 +25,7 @@ public class GameService {
         this.dataAccessGame.clearAllGames();
         this.listOfGames = new GameData[64];
     }
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() throws DataAccessException {
         return dataAccessGame.isEmpty();
     }
     public void addGame(GameData game, AuthData auth) throws DataAccessException {
@@ -44,8 +43,7 @@ public class GameService {
     public GameData getGame(int id) throws DataAccessException {
         return this.dataAccessGame.getGame(id);
     }
-    public void setColor(int id, String color, String username)
-    {
+    public void setColor(int id, String color, String username) throws DataAccessException {
         this.dataAccessGame.setColor(id, color, username);
     }
 

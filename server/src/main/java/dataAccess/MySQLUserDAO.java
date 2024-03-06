@@ -64,15 +64,15 @@ public class MySQLUserDAO implements UserDAO {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM user"))
             {
                 var rs = preparedStatement.executeQuery();
-                rs.next();
-                if(rs.getInt(1) == 0) {
-                    return true;
+                while(rs.next()) {
+                    //if we get here there is something in the query
+                    return false;
                 }
             }
         } catch (SQLException | DataAccessException e) {
             throw new RuntimeException(e);
         }
-        return false;
+        return true;
     }
 
     @Override
