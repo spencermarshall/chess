@@ -64,6 +64,10 @@ public class MemoryGameDAO implements GameDAO
       //this means gameID doesn't exist so, it's a bad request
       throw new DataAccessException("400");
   }
+  public void clearAllGames()
+  {
+      this.allGames = new Vector<>();
+  }
 
 
 }

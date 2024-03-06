@@ -59,7 +59,10 @@ public class AllTests {
     @BeforeEach //this function is copied from the starterCode on github
     public void setup() throws TestException, DataAccessException {
 
-        this.existingUser.register(existingUserUsername,existingUserPassword,existingUserEmail);
+        this.userService.clearAllUsers();
+        this.gameService.clearAllGame();
+        this.authService.clearAllAuth();
+        this.existingUser.register(existingUserUsername, existingUserPassword, existingUserEmail);
         this.userService.register(existingUser);
 
 
@@ -73,6 +76,8 @@ public class AllTests {
     public void clearWorksTest() throws Exception {
         //user is already added
         userService.clearAllUsers();
+        authService.clearAllAuth();
+        gameService.clearAllGame();
 
         assertTrue(userService.isEmpty());
 
@@ -109,8 +114,11 @@ public class AllTests {
     @Order(5)
     @DisplayName("Login negative (incorrect username or password)")
     public void loginNegativeIncorrectPasswordTest() throws DataAccessException {
-        AuthData valid = this.userService.login(newUser);
-        assertNull(valid);
+       // AuthData valid = this.userService.login(newUser);
+       // assertNull(valid);
+        assertThrows(DataAccessException.class, () -> {
+            this.userService.login(newUser);
+        });
         //will be null if it couldn't login, meaning incorrect username or password
     }
     @Test

@@ -64,14 +64,15 @@ public class MySQLUserDAO implements UserDAO {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM user"))
             {
                 var rs = preparedStatement.executeQuery();
-                if(rs.getFetchSize() > 0) {
-                    return false;
+                rs.next();
+                if(rs.getInt(1) == 0) {
+                    return true;
                 }
             }
         } catch (SQLException | DataAccessException e) {
             throw new RuntimeException(e);
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -92,14 +93,17 @@ public class MySQLUserDAO implements UserDAO {
     public void validUsername(String username) throws DataAccessException {
         //we wanna make sure this username isn't already taking before we register it
         try (var conn = DatabaseManager.getConnection()){
-            try (var preparedStatement = conn.prepareStatement("SELECT username FROM user WHERE username = ?;"))
+            try (var preparedStatement = conn.prepareStatement("SELECT COUNT(username) FROM user WHERE username = ?;"))
             {
                 preparedStatement.setString(1, username);
                 var rs = preparedStatement.executeQuery();
-                if (rs.getFetchSize() != 0)
+                rs.next();
+                if(rs.getInt(1) == 1)
                 {
-                    throw new DataAccessException("username already used");
+                    //user already added
+                    throw new DataAccessException("user already exists lol");
                 }
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

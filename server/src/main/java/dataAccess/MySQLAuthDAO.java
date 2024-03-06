@@ -10,10 +10,17 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.sql.Types.NULL;
 
 public class MySQLAuthDAO implements AuthDAO{
+    public MySQLAuthDAO() throws DataAccessException {
+        configureDatabase();
+    }
     @Override
     public void clearAllAuth() throws DataAccessException {
-        var statement="TRUNCATE auth";
-        executeUpdate(statement);
+        var statement="TRUNCATE user";
+        try {
+            executeUpdate(statement);
+        } catch(DataAccessException ex) {
+            return;
+        }
     }
 
     @Override

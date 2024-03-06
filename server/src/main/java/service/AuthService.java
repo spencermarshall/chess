@@ -6,7 +6,7 @@ import model.AuthData;
 public class AuthService {
 
     private AuthDAO dataAccessAuth;
-    public AuthService() {
+    public AuthService() throws DataAccessException {
        // this.dataAccessAuth = new MemoryAuthDAO();
         this.dataAccessAuth = new MySQLAuthDAO();
     }

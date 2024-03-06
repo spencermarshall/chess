@@ -13,14 +13,14 @@ public class GameService {
     private GameDAO dataAccessGame;
     public GameData[] listOfGames;
 
-    public GameService() {
+    public GameService() throws DataAccessException {
         //this.dataAccessGame = new MemoryGameDAO();
         this.dataAccessGame = new MySQLGameDAO();
         this.listOfGames = new GameData[64];
     }
 
     public void clearAllGame() {
-        this.dataAccessGame = new MemoryGameDAO();
+        this.dataAccessGame.clearAllGames();
         this.listOfGames = new GameData[64];
     }
     public boolean isEmpty()

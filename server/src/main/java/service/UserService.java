@@ -50,7 +50,11 @@ public class UserService {
   }
     public AuthData login(UserData user) throws DataAccessException
     {
-        return validLogin(user);
+        try {
+            return validLogin(user);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
     public void clearAllUsers() {
         this.dataAccessUser.clearAllUsers();

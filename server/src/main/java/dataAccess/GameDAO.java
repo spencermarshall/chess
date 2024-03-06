@@ -13,5 +13,5 @@ public interface GameDAO
   void setColor(int id, String color, String username);
 
 
-
+  void clearAllGames();
 }
