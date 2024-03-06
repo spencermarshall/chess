@@ -160,14 +160,13 @@ public class Server {
         return "{something wrong}";
 
     }
-    private Object listGames(Request req, Response res)
-    {
+    private Object listGames(Request req, Response res) throws DataAccessException {
         String header = req.headers("Authorization");
         JsonObject success = new JsonObject();
 
 
         AuthData myAuth = new AuthData(header, true);
-        Vector<GameData> allGames = this.gameService.returnAllGames(myAuth);
+        Vector<GameData> allGames =(Vector<GameData>) this.gameService.returnAllGames(myAuth);
 
 
         boolean validAuthToken = false;
@@ -194,7 +193,7 @@ public class Server {
 
 
 
-        Vector<GameData> allGamesVector = this.gameService.returnAllGames(myAuth);
+        Vector<GameData> allGamesVector =(Vector<GameData>) this.gameService.returnAllGames(myAuth);
         this.games = new GameData[allGamesVector.size()];
         for (int j = 0; j < allGamesVector.size(); ++j) {
             this.games[j] = allGamesVector.get(j);

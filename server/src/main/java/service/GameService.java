@@ -6,6 +6,8 @@ import dataAccess.MySQLGameDAO;
 import model.AuthData;
 import model.GameData;
 import dataAccess.MemoryGameDAO;
+
+import java.util.Collection;
 import java.util.Vector;
 
 public class GameService {
@@ -27,13 +29,13 @@ public class GameService {
     {
         return dataAccessGame.isEmpty();
     }
-    public void addGame(GameData game, AuthData auth) {
+    public void addGame(GameData game, AuthData auth) throws DataAccessException {
         if (auth == null) {
             return;
         }
         dataAccessGame.addGame(game);
     }
-    public Vector<GameData> returnAllGames(AuthData auth) {
+    public Collection<GameData> returnAllGames(AuthData auth) throws DataAccessException {
         if (auth != null) {
             return this.dataAccessGame.returnAllGames();
         }

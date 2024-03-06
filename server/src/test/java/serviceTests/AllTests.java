@@ -143,8 +143,10 @@ public class AllTests {
     public void listGamesPositiveTest() throws Exception {
         AuthData auth = new AuthData(existingAuth);
         GameData newGame = new GameData();
+        newGame.addUser("BLACK", "blackTom");
+        newGame.addUser("WHITE", "whiteJack");
         this.gameService.addGame(newGame, auth);
-        Vector<GameData> allGames = this.gameService.returnAllGames(auth);
+        Vector<GameData> allGames =(Vector<GameData>) this.gameService.returnAllGames(auth);
         assertEquals(1, allGames.size());
     }
 
@@ -156,7 +158,7 @@ public class AllTests {
         GameData newGame = new GameData();
         this.gameService.addGame(newGame, auth);
         AuthData notRealAuth = null;
-        Vector<GameData> allGames = this.gameService.returnAllGames(notRealAuth);
+        Vector<GameData> allGames =(Vector<GameData>) this.gameService.returnAllGames(notRealAuth);
         //this means it's not listing anything because we are unauthorized
         assertEquals(0,allGames.size());
         return;

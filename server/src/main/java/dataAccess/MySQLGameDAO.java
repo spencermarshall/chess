@@ -1,9 +1,13 @@
 package dataAccess;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import model.GameData;
 import model.UserData;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Vector;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -19,13 +23,30 @@ public class MySQLGameDAO implements GameDAO{
     }
 
     @Override
-    public void addGame(GameData game) {
-
+    public void addGame(GameData game) throws DataAccessException {
+        var statement = "INSERT INTO game (gameID, whiteUsername, blackUsername) VALUES (?, ?, ?)";
+        var json = new Gson().toJson(game);
+        var id = executeUpdate(statement, game.getGameID(), game.getWhiteUsername(), game.getBlackUsername());
     }
 
     @Override
-    public Vector<GameData> returnAllGames() {
-        return null;
+    public Collection<GameData> returnAllGames() throws DataAccessException {
+        var result = new ArrayList<GameData>();
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM game";
+            try (var ps = conn.prepareStatement(statement)) {
+                try (var rs = ps.executeQuery()) {
+                    while(rs.next()) {
+                        String game = rs.getString(1);
+                        //make game into json and add it...?
+                      //  JsonObject stringGame = new JsonObject()
+                    }
+                }
+            }
+        } catch (DataAccessException | SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+        return new Vector<>();
     }
 
     @Override
