@@ -95,7 +95,7 @@ public class MySQLGameDAO implements GameDAO{
                         thisGame.setBlackUsername(blackUsername);
                         result.add(thisGame);
                         //make game into json and add it...?
-                      //  JsonObject stringGame = new JsonObject()
+                      //  JsonObject stringGame  = new JsonObject()
                     }
                 }
             }
