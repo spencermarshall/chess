@@ -20,11 +20,17 @@ public class Server {
     private GameService gameService;
     private AuthService authService;
     private GameData[] games;
-    public Server() throws DataAccessException {
-        this.userService = new UserService();
-        this.gameService = new GameService();
-        this.authService = new AuthService();
-        //this.games = new GameData;
+    public Server()  {
+        try{
+            this.userService = new UserService();
+            this.gameService = new GameService();
+            this.authService = new AuthService();
+            //this.games = new GameData;
+
+        }
+        catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int run(int desiredPort)
