@@ -220,6 +220,7 @@ public class Server {
        // }
         //add it to games thru GameService
         AuthData myAuth = new AuthData(header);
+       // game.setWhiteUsername(username); ///todo this aint right
         gameService.addGame(game, myAuth);
         res.status(200); //200 is success
         JsonObject success = new JsonObject();

@@ -43,7 +43,28 @@ public class MySQLGameDAO implements GameDAO{
 
     @Override
     public void addGame(GameData game) throws DataAccessException {
+        //need to get count of games to change gameID
+        int count = 0;
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT COUNT(gameID) FROM game";
+            try (var ps = conn.prepareStatement(statement)) {
+                try (var rs = ps.executeQuery()) {
+                    while(rs.next()) {
+                        count = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (DataAccessException | SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+        //this is because we want gameID to start at 1
+        count++;
+
+
+
+
         var statement = "INSERT INTO game (whiteUsername, blackUsername, gameName, myGame) VALUES (?, ?, ?, ?)";
+        game.setGameID(count);
         var json = new Gson().toJson(game);
         var id = executeUpdate(statement,game.getWhiteUsername(), game.getBlackUsername(), game.getGameName(), json);
     }
