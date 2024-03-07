@@ -80,10 +80,12 @@ public class MySQLGameDAO implements GameDAO{
                         int gameID = rs.getInt(1);
                         String whiteUsername = rs.getString(2);
                         String blackUsername = rs.getString(3);
+                        String gameName = rs.getString(4);
                         String disGame = rs.getString(5);
 
                         ChessGame outputGame = new ChessGame();
                         GameData thisGame = new GameData();
+                        thisGame.setGameName(gameName);
 
                         //this is a chess game object we add to the GameData type
                         var chessGameObj = new Gson().fromJson(disGame, ChessGame.class);
