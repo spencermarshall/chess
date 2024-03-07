@@ -209,6 +209,10 @@ public class Server {
         } catch (DataAccessException errorMessage) {
             return error401(res);
         }
+        //username found from auth string
+        String username = this.authService.getUsername(header);
+
+
         //create game
         var game = new Gson().fromJson(req.body(), GameData.class);
        // if (Objects.equals(game.getGameName(), null)) {

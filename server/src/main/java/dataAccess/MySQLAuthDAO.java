@@ -15,7 +15,7 @@ public class MySQLAuthDAO implements AuthDAO{
     }
     @Override
     public void clearAllAuth() throws DataAccessException {
-        var statement="TRUNCATE user";
+        var statement="TRUNCATE auth";
         try {
             executeUpdate(statement);
         } catch(DataAccessException ex) {
@@ -36,16 +36,17 @@ public class MySQLAuthDAO implements AuthDAO{
             try (var preparedStatement = conn.prepareStatement("SELECT username FROM auth WHERE authToken = ?"))
             {
                 preparedStatement.setString(1,auth);
-                var rs = preparedStatement.executeQuery();
-                //this means response has items in it, that means it is not empty, so return true it has the username
-                if (rs.getFetchSize() > 0) {
+                try(var rs = preparedStatement.executeQuery()) {
+                    rs.next();
+                    String username = rs.getString(1);
                     return true;
                 }
+
             }
         } catch (SQLException | DataAccessException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e.getMessage());
         }
-        return true;
+       // return false;
     }
 
     @Override
@@ -67,22 +68,26 @@ public class MySQLAuthDAO implements AuthDAO{
 
     @Override
     public void removeAuth(String auth) throws DataAccessException {
-        var statement = "DELETE FROM auth WHERE authString = ?";
+        var statement = "DELETE FROM auth WHERE authToken = ?";
         executeUpdate(statement, auth);
+
     }
 
     @Override
-    public String getUsername(String auth) {
+    public String getUsername(String auth) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()){
             try (var preparedStatement = conn.prepareStatement("SELECT username FROM auth WHERE authToken = ?"))
             {
                 preparedStatement.setString(1,auth);
-                var rs = preparedStatement.executeQuery();
-                //the response will be the username of that auth token
-                return rs.getString(1);
+                try (var rs = preparedStatement.executeQuery()) {
+                    rs.next();
+                    String username = rs.getString("username");
+                    return username;
+                }
+
             }
         } catch (SQLException | DataAccessException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException("401");
         }
     }
 

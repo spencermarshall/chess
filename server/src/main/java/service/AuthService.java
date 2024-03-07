@@ -14,7 +14,7 @@ public class AuthService {
     public boolean verifyAuth(String auth) throws DataAccessException {
         return dataAccessAuth.hasUsername(auth);
     }
-    public String getUsername(String auth) {
+    public String getUsername(String auth) throws DataAccessException {
         return this.dataAccessAuth.getUsername(auth);
     }
     public void removeAuth(String auth) throws DataAccessException {
@@ -27,8 +27,7 @@ public class AuthService {
         return dataAccessAuth.isEmpty();
     }
 
-    public void clearAllAuth()
-    {
-        this.dataAccessAuth = new MemoryAuthDAO();
+    public void clearAllAuth() throws DataAccessException {
+        this.dataAccessAuth.clearAllAuth();
     }
 }
