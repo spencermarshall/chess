@@ -43,9 +43,9 @@ public class MySQLGameDAO implements GameDAO{
 
     @Override
     public void addGame(GameData game) throws DataAccessException {
-        var statement = "INSERT INTO game (gameID, whiteUsername, blackUsername, myGame) VALUES (?, ?, ?, ?)";
+        var statement = "INSERT INTO game (whiteUsername, blackUsername, gameName, myGame) VALUES (?, ?, ?, ?)";
         var json = new Gson().toJson(game);
-        var id = executeUpdate(statement, game.getGameID(), game.getWhiteUsername(), game.getBlackUsername(), json);
+        var id = executeUpdate(statement,game.getWhiteUsername(), game.getBlackUsername(), game.getGameName(), json);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class MySQLGameDAO implements GameDAO{
                         int gameID = rs.getInt(1);
                         String whiteUsername = rs.getString(2);
                         String blackUsername = rs.getString(3);
-                        String disGame = rs.getString(4);
+                        String disGame = rs.getString(5);
 
                         ChessGame outputGame = new ChessGame();
                         GameData thisGame = new GameData();
@@ -85,17 +85,18 @@ public class MySQLGameDAO implements GameDAO{
     @Override
     public GameData getGame(int id) throws DataAccessException {
         GameData retGame = new GameData();
-
+        boolean noGameFound = true;
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT * FROM game WHERE gameID = ?";
             try (var ps = conn.prepareStatement(statement)) {
                 ps.setInt(1,id);
                 try (var rs = ps.executeQuery()) {
                     while (rs.next()) {
+                        noGameFound = false;
                         int gameID = rs.getInt(1);
                         String whiteUsername = rs.getString(2);
                         String blackUsername = rs.getString(3);
-                        String myGame = rs.getString(4);
+                        String myGame = rs.getString(5);
                         ChessGame gameObj = new Gson().fromJson(myGame, ChessGame.class);
                         retGame.setMyGame(gameObj);
                         retGame.setBlackUsername(blackUsername);
@@ -103,6 +104,10 @@ public class MySQLGameDAO implements GameDAO{
                         retGame.setGameID(gameID);
                     }
                 }
+            }
+            if (noGameFound) {
+                //can't return crap b/c we didn't find a game with that id
+                throw new DataAccessException("400");
             }
         } catch (DataAccessException | SQLException e) {
             throw new DataAccessException(e.getMessage());
@@ -155,16 +160,16 @@ public class MySQLGameDAO implements GameDAO{
 
         var statement = "";
         if (Objects.equals(color, "BLACK")){
-            statement = "UPDATE game SET blackUsername = ?";
+            statement = "UPDATE game SET blackUsername = ? WHERE gameID = ?";
         }
         else if (Objects.equals(color, "WHITE")) {
-            statement = "UPDATE game SET whiteUsername = ?";
+            statement = "UPDATE game SET whiteUsername = ? WHERE gameID = ?";
         }
         else if (Objects.equals(color, "") || Objects.equals(color, "EMPTY")) {
             //we are just spectating so we don't need to update anything
             return;
         }
-        executeUpdate(statement, username);
+        executeUpdate(statement, username, id);
     }
     private int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
@@ -199,6 +204,7 @@ public class MySQLGameDAO implements GameDAO{
               `gameID` int NOT NULL AUTO_INCREMENT,
               `whiteUsername` varchar(256),
               `blackUsername` varchar(256),
+              `gameName` varchar(256),
               `myGame` blob NOT NULL,
               PRIMARY KEY (`gameID`),
               INDEX(gameID)

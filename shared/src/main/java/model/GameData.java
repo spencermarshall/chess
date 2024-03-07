@@ -10,6 +10,7 @@ public class GameData {
   private String whiteUsername;
   private String blackUsername;
   private ChessGame myGame;
+  private String gameName;
   public GameData()
   {
     //default so we know if the user never sets one
@@ -17,6 +18,10 @@ public class GameData {
     blackUsername = null;
     gameID = 1;
     myGame = new ChessGame();
+    gameName = null;
+  }
+  public String getGameName() {
+    return this.gameName;
   }
   public void setMyGame(ChessGame game) {
     this.myGame = game;
