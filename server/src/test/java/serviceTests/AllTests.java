@@ -210,7 +210,95 @@ public class AllTests {
         //this tries to have another user join
         this.gameService.setColor(1,"WHITE","next");
         assertEquals("me",this.gameService.getGame(1).getWhiteUsername());
+    }
+
+
+    @Test
+    @Order(12)
+    @DisplayName("Add Auth Positive")
+    public void addAuthWorks() throws DataAccessException {
+        AuthData auth = new AuthData(existingUserUsername);
+        this.authService.addAuth(auth);
+        assertFalse(this.authService.isEmpty());
+    }
+    /*@Test
+    @Order(12)
+    @DisplayName("Add Auth Negative")
+    public void addAuthNull() throws DataAccessException {
+        AuthData auth = new AuthData("not exist");
+        this.authService.addAuth(auth);
+        assertFalse(this.authService.isEmpty());
+    }*/
+
+    @Test
+    @Order(13)
+    @DisplayName("Auth is empty positive")
+    public void authIsEmpty() throws DataAccessException {
+        AuthData myAuth = new AuthData(existingUserUsername);
+        this.authService.addAuth(myAuth);
+        this.authService.removeAuth(myAuth.getAuthString());
+        assertTrue(this.authService.isEmpty());
+    }
+
+    @Test
+    @Order(14)
+    @DisplayName("Auth is empty negative")
+    public void authIsNotEmpty() throws DataAccessException {
+        AuthData myAuth = new AuthData(existingUserUsername);
+        this.authService.addAuth(myAuth);
+        assertFalse(this.authService.isEmpty());
+    }
+
+    @Test
+    @Order(15)
+    @DisplayName("remove Auth works")
+    public void removeAuthPositive() throws DataAccessException {
+        AuthData myAuth = new AuthData(existingUserUsername);
+        this.authService.addAuth(myAuth);
+        this.authService.removeAuth(myAuth.getAuthString());
+        assertTrue(this.authService.isEmpty());
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("remove auth negative")
+    public void removeAuthNegative() throws DataAccessException {
+        AuthData myAuth = new AuthData(existingUserUsername);
+        this.authService.addAuth(myAuth);
+        this.authService.removeAuth("not a real auth");
+        assertFalse(this.authService.isEmpty());
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("remove auth negative")
+    public void verifyAuthPositive() throws DataAccessException {
+        AuthData myAuth = new AuthData(existingUserUsername);
+        this.authService.addAuth(myAuth);
+        assertTrue(this.authService.verifyAuth(myAuth.getAuthString()));
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("remove auth negative")
+    public void verifyAuthNegative() throws DataAccessException {
+        AuthData myAuth = new AuthData(existingUserUsername);
+        this.authService.addAuth(myAuth);
+        assertFalse(this.authService.verifyAuth("not a real auth"));
+    }
+
+  /*  public boolean verifyAuth(String auth) throws DataAccessException {
+        return dataAccessAuth.hasUsername(auth);
+    }
+    public String getUsername(String auth) throws DataAccessException {
+        return this.dataAccessAuth.getUsername(auth);
+    }
 
     }
 
+
+
+    public void clearAllAuth() throws DataAccessException {
+        this.dataAccessAuth.clearAllAuth();
+    }*/
 }

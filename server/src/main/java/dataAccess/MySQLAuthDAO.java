@@ -30,7 +30,6 @@ public class MySQLAuthDAO implements AuthDAO{
         var id = executeUpdate(statement, authToken.getUsername(), authToken.getAuthString());
     }
 
-    @Override
     public boolean hasUsername(String auth) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()){
             try (var preparedStatement = conn.prepareStatement("SELECT username FROM auth WHERE authToken = ?"))
@@ -42,11 +41,12 @@ public class MySQLAuthDAO implements AuthDAO{
                     return true;
                 }
 
+
             }
         } catch (SQLException | DataAccessException e) {
-            throw new DataAccessException(e.getMessage());
+            return false;
         }
-       // return false;
+
     }
 
     @Override
@@ -55,8 +55,7 @@ public class MySQLAuthDAO implements AuthDAO{
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM auth"))
             {
                 var rs = preparedStatement.executeQuery();
-                //this means response has items in it, that means it is not empty, so return false
-                if (rs.getFetchSize() > 0) {
+                while(rs.next()) {
                     return false;
                 }
             }
