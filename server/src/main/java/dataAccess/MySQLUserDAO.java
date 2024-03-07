@@ -31,7 +31,7 @@ public class MySQLUserDAO implements UserDAO {
                     //rs.size should be 0 cuz there should be no query
                     while(rs.next()) {
                         //this means there alerady is user with that username
-                        throw new DataAccessException("403");
+                        //throw new DataAccessException("403");
                     }
                 }
             }

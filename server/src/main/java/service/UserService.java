@@ -18,13 +18,13 @@ public class UserService {
     }
     public void isValid(UserData user) throws DataAccessException {
         try {
-            this.dataAccessUser.isValid(user);
+            this.dataAccessUser.validUsername(user.getUsername());
         } catch (DataAccessException message) {
             throw new DataAccessException(message.getMessage());
         }
     }
     public AuthData validLogin(UserData user) throws DataAccessException {
-        isValid(user);
+       // isValid(user);
         AuthData ret = new AuthData(user.getUsername());
         boolean exists = false;
         try {
