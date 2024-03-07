@@ -44,7 +44,7 @@ public class MySQLAuthDAO implements AuthDAO{
 
             }
         } catch (SQLException | DataAccessException e) {
-            return false;
+            throw new DataAccessException(e.getMessage());
         }
 
     }

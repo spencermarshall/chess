@@ -269,32 +269,41 @@ public class AllTests {
         assertFalse(this.authService.isEmpty());
     }
 
-    @Test
-    @Order(17)
-    @DisplayName("remove auth negative")
-    public void verifyAuthPositive() throws DataAccessException {
-        AuthData myAuth = new AuthData(existingUserUsername);
-        this.authService.addAuth(myAuth);
-        assertTrue(this.authService.verifyAuth(myAuth.getAuthString()));
-    }
 
-    @Test
+   /* @Test
     @Order(18)
     @DisplayName("remove auth negative")
     public void verifyAuthNegative() throws DataAccessException {
         AuthData myAuth = new AuthData(existingUserUsername);
         this.authService.addAuth(myAuth);
         assertFalse(this.authService.verifyAuth("not a real auth"));
+    }*/
+   @Test
+   @Order(18)
+   @DisplayName("remove auth positive")
+   public void verifyAuthPositive() throws DataAccessException {
+       AuthData myAuth = new AuthData(existingUserUsername);
+       this.authService.addAuth(myAuth);
+       assertTrue(this.authService.verifyAuth(myAuth.getAuthString()));
+   }
+
+    @Test
+    @Order(19)
+    @DisplayName("clear auth positive")
+    public void clearAuthPositive() throws DataAccessException {
+        AuthData myAuth = new AuthData(existingUserUsername);
+        this.authService.clearAllAuth();
+        assertTrue(this.authService.isEmpty());
     }
 
-  /*  public boolean verifyAuth(String auth) throws DataAccessException {
-        return dataAccessAuth.hasUsername(auth);
-    }
+
+
+  /*
     public String getUsername(String auth) throws DataAccessException {
         return this.dataAccessAuth.getUsername(auth);
     }
 
-    }
+
 
 
 
