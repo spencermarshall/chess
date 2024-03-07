@@ -64,7 +64,7 @@ public class Server {
             errorCode = errorMessage.getMessage();
         }
 
-        if (Objects.equals(errorCode, "400"))
+        if (Objects.equals(errorCode, "400") || user.getUsername() == null || user.getPassword() == null)
         {
             return error400(res);
 
@@ -269,7 +269,7 @@ public class Server {
             this.gameService.setColor(intGameID,color, username);
         }
         else if (color.equals("WHITE")) {
-            if (!Objects.equals(myGame.getWhiteUsername(), "")) {
+            if (!Objects.equals(myGame.getWhiteUsername(), null)) {
                 //white is already taken
                 return error403(res);
             }

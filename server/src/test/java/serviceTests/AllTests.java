@@ -192,7 +192,7 @@ public class AllTests {
         this.gameService.addGame(myGame, gameAuth);
         //this joins it
         this.gameService.setColor(1,"WHITE","me");
-        assertFalse(this.gameService.getGame(1).getWhiteUsername().isEmpty());
+        assertNotNull(this.gameService.getGame(1).getWhiteUsername());
 
         return;
     }

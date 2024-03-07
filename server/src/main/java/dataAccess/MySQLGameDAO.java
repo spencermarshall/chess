@@ -135,7 +135,7 @@ public class MySQLGameDAO implements GameDAO{
                 try (var rs = ps.executeQuery()) {
                     while (rs.next()) {
                         String name = rs.getString(1);
-                        if (!Objects.equals(name, "")) {
+                        if (!Objects.equals(name, null)) {
                             //name is not "" so it is already taken
                             return;
                         }
@@ -197,8 +197,8 @@ public class MySQLGameDAO implements GameDAO{
             """
             CREATE TABLE IF NOT EXISTS game (
               `gameID` int NOT NULL AUTO_INCREMENT,
-              `whiteUsername` varchar(256) NOT NULL,
-              `blackUsername` varchar(256) NOT NULL,
+              `whiteUsername` varchar(256),
+              `blackUsername` varchar(256),
               `myGame` blob NOT NULL,
               PRIMARY KEY (`gameID`),
               INDEX(gameID)

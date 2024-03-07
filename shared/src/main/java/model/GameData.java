@@ -13,8 +13,8 @@ public class GameData {
   public GameData()
   {
     //default so we know if the user never sets one
-    whiteUsername = "";
-    blackUsername = "";
+    whiteUsername = null;
+    blackUsername = null;
     gameID = 1;
     myGame = new ChessGame();
   }
