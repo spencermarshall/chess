@@ -1,7 +1,12 @@
 package client;
 import model.*;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.Arrays;
+
+import static java.lang.Integer.parseInt;
 //import com.sun.nio.sctp.NotificationHandler;
 
 //import server.ServerFacade;
@@ -35,9 +40,10 @@ public class ChessClient {
                 case "login" -> login(params);
                 case "register" -> register();
                 case "logout" -> logOut();
-                case "adopt" -> adoptPet(params);
-                case "adoptall" -> adoptAllPets();
-                case "quit" -> "quit";
+                case "create" -> createGame(params);
+                case "join" -> joinGame(params);
+                case "observe" -> joinGame(params); //this is joinGame() again cuz color is empty; function can handle both
+
                 default -> help();
             };
             if (quit) {
@@ -97,30 +103,63 @@ public class ChessClient {
         assert this.alreadyLoggedIn; //we need to be logged in to log out lol
         // todo do we pass in user from paramteter, how do we know which user to logout?
         server.logout();
+        this.alreadyLoggedIn = false; //now we are logged out
         return String.format("%s left the shop", visitorName);
     }
 
-    public void createGame(String... params) throws Exception {
+    public String createGame(String... params) throws Exception {
        if (params.length >= 1) {
            String gameName = params[0];
            GameData game = new GameData();
            game.setGameName(gameName);
            server.createGame(game);
+           return "game successfully created";
        }
        throw new Exception("Expected: create <NAME>");
     }
 
-    /*
-    public String listPets() throws ResponseException {
-        assertSignedIn();
-        var pets = server.listPets();
+    public String listPets() throws Exception {
+        assert this.alreadyLoggedIn;
+
+        //server.listGames() unsure what data type it returns <T>
+        var games = server.listGames();
         var result = new StringBuilder();
         var gson = new Gson();
-        for (var pet : pets) {
-            result.append(gson.toJson(pet)).append('\n');
+        for (var game : games) {
+            result.append(gson.toJson(game)).append('\n'); //this from petshop, i might have to adjust it slightly
         }
         return result.toString();
     }
+
+    public String joinGame(String... params) throws Exception {
+       boolean observe = (params.length == 1);
+       String color = "";
+       int gameID = -1; //default, it shouldn't be this ever
+       if (observe) {
+           gameID = parseInt(params[0]);
+       }
+       else if (params.length == 2) {
+           gameID = parseInt(params[0]);
+           color = params[1];
+       }
+
+       server.joinGame(gameID,color); //todo i might have to implement more for observe
+        if (observe) {
+            return "successfully observing";
+        }
+        else {
+            return "successfully joined";
+        }
+    }
+
+
+
+
+
+
+
+    /*
+
 
     public String adoptPet(String... params) throws ResponseException {
         assertSignedIn();

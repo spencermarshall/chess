@@ -26,9 +26,37 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, user, UserData.class);
     }
     public void createGame(GameData game) throws Exception {
-        var path = "/game";
+        var path = "/game/create";
         this.makeRequest("POST", path, game, GameData.class);
     }
+    ///todo void is temporary, it should return the games i think...?
+    public GameData[] listGames() throws Exception {
+        var path = "/pet";
+        //  record listPetResponse(Pet[] pet) {
+        // }
+        var response = this.makeRequest("GET", path, null, ChessClient.class); ///todo idk if this last parameter is correct
+        //return response.user();
+        return null; //temp
+    }
+
+
+    //pretty sure this function below is incorrect tbh
+    public void joinGame(int gameID, String color) throws Exception {
+        try {
+            //if color is "" then it's observer
+            var joinPath=String.format("/game/join/%d/%s", gameID, color);
+            var observePath=String.format("game/watch/%d", gameID);
+            GameData selectedGame=listGames()[gameID - 1];
+            if (color.isEmpty()) {
+                this.makeRequest("POST", observePath, selectedGame, GameData.class);
+            } else {
+                this.makeRequest("POST", joinPath, selectedGame, GameData.class);
+            }
+        } catch (Exception exception) {
+            throw new Exception(exception.getMessage());
+        }
+    }
+
 
 
 
@@ -52,14 +80,7 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, null, null);
     }
 
-    ///todo void is temporary, it should return the games i think...?
-    public void listGames() throws Exception {
-        var path = "/pet";
-      //  record listPetResponse(Pet[] pet) {
-       // }
-        var response = this.makeRequest("GET", path, null, ChessClient.class); ///todo idk if this last paramter is correct
-        //return response.user();
-    }
+
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
         try {
