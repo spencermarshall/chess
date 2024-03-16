@@ -1,3 +1,4 @@
+package client;
 import com.google.gson.Gson;
 //import exception.ResponseException;
 import model.*;
@@ -13,6 +14,27 @@ public class ServerFacade {
     public ServerFacade(String url) {
         serverUrl = url;
     }
+
+    //i made this lol
+    public void login(UserData user) throws Exception {
+        var path = "/login";
+        this.makeRequest("GET", path, user, UserData.class);
+    }
+    public void logout() throws Exception {
+        var path = "/logout";
+        UserData user = new UserData(); //todo this is WRONG, i just have it so it won't give errors
+        this.makeRequest("DELETE", path, user, UserData.class);
+    }
+    public void createGame(GameData game) throws Exception {
+        var path = "/game";
+        this.makeRequest("POST", path, game, GameData.class);
+    }
+
+
+
+
+
+
 
 
     public UserData addUser(UserData user) throws Exception {
