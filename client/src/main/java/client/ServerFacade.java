@@ -14,6 +14,9 @@ public class ServerFacade {
     public ServerFacade(String url) {
         serverUrl = url;
     }
+    public ServerFacade() {
+        serverUrl = "http://localhost:8080";
+    }
 
     //i made this lol
     public void login(UserData user) throws Exception {
@@ -38,6 +41,12 @@ public class ServerFacade {
         //return response.user();
         return null; //temp
     }
+    public AuthData register(String username, String password, String email) throws Exception {
+        var path="/register";
+        UserData newUser=new UserData();
+        newUser.register(username, password, email);
+        var response = this.makeRequest("POST", path, newUser, UserData.class);
+    }
 
 
     //pretty sure this function below is incorrect tbh
@@ -58,27 +67,12 @@ public class ServerFacade {
     }
 
 
-
-
-
-
-
-
-
     public UserData addUser(UserData user) throws Exception {
         var path = "/add";
         return this.makeRequest("POST", path, user, UserData.class);
     }
 
-    public void deletePet(int id) throws Exception {
-        var path = String.format("/pet/%s", id);
-        this.makeRequest("DELETE", path, null, null);
-    }
 
-    public void deleteAllPets() throws Exception {
-        var path = "/pet";
-        this.makeRequest("DELETE", path, null, null);
-    }
 
 
 

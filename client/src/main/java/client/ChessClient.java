@@ -17,7 +17,7 @@ public class ChessClient {
    // private final NotificationHandler notificationHandler;
    // private WebSocketFacade ws;
   //  private State state = State.SIGNEDOUT;
-    private boolean alreadyLoggedIn;
+    public boolean alreadyLoggedIn;
 
    public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
@@ -33,22 +33,16 @@ public class ChessClient {
             String output = "";
             boolean quit = false;
             return switch (cmd) {
-                case "quit" -> {
-                    quit();
-                    quit = true;
-                }
+                case "quit" -> quit();
                 case "login" -> login(params);
                 case "register" -> register();
                 case "logout" -> logOut();
                 case "create" -> createGame(params);
                 case "join" -> joinGame(params);
                 case "observe" -> joinGame(params); //this is joinGame() again cuz color is empty; function can handle both
-
                 default -> help();
             };
-            if (quit) {
-                return "quit";
-            }
+
         } catch (Exception exception) {
             return exception.getMessage();
         }
@@ -153,65 +147,16 @@ public class ChessClient {
     }
 
 
-
-
-
-
-
-    /*
-
-
-    public String adoptPet(String... params) throws ResponseException {
-        assertSignedIn();
-        if (params.length == 1) {
-            try {
-                var id = Integer.parseInt(params[0]);
-                var pet = getPet(id);
-                if (pet != null) {
-                    server.deletePet(id);
-                    return String.format("%s says %s", pet.name(), pet.sound());
-                }
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        throw new ResponseException(400, "Expected: <pet id>");
-    }
-
-    public String adoptAllPets() throws ResponseException {
-        assertSignedIn();
-        var buffer = new StringBuilder();
-        for (var pet : server.listPets()) {
-            buffer.append(String.format("%s says %s%n", pet.name(), pet.sound()));
-        }
-
-        server.deleteAllPets();
-        return buffer.toString();
-    }
-
-
-
-    private Pet getPet(int id) throws ResponseException {
-        for (var pet : server.listPets()) {
-            if (pet.id() == id) {
-                return pet;
-            }
-        }
-        return null;
-    }
-
-
-
-    }*/
     public String help() {
-        if (!this.alreadyLoggedIn) {
-            return """
+        if (!this.alreadyLoggedIn) { //if user is not logged in show this
+            return """ 
                     - help -> displays command options
                     - quit -> quits the entire chess program
                     - Login <USERNAME> <PASSWORD> -> to login to existing account
                     - Register <USERNAME> <PASSWORD> <EMAIL> -> to create a new account
                     """;
         }
-        else {
+        else { //if user is logged in show this
             return """
                 - help -> displays command options
                 - logout -> logs you out

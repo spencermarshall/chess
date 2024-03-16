@@ -37,7 +37,12 @@ public class Repl  {
     }*/
 
     private void printPrompt() {
-        System.out.print("processing...");
+        if (client.alreadyLoggedIn) {
+            System.out.println("\nLOGGED IN. TYPE help FOR HELP >>");
+        }
+        else {
+            System.out.println("\nNOT LOGGED IN. TYPE help FOR HELP >>");
+        }
 
     }
 
