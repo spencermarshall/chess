@@ -93,10 +93,10 @@ public class ChessClient {
         throw new Exception("Expected: register <username> <password> <email>");
     }
 
-    public String logOut() throws Exception {
+    public String logOut(UserData user) throws Exception {
         assert this.alreadyLoggedIn; //we need to be logged in to log out lol
         // todo do we pass in user from paramteter, how do we know which user to logout?
-        server.logout();
+        server.logout(user);
         this.alreadyLoggedIn = false; //now we are logged out
         return String.format("%s left the shop", visitorName);
     }

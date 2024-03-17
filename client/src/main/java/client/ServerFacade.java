@@ -10,6 +10,7 @@ import java.net.*;
 public class ServerFacade {
 
     private final String serverUrl;
+    public boolean isLoggedIn; //todo this shouldn't be a variable, right?
 
     public ServerFacade(String url) {
         serverUrl = url;
@@ -22,11 +23,15 @@ public class ServerFacade {
     public void login(UserData user) throws Exception {
         var path = "/login";
         this.makeRequest("GET", path, user, UserData.class);
+        this.isLoggedIn = true;
     }
-    public void logout() throws Exception {
+    public void logout(UserData user) throws Exception {
         var path = "/logout";
-        UserData user = new UserData(); //todo this is WRONG, i just have it so it won't give errors
         this.makeRequest("DELETE", path, user, UserData.class);
+        this.isLoggedIn = false;
+    }
+    public boolean isLoggedIn(UserData user) {
+        return false; //todo something here idk,
     }
     public void createGame(GameData game) throws Exception {
         var path = "/game/create";
@@ -45,7 +50,9 @@ public class ServerFacade {
         var path="/register";
         UserData newUser=new UserData();
         newUser.register(username, password, email);
+        AuthData auth = new AuthData(username);
         var response = this.makeRequest("POST", path, newUser, UserData.class);
+        return auth;
     }
 
 
