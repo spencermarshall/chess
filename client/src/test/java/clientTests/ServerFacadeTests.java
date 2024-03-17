@@ -48,23 +48,24 @@ public class ServerFacadeTests {
 
     @Test
     @Order(1)
-    @DisplayName("Login positive works")
-    public void loginPositive() throws Exception {
+    @DisplayName("register positive works")
+    public void regusterPositive() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
         var authData = facade.register("username","password","email@gmail.com");
-        facade.login(user);
-        assertTrue(facade.isLoggedIn); //todo this facade.isLogged in will need to change and it's the same in every test lol
+        assertNotNull(authData);
+        //maybe assertThrows idk yet
     }
     @Test
     @Order(2)
-    @DisplayName("Login positive works")
-    public void loginPositive() throws Exception {
+    @DisplayName("duplicate register won't work")
+    public void registerNegative() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
         var authData = facade.register("username","password","email@gmail.com");
-        facade.login(user);
-        assertTrue(facade.isLoggedIn); //todo this facade.isLogged in will need to change and it's the same in every test lol
+        var authData2 = facade.register("username","password","email@gmail.com");
+        //tries to register same user twice, shouldn't work
+        assertNull(authData2); //expected is null because register won't be valid, because username already exists
     }
     @Test
     @Order(3)
@@ -193,7 +194,7 @@ public class ServerFacadeTests {
     }
     @Test
     @Order(13)
-    @DisplayName("Observe Game Positive")
+    @DisplayName("Observe Game Positive") //observe
     public void observeGamePositive() throws Exception {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
@@ -202,7 +203,7 @@ public class ServerFacadeTests {
         GameData game = new GameData();
         facade.createGame(game);
         GameData[] list = facade.listGames();
-        facade.joinGame(1,""); //observe first game ID
+        facade.joinGame(1,""); //observe first game ID, empty string indicates no color so we are observe but idk how to check
         //todo idk how to check this, maybe write a new function
         fail();
     }
