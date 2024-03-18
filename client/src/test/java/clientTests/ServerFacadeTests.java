@@ -56,7 +56,7 @@ public class ServerFacadeTests {
         assertNotNull(authData);
         //maybe assertThrows idk yet
     }
-    @Test
+    @Test //ok
     @Order(2)
     @DisplayName("duplicate register won't work")
     public void registerNegative() throws Exception {
