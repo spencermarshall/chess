@@ -36,7 +36,7 @@ public class ChessClient {
                 case "quit" -> quit();
                 case "login" -> login(params);
                 case "register" -> register();
-                case "logout" -> logOut();
+                case "logout" -> logOut(new UserData());
                 case "create" -> createGame(params);
                 case "join" -> joinGame(params);
                 case "observe" -> joinGame(params); //this is joinGame() again cuz color is empty; function can handle both
