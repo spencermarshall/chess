@@ -2,7 +2,8 @@ package client;
 import com.google.gson.Gson;
 //import exception.ResponseException;
 import model.*;
-
+import java.net.URL;
+import java.net.HttpURLConnection;
 
 import java.io.*;
 import java.net.*;
@@ -17,17 +18,19 @@ public class ServerFacade {
     }
     public ServerFacade() {
         serverUrl = "http://localhost:8080";
+
     }
+
 
     //i made this lol
     public void login(UserData user) throws Exception {
-        var path = "/login";
+        var path = "/session";
         this.makeRequest("GET", path, user, UserData.class);
         this.isLoggedIn = true;
     }
-    public void logout(UserData user) throws Exception {
-        var path = "/logout";
-        this.makeRequest("DELETE", path, user, UserData.class);
+    public void logout(String username) throws Exception {
+        var path = "/session";
+        this.makeRequest("DELETE", path, username, String.class);
         this.isLoggedIn = false;
     }
     public boolean isLoggedIn(UserData user) {
@@ -40,19 +43,22 @@ public class ServerFacade {
     ///todo void is temporary, it should return the games i think...?
     public GameData[] listGames() throws Exception {
         var path = "/pet";
-        //  record listPetResponse(Pet[] pet) {
-        // }
+
         var response = this.makeRequest("GET", path, null, ChessClient.class); ///todo idk if this last parameter is correct
         //return response.user();
         return null; //temp
     }
     public AuthData register(String username, String password, String email) throws Exception {
-        var path="/register";
+        var path="/user";
         UserData newUser=new UserData();
         newUser.register(username, password, email);
         AuthData auth = new AuthData(username);
         var response = this.makeRequest("POST", path, newUser, UserData.class);
         return auth;
+    }
+    public void clear() throws Exception {
+        var path = "/db";
+        this.makeRequest("DELETE",path,null,null);
     }
 
 
@@ -75,7 +81,7 @@ public class ServerFacade {
 
 
     public UserData addUser(UserData user) throws Exception {
-        var path = "/add";
+        var path = "/user";
         return this.makeRequest("POST", path, user, UserData.class);
     }
 
@@ -104,8 +110,10 @@ public class ServerFacade {
         if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);
+
             try (OutputStream reqBody = http.getOutputStream()) {
                 reqBody.write(reqData.getBytes());
+
             }
         }
     }

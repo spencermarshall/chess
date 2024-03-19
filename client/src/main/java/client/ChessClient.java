@@ -23,6 +23,7 @@ public class ChessClient {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
         this.alreadyLoggedIn = false;
+
     }
 
     public String eval(String input) {
@@ -35,8 +36,8 @@ public class ChessClient {
             return switch (cmd) {
                 case "quit" -> quit();
                 case "login" -> login(params);
-                case "register" -> register();
-                case "logout" -> logOut(new UserData());
+                case "register" -> register(params);
+                case "logout" -> logOut();
                 case "create" -> createGame(params);
                 case "join" -> joinGame(params);
                 case "observe" -> joinGame(params); //this is joinGame() again cuz color is empty; function can handle both
@@ -61,7 +62,7 @@ public class ChessClient {
     }
 
     public String login(String... params) throws Exception {
-        if (params.length >= 2) {
+        if (params.length == 2) {
             //username and password is what the user typed in
             String username = params[0];
             String password = params[1];
@@ -79,7 +80,7 @@ public class ChessClient {
     }
 
     public String register(String... params) throws Exception {
-        if (params.length >= 3) {
+        if (params.length == 3) {
             //username and password and email is what the user typed in
             String username = params[0];
             String password = params[1];
@@ -93,10 +94,10 @@ public class ChessClient {
         throw new Exception("Expected: register <username> <password> <email>");
     }
 
-    public String logOut(UserData user) throws Exception {
+    public String logOut() throws Exception {
         assert this.alreadyLoggedIn; //we need to be logged in to log out lol
         // todo do we pass in user from paramteter, how do we know which user to logout?
-        server.logout(user);
+        server.logout(this.visitorName.split("-")[0]);
         this.alreadyLoggedIn = false; //now we are logged out
         return String.format("%s left the shop", visitorName);
     }

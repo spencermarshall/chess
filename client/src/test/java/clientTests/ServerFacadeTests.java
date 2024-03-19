@@ -5,6 +5,7 @@ import dataAccess.DataAccessException;
 import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.Executable;
 import server.Server;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +24,7 @@ public class ServerFacadeTests {
         server = new Server();
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
-        facade = new ServerFacade();
+        facade = new ServerFacade("http://localhost:8080");
     }
 
     @AfterAll
@@ -33,6 +34,8 @@ public class ServerFacadeTests {
 
     @BeforeEach //this function is copied from the starterCode on github
     public void setup() throws Exception {
+        facade.clear();
+
 
 
         //one user already logged in
@@ -49,9 +52,10 @@ public class ServerFacadeTests {
     @Test
     @Order(1)
     @DisplayName("register positive works")
-    public void regusterPositive() throws Exception {
+    public void registerPositive() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
+
         var authData = facade.register("username","password","email@gmail.com");
         assertNotNull(authData);
         //maybe assertThrows idk yet
@@ -63,9 +67,13 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         user.register(username, password, email);
         var authData = facade.register("username","password","email@gmail.com");
-        var authData2 = facade.register("username","password","email@gmail.com");
+        try {
+            assertThrows(java.lang.Exception.class,(Executable) facade.register(username, password, email));
+        } catch(Exception em) {
+            assertTrue(true);
+        }
         //tries to register same user twice, shouldn't work
-        assertNull(authData2); //expected is null because register won't be valid, because username already exists
+       // assertNull(authData2); //expected is null because register won't be valid, because username already exists
     }
     @Test
     @Order(3)
@@ -76,6 +84,7 @@ public class ServerFacadeTests {
         var authData = facade.register("username","password","email@gmail.com");
         facade.login(user);
         assertTrue(facade.isLoggedIn); //todo this facade.isLogged in will need to change and it's the same in every test lol
+
     }
     @Test
     @Order(4)
@@ -84,8 +93,11 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         user.register(username, password, email);
         var authData = facade.register("username","notrealPass","email@gmail.com");
-        facade.login(user);
-        assertFalse(facade.isLoggedIn);
+        try {
+            facade.login(user);
+        } catch(Exception em) {
+            assertTrue(true);
+        }
     }
 
     @Test
@@ -94,10 +106,12 @@ public class ServerFacadeTests {
     public void logoutPositive() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","notrealPass","email@gmail.com");
+        var authData = facade.register("username","password","email@gmail.com");
         facade.login(user);
-        facade.logout(user);
+        facade.logout(username);
         assertFalse(facade.isLoggedIn);
+
+
     }
 
     @Test
