@@ -162,7 +162,7 @@ public class ChessClient {
                     - Register <USERNAME> <PASSWORD> <EMAIL> -> to create a new account
                     """;
         }
-        else { //if user is logged in show this
+        else { // if user is logged in show this
             return """
                 - help -> displays command options
                 - logout -> logs you out
