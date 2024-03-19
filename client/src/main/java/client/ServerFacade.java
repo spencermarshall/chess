@@ -37,7 +37,7 @@ public class ServerFacade {
         return false; //todo something here idk,
     }
     public void createGame(GameData game) throws Exception {
-        var path = "/game/create";
+        var path = "/game";
         this.makeRequest("POST", path, game, GameData.class);
     }
     ///todo void is temporary, it should return the games i think...?
