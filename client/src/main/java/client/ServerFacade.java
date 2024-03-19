@@ -7,9 +7,11 @@ import java.net.HttpURLConnection;
 
 import java.io.*;
 import java.net.*;
+import java.util.Map;
 
 public class ServerFacade {
 
+    public Map<String, String> usernameAuth;
     private final String serverUrl;
     public boolean isLoggedIn; //todo this shouldn't be a variable, right?
 
@@ -25,7 +27,7 @@ public class ServerFacade {
     //i made this lol
     public void login(UserData user) throws Exception {
         var path = "/session";
-        this.makeRequest("GET", path, user, UserData.class);
+        var auth = this.makeRequest("GET", path, user, UserData.class);
         this.isLoggedIn = true;
     }
     public void logout(String username) throws Exception {
@@ -54,6 +56,7 @@ public class ServerFacade {
         newUser.register(username, password, email);
         AuthData auth = new AuthData(username);
         var response = this.makeRequest("POST", path, newUser, UserData.class);
+        usernameAuth.put(username, auth.getAuthString()); //adds auth token string to our map of all usernames/auth token
         return auth;
     }
     public void clear() throws Exception {

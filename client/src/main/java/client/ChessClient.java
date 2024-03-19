@@ -5,12 +5,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 //import com.sun.nio.sctp.NotificationHandler;
 
 //import server.ServerFacade;
 public class ChessClient {
+   private String authToken;
     private String visitorName = null;
     private final ServerFacade server;
     private final String serverUrl;
@@ -23,6 +25,7 @@ public class ChessClient {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
         this.alreadyLoggedIn = false;
+        this.authToken = "";
 
     }
 
@@ -73,6 +76,7 @@ public class ChessClient {
 
 
             visitorName = String.join("-", params);
+            authToken = server.usernameAuth.get(username);
 
             return String.format("You signed in as %s.\n You may know play Chess games :)\n These are the available commands \n"+help(), visitorName);
         }
@@ -89,6 +93,7 @@ public class ChessClient {
             user.register(username, password, email);
             server.addUser(user);
 
+
             return String.format("You are registered as %s. You may now login if desired. :)", username);
         }
         throw new Exception("Expected: register <username> <password> <email>");
@@ -103,7 +108,7 @@ public class ChessClient {
     }
 
     public String createGame(String... params) throws Exception {
-       if (params.length >= 1) {
+       if (params.length == 1) {
            String gameName = params[0];
            GameData game = new GameData();
            game.setGameName(gameName);
