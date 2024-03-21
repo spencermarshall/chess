@@ -7,19 +7,23 @@ import java.net.HttpURLConnection;
 
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ServerFacade {
 
-    public Map<String, String> usernameAuth;
+    public Map<String, AuthData> usernameAuth;
     private final String serverUrl;
     public boolean isLoggedIn; //todo this shouldn't be a variable, right?
+    private AuthData thisAuth;
 
     public ServerFacade(String url) {
         serverUrl = url;
+        this.usernameAuth = new HashMap<String, AuthData>();
     }
     public ServerFacade() {
         serverUrl = "http://localhost:8080";
+        this.usernameAuth = new HashMap<String, AuthData>();
 
     }
 
@@ -30,9 +34,9 @@ public class ServerFacade {
         var auth = this.makeRequest("GET", path, user, UserData.class);
         this.isLoggedIn = true;
     }
-    public void logout(String username) throws Exception {
+    public void logout(String auth) throws Exception {
         var path = "/session";
-        this.makeRequest("DELETE", path, username, String.class);
+        this.makeRequest("DELETE", path, auth,String.class);
         this.isLoggedIn = false;
     }
     public boolean isLoggedIn(UserData user) {
@@ -51,12 +55,13 @@ public class ServerFacade {
         return null; //temp
     }
     public AuthData register(String username, String password, String email) throws Exception {
-        var path="/user";
+        var path="/user"; //todo is this function ever called idk cuz add user does the register
         UserData newUser=new UserData();
         newUser.register(username, password, email);
         AuthData auth = new AuthData(username);
+        usernameAuth.put(username, auth); //adds auth token string to our map of all usernames/auth token
         var response = this.makeRequest("POST", path, newUser, UserData.class);
-        usernameAuth.put(username, auth.getAuthString()); //adds auth token string to our map of all usernames/auth token
+
         return auth;
     }
     public void clear() throws Exception {
@@ -85,6 +90,10 @@ public class ServerFacade {
 
     public UserData addUser(UserData user) throws Exception {
         var path = "/user";
+        String username = user.getUsername();
+        AuthData auth = new AuthData(username);
+        usernameAuth.put(username, auth.getAuthString()); //adds auth token string to our map of all usernames/auth token
+
         return this.makeRequest("POST", path, user, UserData.class);
     }
 
@@ -100,6 +109,7 @@ public class ServerFacade {
             http.setDoOutput(true);
 
             writeBody(request, http);
+            http.setAuthenticator(this.);
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);

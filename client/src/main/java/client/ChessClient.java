@@ -13,6 +13,7 @@ import static java.lang.Integer.parseInt;
 //import server.ServerFacade;
 public class ChessClient {
    private String authToken;
+   private String username;
     private String visitorName = null;
     private final ServerFacade server;
     private final String serverUrl;
@@ -72,6 +73,7 @@ public class ChessClient {
             UserData testUser = new UserData();
             testUser.register(username, password, "");
             server.login(testUser);
+            this.username = username;
             this.alreadyLoggedIn = true;
 
 
@@ -101,10 +103,11 @@ public class ChessClient {
 
     public String logOut() throws Exception {
         assert this.alreadyLoggedIn; //we need to be logged in to log out lol
-        // todo do we pass in user from paramteter, how do we know which user to logout?
-        server.logout(this.visitorName.split("-")[0]);
+        // todo auth token?
+        server.logout(this.authToken);
         this.alreadyLoggedIn = false; //now we are logged out
         return String.format("%s left the shop", visitorName);
+
     }
 
     public String createGame(String... params) throws Exception {
