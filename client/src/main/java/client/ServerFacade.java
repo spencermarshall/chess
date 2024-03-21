@@ -9,21 +9,27 @@ import java.io.*;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ServerFacade {
 
-    public Map<String, AuthData> usernameAuth;
+    public Map<UserData, AuthData> usernameAuth;
+    public Map<String, UserData> usernameToUserData;
+
     private final String serverUrl;
     public boolean isLoggedIn; //todo this shouldn't be a variable, right?
     private AuthData thisAuth;
 
     public ServerFacade(String url) {
         serverUrl = url;
-        this.usernameAuth = new HashMap<String, AuthData>();
+        this.usernameAuth = new HashMap<UserData, AuthData>();
+        this.usernameToUserData = new HashMap<String, UserData>();
     }
     public ServerFacade() {
         serverUrl = "http://localhost:8080";
-        this.usernameAuth = new HashMap<String, AuthData>();
+        this.usernameAuth = new HashMap<UserData, AuthData>();
+        this.usernameToUserData = new HashMap<String, UserData>();
+
 
     }
 
@@ -31,12 +37,13 @@ public class ServerFacade {
     //i made this lol
     public void login(UserData user) throws Exception {
         var path = "/session";
-        var auth = this.makeRequest("GET", path, user, UserData.class);
+        var auth = this.makeRequest("POST", path, user, UserData.class,null);
         this.isLoggedIn = true;
     }
-    public void logout(String auth) throws Exception {
+    public void logout(AuthData auth, String username) throws Exception {
         var path = "/session";
-        this.makeRequest("DELETE", path, auth,String.class);
+        UserData logoutUser = this.usernameToUserData.get(username);
+        this.makeRequest("DELETE", path, logoutUser,UserData.class,auth.getAuthString());
         this.isLoggedIn = false;
     }
     public boolean isLoggedIn(UserData user) {
@@ -44,29 +51,30 @@ public class ServerFacade {
     }
     public void createGame(GameData game) throws Exception {
         var path = "/game";
-        this.makeRequest("POST", path, game, GameData.class);
+        this.makeRequest("POST", path, game, GameData.class,null);
     }
     ///todo void is temporary, it should return the games i think...?
     public GameData[] listGames() throws Exception {
         var path = "/pet";
 
-        var response = this.makeRequest("GET", path, null, ChessClient.class); ///todo idk if this last parameter is correct
+        var response = this.makeRequest("GET", path, null, ChessClient.class,null); ///todo idk if this last parameter is correct
         //return response.user();
         return null; //temp
     }
-    public AuthData register(String username, String password, String email) throws Exception {
+   /* public AuthData register(String username, String password, String email) throws Exception {
         var path="/user"; //todo is this function ever called idk cuz add user does the register
         UserData newUser=new UserData();
         newUser.register(username, password, email);
         AuthData auth = new AuthData(username);
-        usernameAuth.put(username, auth); //adds auth token string to our map of all usernames/auth token
-        var response = this.makeRequest("POST", path, newUser, UserData.class);
+        usernameAuth.put(newUser, auth); //adds auth token string to our map of all usernames/auth token
+        usernameToUserData.put(newUser.getUsername(),newUser);
+        var response = this.makeRequest("POST", path, newUser, UserData.class,null);
 
         return auth;
-    }
+    }*/
     public void clear() throws Exception {
         var path = "/db";
-        this.makeRequest("DELETE",path,null,null);
+        this.makeRequest("DELETE",path,null,null,null);
     }
 
 
@@ -78,9 +86,9 @@ public class ServerFacade {
             var observePath=String.format("game/watch/%d", gameID);
             GameData selectedGame=listGames()[gameID - 1];
             if (color.isEmpty()) {
-                this.makeRequest("POST", observePath, selectedGame, GameData.class);
+                this.makeRequest("POST", observePath, selectedGame, GameData.class,null);
             } else {
-                this.makeRequest("POST", joinPath, selectedGame, GameData.class);
+                this.makeRequest("POST", joinPath, selectedGame, GameData.class, null);
             }
         } catch (Exception exception) {
             throw new Exception(exception.getMessage());
@@ -91,26 +99,35 @@ public class ServerFacade {
     public UserData addUser(UserData user) throws Exception {
         var path = "/user";
         String username = user.getUsername();
-        AuthData auth = new AuthData(username);
-        usernameAuth.put(username, auth.getAuthString()); //adds auth token string to our map of all usernames/auth token
+        AuthData auth = new AuthData(username); //todo this is creating a new auth but we already make one in server
+        usernameAuth.put(user, auth); //adds auth token string to our map of all usernames/auth token
+        usernameToUserData.put(user.getUsername(),user);
 
-        return this.makeRequest("POST", path, user, UserData.class);
+        return this.makeRequest("POST", path, user, UserData.class,null);
     }
 
 
 
 
 
-    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
+    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, String authToken) throws Exception {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            if (authToken != null) {
+                http.addRequestProperty("Authorization", authToken);
+            }
             http.setRequestMethod(method);
             http.setDoOutput(true);
+            if (Objects.equals(method, "GET")) {
+                http.setDoOutput(false);
+            }
+
+
 
             writeBody(request, http);
-            http.setAuthenticator(this.);
             http.connect();
+
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
         } catch (Exception ex) {

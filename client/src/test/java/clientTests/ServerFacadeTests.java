@@ -108,7 +108,7 @@ public class ServerFacadeTests {
         user.register(username, password, email);
         var authData = facade.register("username","password","email@gmail.com");
         facade.login(user);
-        facade.logout(username);
+        facade.logout(authData);
         assertFalse(facade.isLoggedIn);
 
 

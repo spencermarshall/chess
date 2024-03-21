@@ -12,7 +12,7 @@ import static java.lang.Integer.parseInt;
 
 //import server.ServerFacade;
 public class ChessClient {
-   private String authToken;
+   private AuthData authToken;
    private String username;
     private String visitorName = null;
     private final ServerFacade server;
@@ -26,7 +26,7 @@ public class ChessClient {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
         this.alreadyLoggedIn = false;
-        this.authToken = "";
+        this.username = "";
 
     }
 
@@ -70,15 +70,16 @@ public class ChessClient {
             //username and password is what the user typed in
             String username = params[0];
             String password = params[1];
-            UserData testUser = new UserData();
-            testUser.register(username, password, "");
-            server.login(testUser);
+            UserData loginUser = server.usernameToUserData.get(username);
+            AuthData myAuth = server.usernameAuth.get(loginUser);
+
+            server.login(loginUser);
             this.username = username;
             this.alreadyLoggedIn = true;
 
 
             visitorName = String.join("-", params);
-            authToken = server.usernameAuth.get(username);
+            this.authToken = server.usernameAuth.get(loginUser);
 
             return String.format("You signed in as %s.\n You may know play Chess games :)\n These are the available commands \n"+help(), visitorName);
         }
@@ -104,8 +105,9 @@ public class ChessClient {
     public String logOut() throws Exception {
         assert this.alreadyLoggedIn; //we need to be logged in to log out lol
         // todo auth token?
-        server.logout(this.authToken);
+        server.logout(this.authToken,this.username);
         this.alreadyLoggedIn = false; //now we are logged out
+        this.username = "";
         return String.format("%s left the shop", visitorName);
 
     }
