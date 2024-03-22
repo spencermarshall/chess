@@ -200,6 +200,8 @@ public class ServerFacadeTests {
         user.register(username, password, email);
         var authData = facade.addUser(user);
         GameData game = new GameData();
+        game.setGameName("testGameName");
+        facade.login(user);
         facade.createGame(game);
         String list = facade.listGames().toString();
         facade.joinGame(1,"black");

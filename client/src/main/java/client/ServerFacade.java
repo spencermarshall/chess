@@ -42,6 +42,7 @@ public class ServerFacade {
         this.isLoggedIn = true;
         this.userLoggedIn = user; //technicaly it's missing email but username and password arew the ame
         this.thisAuth = auth;
+        this.usernameLoggedIn = user.getUsername();
         return auth;
     }
     public void logout() throws Exception {
@@ -70,13 +71,13 @@ public class ServerFacade {
     public void joinGame(int gameID, String color) throws Exception {
         try {
             //if color is "" then it's observer
-            var joinPath=String.format("/game/join/%d/%s", gameID, color);
-            var observePath=String.format("game/watch/%d", gameID);
-           // String selectedGame = listGames()[gameID - 1];
+            var joinPath=String.format("/game/%d/%s/%s", gameID, color,this.usernameLoggedIn);
+            var observePath = String.format("game/%d", gameID);
+            String selectedGame = null;
             if (color.isEmpty()) {
-         //       this.makeRequest("POST", observePath, selectedGame, GameData.class,null);
+                this.makeRequest("PUT", observePath, null, GameData.class, this.thisAuth.getAuthString());
             } else {
-          //      this.makeRequest("POST", joinPath, selectedGame, GameData.class, null);
+                this.makeRequest("PUT", joinPath, null, GameData.class, this.thisAuth.getAuthString());
             }
         } catch (Exception exception) {
             throw new Exception(exception.getMessage());

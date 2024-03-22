@@ -239,6 +239,7 @@ public class Server {
         res.status(200); //200 is success
         String header = req.headers("Authorization");
         String body = req.body();
+        body = body.toUpperCase(); //makes it all capitalized
         String color = "EMPTY";
         if (body.contains("WHITE")) {
             color = "WHITE";

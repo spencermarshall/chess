@@ -140,7 +140,7 @@ public class ChessClient {
         this.alreadyLoggedIn = false; //now we are logged out
         this.username = "";
         this.authToken = null;
-        return String.format("%s left the shop", visitorName);
+        return String.format("%s left the arena", visitorName);
 
     }
 
@@ -157,18 +157,19 @@ public class ChessClient {
 
 
     public String joinGame(String... params) throws Exception {
+       if (params.length == 0 || params.length > 2) {
+           //if just "join" or more parameters than we need throw error
+           throw new Exception("ERROR Expected: join <GAME ID> [WHITE | BLACK | <empty>]");
+       }
+      //determines if user is observing (true) or joining (False)
        boolean observe = (params.length == 1);
        String color = "";
-       int gameID = -1; //default, it shouldn't be this ever
-       if (observe) {
-           gameID = parseInt(params[0]);
-       }
-       else if (params.length == 2) {
-           gameID = parseInt(params[0]);
+       int gameID = parseInt(params[0]);
+       if (params.length == 2) {
            color = params[1];
        }
 
-       server.joinGame(gameID,color); //todo i might have to implement more for observe
+       server.joinGame(gameID,color);
         if (observe) {
             return "successfully observing";
         }
