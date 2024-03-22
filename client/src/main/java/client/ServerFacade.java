@@ -1,4 +1,5 @@
 package client;
+import chess.ChessGame;
 import com.google.gson.Gson;
 //import exception.ResponseException;
 import model.*;
@@ -52,10 +53,14 @@ public class ServerFacade {
         var path = "/game";
         this.makeRequest("POST", path, game, GameData.class,this.thisAuth.getAuthString());
     }
-    public GameData[] listGames() throws Exception {
+    public Object listGames() throws Exception {
         var path = "/game";
-        GameData []list  =new GameData[]{this.makeRequest("GET", path, null, GameData.class, this.thisAuth.getAuthString())}; ///todo idk if this last parameter is correct
-        return list;
+        GameData game = new GameData();
+        record listGameResponse(ChessGame[] game) {
+        }
+
+        var response = this.makeRequest("GET", path, null, listGameResponse.class, this.thisAuth.getAuthString()); ///todo idk if this last parameter is correct
+        return response;
     }
    /* public AuthData register(String username, String password, String email) throws Exception {
         var path="/user"; //todo is this function ever called idk cuz add user does the register
@@ -80,11 +85,11 @@ public class ServerFacade {
             //if color is "" then it's observer
             var joinPath=String.format("/game/join/%d/%s", gameID, color);
             var observePath=String.format("game/watch/%d", gameID);
-            GameData selectedGame=listGames()[gameID - 1];
+           // String selectedGame = listGames()[gameID - 1];
             if (color.isEmpty()) {
-                this.makeRequest("POST", observePath, selectedGame, GameData.class,null);
+         //       this.makeRequest("POST", observePath, selectedGame, GameData.class,null);
             } else {
-                this.makeRequest("POST", joinPath, selectedGame, GameData.class, null);
+          //      this.makeRequest("POST", joinPath, selectedGame, GameData.class, null);
             }
         } catch (Exception exception) {
             throw new Exception(exception.getMessage());

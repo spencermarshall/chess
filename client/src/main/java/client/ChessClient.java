@@ -58,13 +58,14 @@ public class ChessClient {
     }
 
     public String list() throws Exception {
-       GameData[] allGames = server.listGames();
-       StringBuilder output =new StringBuilder();
+       Object allGames = server.listGames();
+       return (String)allGames; //idk if this is right
+       /*StringBuilder output =new StringBuilder();
        var gson = new Gson();
        for (int i = 0; i < allGames.length; ++i) {
            output.append(gson.toJson(allGames[i]));
        }
-       return output.toString();
+       return output.toString();*/
 
     }
 
