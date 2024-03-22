@@ -162,12 +162,12 @@ public class Server {
 
     }
     private Object listGames(Request req, Response res) throws DataAccessException {
-        String header = req.headers("Authorization");
-        JsonObject success = new JsonObject();
+        String header=req.headers("Authorization");
+        JsonObject success=new JsonObject();
 
 
-        AuthData myAuth = new AuthData(header, true);
-        Collection<GameData> allGames =this.gameService.returnAllGames(myAuth);
+        AuthData myAuth=new AuthData(header, true);
+        Collection<GameData> allGames=this.gameService.returnAllGames(myAuth);
 
 
         boolean validAuthToken = false;

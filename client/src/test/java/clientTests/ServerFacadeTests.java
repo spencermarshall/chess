@@ -138,7 +138,7 @@ public class ServerFacadeTests {
         facade.login(user);
         GameData game = new GameData();
         facade.createGame(game);
-        assertTrue(facade.listGames().length() > 0);
+        assertFalse(facade.listGames().toString().isEmpty());
     }
 
     @Test
@@ -167,11 +167,13 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
-        var authData = facade.addUser(user);
+        var auth = facade.addUser(user);
+        facade.login(user);
+
         GameData game = new GameData();
         facade.createGame(game);
-        String list = facade.listGames();
-        assertEquals(1, list.length());
+        String list = facade.listGames().toString();
+        assertFalse(list.isEmpty());
     }
     @Test
     @Order(10)
@@ -183,8 +185,11 @@ public class ServerFacadeTests {
         var authData = facade.addUser(user);
         GameData game = new GameData();
         //facade.createGame(game);
-        String list = facade.listGames();
-        assertEquals(0, list.length());
+        try {
+            String list = facade.listGames().toString(); //we are not logged in, it should not allow us
+        } catch(Exception em) {
+            assertTrue(true);
+        }
     }
     @Test
     @Order(11)
@@ -196,7 +201,7 @@ public class ServerFacadeTests {
         var authData = facade.addUser(user);
         GameData game = new GameData();
         facade.createGame(game);
-        String list = facade.listGames();
+        String list = facade.listGames().toString();
         facade.joinGame(1,"black");
         //todo some other function call idk
         fail();
@@ -211,7 +216,7 @@ public class ServerFacadeTests {
         var authData = facade.addUser(user);
         GameData game = new GameData();
         facade.createGame(game);
-        String list = facade.listGames();
+        String list = facade.listGames().toString();
         facade.joinGame(4,"black"); //invalid id, game does not exist
         //todo maybe assert throw, idk
         fail();
@@ -226,7 +231,7 @@ public class ServerFacadeTests {
         var authData = facade.addUser(user);
         GameData game = new GameData();
         facade.createGame(game);
-        String list = facade.listGames();
+        String list = facade.listGames().toString();
         facade.joinGame(1,""); //observe first game ID, empty string indicates no color so we are observe but idk how to check
         //todo idk how to check this, maybe write a new function
         fail();

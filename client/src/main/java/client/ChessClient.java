@@ -4,6 +4,7 @@ import model.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -58,15 +59,27 @@ public class ChessClient {
     }
 
     public String list() throws Exception {
-       Object allGames = server.listGames();
-       return (String)allGames; //idk if this is right
-       /*StringBuilder output =new StringBuilder();
-       var gson = new Gson();
-       for (int i = 0; i < allGames.length; ++i) {
-           output.append(gson.toJson(allGames[i]));
+       assert this.alreadyLoggedIn;
+       var allGames = server.listGames();
+       if (allGames == null) {
+           return "no games lol";
        }
-       return output.toString();*/
-
+       StringBuilder output = new StringBuilder();
+       Map<String, ArrayList> test =(Map<String, ArrayList>) allGames;
+       ArrayList<Map> listGames = test.get("games");
+       for (int i = 0; i < listGames.size(); ++i) {
+           output.append("Game ID: ");
+           double gameID =(double) listGames.get(i).get("gameID");
+           output.append((int)gameID);
+           output.append(" Game Name: ");
+           output.append(listGames.get(i).get("gameName"));
+           //todo add white username and black
+           output.append(" White Username: ");
+           output.append("[WHITE USERNAME]");
+           output.append(" Black Username: ");
+           output.append("[BLACK USERNAME]\n");
+       }
+       return output.toString();
     }
 
     public String quit() throws Exception {

@@ -55,24 +55,11 @@ public class ServerFacade {
     }
     public Object listGames() throws Exception {
         var path = "/game";
-        GameData game = new GameData();
-        record listGameResponse(ChessGame[] game) {
-        }
-
-        var response = this.makeRequest("GET", path, null, listGameResponse.class, this.thisAuth.getAuthString()); ///todo idk if this last parameter is correct
+        record listGameResponse() { }
+        var response = this.makeRequest("GET", path, null, Object.class, this.thisAuth.getAuthString()); ///todo idk if this last parameter is correct
         return response;
     }
-   /* public AuthData register(String username, String password, String email) throws Exception {
-        var path="/user"; //todo is this function ever called idk cuz add user does the register
-        UserData newUser=new UserData();
-        newUser.register(username, password, email);
-        AuthData auth = new AuthData(username);
-        usernameAuth.put(newUser, auth); //adds auth token string to our map of all usernames/auth token
-        usernameToUserData.put(newUser.getUsername(),newUser);
-        var response = this.makeRequest("POST", path, newUser, UserData.class,null);
 
-        return auth;
-    }*/
     public void clear() throws Exception {
         var path = "/db";
         this.makeRequest("DELETE",path,null,null,null);
