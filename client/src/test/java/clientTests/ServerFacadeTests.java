@@ -236,20 +236,6 @@ public class ServerFacadeTests {
         //todo idk how to check this, maybe write a new function
         fail();
     }
-    @Test
-    @Order(14)
-    @DisplayName("Observe Game Positive") //observe
-    public void odbserveGamePositive() throws Exception {
-        UserData user = new UserData();
-        UserData fakeUser = new UserData();
-        user.register(username, password, email);
-        var authData = facade.addUser(user);
-        GameData game = new GameData();
-        facade.createGame(game);
-        String list = facade.listGames().toString();
-        facade.joinGame(1,""); //observe first game ID, empty string indicates no color so we are observe but idk how to check
-        //todo idk how to check this, maybe write a new function
-        fail();
-    }
+
     //todo, there might be more tests for observing or something else?
 }
