@@ -19,6 +19,8 @@ public class ServerFacade {
     private final String serverUrl;
     public boolean isLoggedIn; //todo this shouldn't be a variable, right?
     private AuthData thisAuth;
+    private String usernameLoggedIn;
+    private UserData userLoggedIn;
 
     public ServerFacade(String url) {
         serverUrl = url;
@@ -29,37 +31,31 @@ public class ServerFacade {
         serverUrl = "http://localhost:8080";
         this.usernameAuth = new HashMap<UserData, AuthData>();
         this.usernameToUserData = new HashMap<String, UserData>();
-
-
     }
 
 
     //i made this lol
-    public void login(UserData user) throws Exception {
+    public AuthData login(UserData user) throws Exception {
         var path = "/session";
-        var auth = this.makeRequest("POST", path, user, UserData.class,null);
+        var auth = this.makeRequest("POST", path, user, AuthData.class,null);
         this.isLoggedIn = true;
+        this.userLoggedIn = user; //technicaly it's missing email but username and password arew the ame
+        this.thisAuth = auth;
+        return auth;
     }
-    public void logout(AuthData auth, String username) throws Exception {
+    public void logout() throws Exception {
         var path = "/session";
-        UserData logoutUser = this.usernameToUserData.get(username);
-        this.makeRequest("DELETE", path, logoutUser,UserData.class,auth.getAuthString());
+        this.makeRequest("DELETE", path, this.userLoggedIn,UserData.class,this.thisAuth.getAuthString());
         this.isLoggedIn = false;
-    }
-    public boolean isLoggedIn(UserData user) {
-        return false; //todo something here idk,
     }
     public void createGame(GameData game) throws Exception {
         var path = "/game";
-        this.makeRequest("POST", path, game, GameData.class,null);
+        this.makeRequest("POST", path, game, GameData.class,this.thisAuth.getAuthString());
     }
-    ///todo void is temporary, it should return the games i think...?
     public GameData[] listGames() throws Exception {
-        var path = "/pet";
-
-        var response = this.makeRequest("GET", path, null, ChessClient.class,null); ///todo idk if this last parameter is correct
-        //return response.user();
-        return null; //temp
+        var path = "/game";
+        GameData []list  =new GameData[]{this.makeRequest("GET", path, null, GameData.class, this.thisAuth.getAuthString())}; ///todo idk if this last parameter is correct
+        return list;
     }
    /* public AuthData register(String username, String password, String email) throws Exception {
         var path="/user"; //todo is this function ever called idk cuz add user does the register

@@ -56,7 +56,7 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         user.register(username, password, email);
 
-        var authData = facade.register("username","password","email@gmail.com");
+        var authData = facade.addUser(user); //used to be register() idk they seem to do the same thing
         assertNotNull(authData);
         //maybe assertThrows idk yet
     }
@@ -66,9 +66,9 @@ public class ServerFacadeTests {
     public void registerNegative() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","password","email@gmail.com");
+        var authData = facade.addUser(user);
         try {
-            assertThrows(java.lang.Exception.class,(Executable) facade.register(username, password, email));
+            assertThrows(java.lang.Exception.class,(Executable) facade.addUser(user));
         } catch(Exception em) {
             assertTrue(true);
         }
@@ -81,7 +81,7 @@ public class ServerFacadeTests {
     public void loginPositive() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","password","email@gmail.com");
+        var authData = facade.addUser(user);
         facade.login(user);
         assertTrue(facade.isLoggedIn); //todo this facade.isLogged in will need to change and it's the same in every test lol
 
@@ -92,9 +92,11 @@ public class ServerFacadeTests {
     public void loginNegative() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","notrealPass","email@gmail.com");
+        UserData user2 = new UserData();
+        user2.register(username, "fake", email);
+        var authData = facade.addUser(user);
         try {
-            facade.login(user);
+            facade.login(user2);
         } catch(Exception em) {
             assertTrue(true);
         }
@@ -102,13 +104,13 @@ public class ServerFacadeTests {
 
     @Test
     @Order(5)
-    @DisplayName("Logout positive, will log you out")
+    @DisplayName("Logout positive, will log you out standard")
     public void logoutPositive() throws Exception {
         UserData user = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","password","email@gmail.com");
+        var authData = facade.addUser(user);
         facade.login(user);
-        facade.logout(authData);
+        facade.logout();
         assertFalse(facade.isLoggedIn);
 
 
@@ -116,14 +118,10 @@ public class ServerFacadeTests {
 
     @Test
     @Order(6)
-    @DisplayName("Logout negative,...")
+    @DisplayName("Logout negative, tries to logout when not logged in")
     public void logoutNegative() throws Exception {
-        UserData user = new UserData();
-        UserData fakeUser = new UserData();
-        user.register(username, password, email);
-        var authData = facade.register("username","notrealPass","email@gmail.com");
         try {
-            facade.login(fakeUser);
+            facade.logout();//we are not even loggedin
         } catch(Exception em) {
             assertTrue(true);
         }
@@ -131,12 +129,12 @@ public class ServerFacadeTests {
 
     @Test
     @Order(7)
-    @DisplayName("Create Game Positive")
+    @DisplayName("Create Game Positive") //this test is dependeont on listGames also working, i don't see another way
     public void createGamePositive() throws Exception {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
-        var authData = facade.register(username,password,email);
+        var authData = facade.addUser(user);
         facade.login(user);
         GameData game = new GameData();
         facade.createGame(game);
@@ -147,7 +145,13 @@ public class ServerFacadeTests {
     @Order(8)
     @DisplayName("Create Game Negative")
     public void createGameNegative() throws Exception {
+        UserData user = new UserData();
+        UserData fakeUser = new UserData();
+        user.register(username, password, email);
+        var authData = facade.addUser(user);
+        facade.login(user);
         GameData game = new GameData();
+        game.setGameName("test");
         facade.createGame(game);
         try {
             facade.createGame(game); //create duplicate game
@@ -163,7 +167,7 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
-        var authData = facade.register(username, password,email);
+        var authData = facade.addUser(user);
         GameData game = new GameData();
         facade.createGame(game);
         GameData[] list = facade.listGames();
@@ -176,7 +180,7 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
-        var authData = facade.register(username, password,email);
+        var authData = facade.addUser(user);
         GameData game = new GameData();
         //facade.createGame(game);
         GameData[] list = facade.listGames();
@@ -189,7 +193,7 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","notrealPass","email@gmail.com");
+        var authData = facade.addUser(user);
         GameData game = new GameData();
         facade.createGame(game);
         GameData[] list = facade.listGames();
@@ -204,7 +208,7 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","notrealPass","email@gmail.com");
+        var authData = facade.addUser(user);
         GameData game = new GameData();
         facade.createGame(game);
         GameData[] list = facade.listGames();
@@ -219,7 +223,7 @@ public class ServerFacadeTests {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
-        var authData = facade.register("username","notrealPass","email@gmail.com");
+        var authData = facade.addUser(user);
         GameData game = new GameData();
         facade.createGame(game);
         GameData[] list = facade.listGames();

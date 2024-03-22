@@ -33,6 +33,7 @@ public class ChessClient {
     public String eval(String input) {
         try {
             var tokens = input.toLowerCase().split(" ");
+            char ws = 's';
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             String output = "";
@@ -42,15 +43,29 @@ public class ChessClient {
                 case "login" -> login(params);
                 case "register" -> register(params);
                 case "logout" -> logOut();
+                case "list" -> list();
                 case "create" -> createGame(params);
                 case "join" -> joinGame(params);
                 case "observe" -> joinGame(params); //this is joinGame() again cuz color is empty; function can handle both
                 default -> help();
+
+
             };
 
         } catch (Exception exception) {
             return exception.getMessage();
         }
+    }
+
+    public String list() throws Exception {
+       GameData[] allGames = server.listGames();
+       StringBuilder output =new StringBuilder();
+       var gson = new Gson();
+       for (int i = 0; i < allGames.length; ++i) {
+           output.append(gson.toJson(allGames[i]));
+       }
+       return output.toString();
+
     }
 
     public String quit() throws Exception {
@@ -70,16 +85,18 @@ public class ChessClient {
             //username and password is what the user typed in
             String username = params[0];
             String password = params[1];
-            UserData loginUser = server.usernameToUserData.get(username);
-            AuthData myAuth = server.usernameAuth.get(loginUser);
+          //  UserData loginUser = server.usernameToUserData.get(username);
+            UserData loginUser = new UserData();
+            loginUser.register(username, password, "");
 
-            server.login(loginUser);
+
+            this.authToken = server.login(loginUser);
             this.username = username;
             this.alreadyLoggedIn = true;
 
 
             visitorName = String.join("-", params);
-            this.authToken = server.usernameAuth.get(loginUser);
+          //  this.authToken = server.usernameAuth.get(loginUser);
 
             return String.format("You signed in as %s.\n You may know play Chess games :)\n These are the available commands \n"+help(), visitorName);
         }
@@ -105,9 +122,10 @@ public class ChessClient {
     public String logOut() throws Exception {
         assert this.alreadyLoggedIn; //we need to be logged in to log out lol
         // todo auth token?
-        server.logout(this.authToken,this.username);
+        server.logout();
         this.alreadyLoggedIn = false; //now we are logged out
         this.username = "";
+        this.authToken = null;
         return String.format("%s left the shop", visitorName);
 
     }
@@ -123,18 +141,6 @@ public class ChessClient {
        throw new Exception("Expected: create <NAME>");
     }
 
-    public String listPets() throws Exception {
-        assert this.alreadyLoggedIn;
-
-        //server.listGames() unsure what data type it returns <T>
-        var games = server.listGames();
-        var result = new StringBuilder();
-        var gson = new Gson();
-        for (var game : games) {
-            result.append(gson.toJson(game)).append('\n'); //this from petshop, i might have to adjust it slightly
-        }
-        return result.toString();
-    }
 
     public String joinGame(String... params) throws Exception {
        boolean observe = (params.length == 1);
