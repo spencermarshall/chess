@@ -1,13 +1,17 @@
 package client;
+import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessPiece;
 import com.google.gson.Gson;
 //import exception.ResponseException;
+import com.google.gson.JsonObject;
 import model.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -71,26 +75,30 @@ public class ServerFacade {
     public void joinGame(int gameID, String color) throws Exception {
         try {
             //if color is "" then it's observer
-            var joinPath=String.format("/game/%d/%s/%s", gameID, color,this.usernameLoggedIn);
-            var observePath = String.format("/game/%d",gameID);
-            String selectedGame = null;
-            if (color.isEmpty()) {
-                this.makeRequest("PUT", observePath, null, GameData.class, this.thisAuth.getAuthString());
-            } else {
-                this.makeRequest("PUT", joinPath, null, GameData.class, this.thisAuth.getAuthString());
-            }
+            String path= "/game";
+          /*  String selectedGame = null;
+            //create game data
+            //request is JSON string, pass it in as a request
+
+
+            Map list = (Map) listGames();
+            ArrayList addingGame2 =(ArrayList) list.get("games");
+            Object test = addingGame2.get(0);
+            String json = new Gson().toJson(test);
+          //  Map test =(Map) addingGame2.get(0);
+        //    Object test2 = test.get("myGame");
+            GameData addingGame = new Gson().fromJson(json, GameData.class);*/
+            String realColor = color.toUpperCase();
+            JoinRegister join = new JoinRegister(realColor, gameID);
+
+
+            this.makeRequest("PUT", path, join, null, this.thisAuth.getAuthString());
+
         } catch (Exception exception) {
             throw new Exception(exception.getMessage());
         }
     }
-    public void observeGame(int gameID) throws Exception {
-        try {
-            var path = String.format("/games/%d", gameID);
-            this.makeRequest("PUT",path, gameID, null,this.thisAuth.getAuthString());
-        } catch (Exception exception) {
-            throw new Exception(exception.getMessage());
-        }
-    }
+
 
 
     public UserData addUser(UserData user) throws Exception {
@@ -102,7 +110,14 @@ public class ServerFacade {
 
         return this.makeRequest("POST", path, user, UserData.class,null);
     }
-
+    public void observeGame(int gameID) throws Exception {
+        try {
+            var path = String.format("/games/%d", gameID);
+            this.makeRequest("PUT",path, gameID, null,this.thisAuth.getAuthString());
+        } catch (Exception exception) {
+            throw new Exception(exception.getMessage());
+        }
+    }
 
 
 
@@ -119,8 +134,6 @@ public class ServerFacade {
             if (Objects.equals(method, "GET")) {
                 http.setDoOutput(false);
             }
-
-
 
             writeBody(request, http);
             http.connect();

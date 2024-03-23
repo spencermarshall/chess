@@ -197,7 +197,7 @@ public class ServerFacadeTests {
     public void joinGamePositive() throws Exception {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
-        user.register(username, password, email);
+        user.register("checkUsername", password, email);
         var authData = facade.addUser(user);
         GameData game = new GameData();
         game.setGameName("testGameName");
@@ -205,8 +205,8 @@ public class ServerFacadeTests {
         facade.createGame(game);
         String list = facade.listGames().toString();
         facade.joinGame(1,"black");
-        //todo some other function call idk
-        fail();
+        String check = facade.listGames().toString();
+        assertTrue(check.contains("checkUsername"));//this is username so if it contains then yah it works
     }
     @Test
     @Order(12)
@@ -216,12 +216,18 @@ public class ServerFacadeTests {
         UserData fakeUser = new UserData();
         user.register(username, password, email);
         var authData = facade.addUser(user);
+        facade.login(user);
+
         GameData game = new GameData();
         facade.createGame(game);
         String list = facade.listGames().toString();
-        facade.joinGame(4,"black"); //invalid id, game does not exist
-        //todo maybe assert throw, idk
-        fail();
+        try {
+            facade.joinGame(4,"black"); //invalid id, game does not exist
+            fail();
+        } catch (Exception ex) {
+            assertTrue(true);
+        }
+
     }
     @Test
     @Order(13)
@@ -232,11 +238,13 @@ public class ServerFacadeTests {
         user.register(username, password, email);
         var authData = facade.addUser(user);
         GameData game = new GameData();
+
+        facade.login(user);
         facade.createGame(game);
         String list = facade.listGames().toString();
         facade.joinGame(1,""); //observe first game ID, empty string indicates no color so we are observe but idk how to check
-        //todo idk how to check this, maybe write a new function
-        fail();
+        String observeList = facade.listGames().toString(); //to make sure observe did not update anything in the games
+        assertEquals(list,observeList);
     }
 
     //todo, there might be more tests for observing or something else?

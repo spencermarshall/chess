@@ -171,7 +171,9 @@ public class ChessClient {
 
 
         if (observe) {
-            server.observeGame(gameID);
+            server.joinGame(gameID, "");
+
+          //  server.observeGame(gameID);
             return "successfully observing";
         }
         else {
