@@ -1,7 +1,7 @@
 package server;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dataAccess.DataAccessException;
+import chess.JoinRegister;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
@@ -238,29 +238,25 @@ public class Server {
     private Object joinGame(Request req, Response res) throws DataAccessException {
         res.status(200); //200 is success
         String header = req.headers("Authorization");
-        String body = req.body();
-        body = body.toUpperCase(); //makes it all capitalized
-        String color = "EMPTY";
-        if (body.contains("WHITE")) {
-            color = "WHITE";
-        }
-        else if (body.contains("BLACK")) {
-            color = "BLACK";
-        }
+
         boolean validAuthToken = false;
         try {
             validAuthToken = this.authService.verifyAuth(header);
         } catch (DataAccessException errorMessage) {
             return error401(res);
         }
-        //verify gameID exists
-        String gameID = body.substring(body.indexOf("gameID")+8);
-        gameID = gameID.substring(0,gameID.length()-1);
+        var joinReg = new Gson().fromJson(req.body(), JoinRegister.class);
+        int gameID =joinReg.getGameID();
+        String color =joinReg.getPlayerColor();
+        color = color.toUpperCase();
         String username = this.authService.getUsername(header);
-        int intGameID = Integer.parseInt(gameID);
+
+        //verify gameID exists %%%%%% IVE UPDATED THIS A BIT SO IT USES JOINREG CLASS, IT MIGHT BE WRONG FR
+
+
         GameData myGame = null;
         try {
-            myGame = this.gameService.getGame(intGameID);
+            myGame = this.gameService.getGame(gameID);
 
         } catch (DataAccessException error) {
             //game id does not exist bruh
@@ -278,7 +274,7 @@ public class Server {
                 return error403(res);
             }
             //else add them
-            this.gameService.setColor(intGameID,color, username);
+            this.gameService.setColor(gameID,color, username);
         }
         else if (color.equals("WHITE")) {
             if (!Objects.equals(myGame.getWhiteUsername(), null)) {
@@ -286,7 +282,7 @@ public class Server {
                 return error403(res);
             }
             //else add them
-            this.gameService.setColor(intGameID,color, username);
+            this.gameService.setColor(gameID,color, username);
         }
         //else we chose a color and it is available, so join
         return "{}";

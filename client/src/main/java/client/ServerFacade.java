@@ -1,17 +1,13 @@
 package client;
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
+import chess.JoinRegister;
 import com.google.gson.Gson;
 //import exception.ResponseException;
-import com.google.gson.JsonObject;
 import model.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

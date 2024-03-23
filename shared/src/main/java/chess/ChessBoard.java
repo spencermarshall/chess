@@ -13,6 +13,9 @@ public class ChessBoard {
     public ChessBoard() {
         resetBoard();
     }
+    public void setBoard(Object squares) {
+        this.squares =(ChessPiece[][]) squares;
+    }
 
     public String toString()
     {
