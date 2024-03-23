@@ -211,7 +211,7 @@ public class ServerFacadeTests {
     @Test
     @Order(12)
     @DisplayName("Join Game Negative")
-    public void joinGameNegative() throws Exception {
+    public void JoinGameNegative() throws Exception {
         UserData user = new UserData();
         UserData fakeUser = new UserData();
         user.register(username, password, email);
