@@ -169,11 +169,13 @@ public class ChessClient {
            color = params[1];
        }
 
-       server.joinGame(gameID,color);
+
         if (observe) {
+            server.observeGame(gameID);
             return "successfully observing";
         }
         else {
+            server.joinGame(gameID,color);
             return "successfully joined";
         }
     }
