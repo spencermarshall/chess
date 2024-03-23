@@ -33,6 +33,11 @@ public class ServerFacade {
         this.usernameAuth = new HashMap<UserData, AuthData>();
         this.usernameToUserData = new HashMap<String, UserData>();
     }
+    public ServerFacade(int port) {
+        serverUrl = "http://localhost:"+port;
+        this.usernameAuth = new HashMap<UserData, AuthData>();
+        this.usernameToUserData = new HashMap<String, UserData>();
+    }
 
 
     //i made this lol
