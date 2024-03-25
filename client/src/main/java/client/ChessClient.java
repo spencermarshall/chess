@@ -32,7 +32,7 @@ public class ChessClient {
 
     }
 
-    public String eval(String input) {
+    public String eval(String input)  {
         try {
             var tokens = input.toLowerCase().split(" ");
             char ws = 's';
@@ -41,15 +41,17 @@ public class ChessClient {
             String output = "";
             boolean quit = false;
             return switch (cmd) {
+
                 case "quit" -> quit();
-                case "login" -> login(params);
-                case "register" -> register(params);
-                case "logout" -> logOut();
-                case "list" -> list();
-                case "create" -> createGame(params);
-                case "join" -> joinGame(params);
-                case "observe" -> joinGame(params); //this is joinGame() again cuz color is empty; function can handle both
-                default -> help();
+                case "login" ->login(params);
+                case "logout"->logOut();
+                case "list"->list();
+                case "create"-> createGame(params);
+                case "join"-> joinGame(params);
+                case "observe"-> joinGame(params); //this is joinGame() again cuz color is empty; function can handle both
+                case "register"-> register(params);
+                default-> help();
+
 
 
             };
@@ -69,14 +71,23 @@ public class ChessClient {
        for (int i = 0; i < listGames.size(); ++i) {
            output.append("Game ID: ");
            double gameID =(double) listGames.get(i).get("gameID");
+           String whiteUsername = (String) listGames.get(i).get("whiteUsername");
+           String blackUsername = (String) listGames.get(i).get("blackUsername");
+           if (whiteUsername == null) {
+               whiteUsername = "[EMPTY]";
+           }
+           if (blackUsername == null) {
+               blackUsername = "[EMPTY]";
+           }
            output.append((int)gameID);
            output.append(" Game Name: ");
            output.append(listGames.get(i).get("gameName"));
            //todo add white username and black
            output.append(" White Username: ");
-           output.append("[WHITE USERNAME]");
+           output.append(whiteUsername);
            output.append(" Black Username: ");
-           output.append("[BLACK USERNAME]\n");
+           output.append(blackUsername);
+           output.append("\n");
        }
        return output.toString();
     }
@@ -94,7 +105,7 @@ public class ChessClient {
     }
 
     public String login(String... params) throws Exception {
-        if (params.length == 2) {
+        if (params.length == 2 || params.length == 3) {
             //username and password is what the user typed in
             String username = params[0];
             String password = params[1];
@@ -125,9 +136,11 @@ public class ChessClient {
             UserData user = new UserData();
             user.register(username, password, email);
             server.addUser(user);
+            login(params);
 
 
-            return String.format("You are registered as %s. You may now login if desired. :)", username);
+            return String.format("You are registered as %s.:)", username);
+
         }
         throw new Exception("Expected: register <username> <password> <email>");
     }
