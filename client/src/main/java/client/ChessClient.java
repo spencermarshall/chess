@@ -1,4 +1,5 @@
 package client;
+import com.google.gson.JsonObject;
 import model.*;
 
 import com.google.gson.Gson;
@@ -60,10 +61,8 @@ public class ChessClient {
 
     public String list() throws Exception {
        assert this.alreadyLoggedIn;
-       var allGames = server.listGames();
-       if (allGames == "") {
-           return "There are no games to display :)";
-       }
+       Object allGames = server.listGames();
+
        StringBuilder output = new StringBuilder();
        Map<String, ArrayList> test =(Map<String, ArrayList>) allGames;
        ArrayList<Map> listGames = test.get("games");
@@ -173,19 +172,9 @@ public class ChessClient {
         if (observe) {
             color="";
         }
-        ArrayList joinedGame = (ArrayList) server.joinGame(gameID,color);
-        for (int r = 0; r < joinedGame.size(); ++r) {
-            ArrayList row =(ArrayList) joinedGame.get(r);
-            for (int c = 0; c < row.size(); ++c) {
-                Object item = row.get(c);
-                if (item == null) {
-                    continue;
-                }
-                int h = 3;
-            }
-        }
+        String joinedGame = server.joinGame(gameID,color);
 
-        return joinedGame.toString();
+        return joinedGame;
 
 
     }

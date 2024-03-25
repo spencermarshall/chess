@@ -187,7 +187,9 @@ public class Server {
 
         if (allGames == null || allGames.isEmpty())
         {
-            return new Gson().toJson(Map.of("games",allGames));
+            Map<String, String> empty = new HashMap<>();
+            empty.put("games","");
+            return new Gson().toJson(empty);
 
 
 
@@ -204,9 +206,15 @@ public class Server {
         JsonObject me = new JsonObject();
         String listGame = new Gson().toJson(this.games);
         if (this.games.length == 0) {
-            return new Gson().toJson(Map.of("games",""));
-        }
+          //  return new Gson().toJson(Map.of("games",""));
+            Map<String, String> empty = new HashMap<>();
+            empty.put("games","");
+            return new Gson().toJson(empty);
 
+
+        }
+        Map<String, GameData[]> games = new HashMap<>();
+        games.put("games",this.games);
         return new Gson().toJson(Map.of("games",this.games));
     }
     private Object createGame(Request req, Response res) throws DataAccessException {

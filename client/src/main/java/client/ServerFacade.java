@@ -1,9 +1,11 @@
 package client;
 import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessPosition;
 import chess.JoinRegister;
 import com.google.gson.Gson;
 //import exception.ResponseException;
+import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import model.*;
 import java.net.URL;
@@ -63,15 +65,9 @@ public class ServerFacade {
         var path = "/game";
         this.makeRequest("POST", path, game, GameData.class,this.thisAuth.getAuthString());
     }
-    public Object listGames() throws Exception {
+    public Map listGames() throws Exception {
         var path = "/game";
-        record listGameResponse() { }
-        var response = this.makeRequest("GET", path, null, Object.class, this.thisAuth.getAuthString()); ///todo idk if this last parameter is correct
-        LinkedTreeMap temp = (LinkedTreeMap)response;
-        ArrayList temp2 =(ArrayList) temp.get("games");
-        if (temp2.size() == 0) {
-            return "";
-        }
+        Map<String, GameData[]> response = this.makeRequest("GET", path, null, Map.class, this.thisAuth.getAuthString()); ///todo idk if this last parameter is correct
         return response;
     }
 
@@ -82,30 +78,61 @@ public class ServerFacade {
 
 
     //pretty sure this function below is incorrect tbh
-    public Object joinGame(int gameID, String color) throws Exception {
+    public String joinGame(int gameID, String color) throws Exception {
         try {
             //if color is "" then it's observer
             String path= "/game";
 
             String realColor = color.toUpperCase();
             JoinRegister join = new JoinRegister(realColor, gameID);
-            Map item =(Map) listGames();
-            ArrayList temp =(ArrayList) item.get("games");
-            LinkedTreeMap temp2 =(LinkedTreeMap) temp.get(0);
             this.makeRequest("PUT", path, join, null, this.thisAuth.getAuthString());
-            LinkedTreeMap temp3 =(LinkedTreeMap) temp2.get("myGame");
-            ChessGame retGame = new ChessGame();
-            boolean isWhite =(boolean) temp3.get("isWhiteTurn");
-            if (isWhite) {
-                retGame.setTeamTurn(ChessGame.TeamColor.WHITE);
+            ChessBoard userBoard = new ChessBoard();
+            StringBuilder output = new StringBuilder();
+            output.append("  h g f e d c b a \n");
+            for (int r = 1; r < 9; ++r)
+            {
+                output.append(r);
+                output.append(" ");
+                for (int c = 1; c < 9; ++c)
+                {
+                    ChessPosition pos = new ChessPosition(r,c);
+                    if (userBoard.getPiece(pos) == null) {
+                        output.append("  ");
+                    }
+                    else {
+                        output.append(userBoard.getPiece(pos));
+                        output.append(" ");
+                    }
+
+                }
+                output.append(r).append(" \n");
             }
-            else {
-                retGame.setTeamTurn(ChessGame.TeamColor.BLACK);
+            output.append("  a b c d e f g h \n");
+            output.append("\n\n\n");
+            output.append("  a b c d e f g h \n");
+            for (int r = 8; r >0; --r)
+            {
+                output.append(r);
+                output.append(" ");
+                for (int c = 1; c < 9; ++c)
+                {
+                    ChessPosition pos = new ChessPosition(r,c);
+                    if (userBoard.getPiece(pos) == null) {
+                        output.append("  ");
+                    }
+                    else {
+                        output.append(userBoard.getPiece(pos));
+                        output.append(" ");
+                    }
+
+                }
+                output.append(r).append(" \n");
             }
-            ChessBoard at = new ChessBoard();;
-            LinkedTreeMap temp4 =(LinkedTreeMap) temp3.get("board");
-            Object board = temp4.get("squares");
-            return board;
+            output.append("  h g f e d c b a \n");
+
+
+
+            return output.toString();
 
         } catch (Exception exception) {
             throw new Exception(exception.getMessage()+" Someone already took that color :/");
