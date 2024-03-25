@@ -25,6 +25,7 @@ public class Server {
             this.userService = new UserService();
             this.gameService = new GameService();
             this.authService = new AuthService();
+            this.games = new GameData[9];
             //this.games = new GameData;
 
         }
@@ -161,7 +162,7 @@ public class Server {
         return "{something wrong}";
 
     }
-    private Object listGames(Request req, Response res) throws DataAccessException {
+    private String listGames(Request req, Response res) throws DataAccessException {
         String header=req.headers("Authorization");
         JsonObject success=new JsonObject();
 
@@ -178,7 +179,7 @@ public class Server {
         {
             //success.addProperty("games:", "[]");
             //return success;
-            return error401(res);
+            return error401(res).toString();
         }
         res.status(200); //200 is success
         res.type("application/json");
@@ -186,8 +187,8 @@ public class Server {
 
         if (allGames == null || allGames.isEmpty())
         {
-            JsonObject nothing = new JsonObject();
             return new Gson().toJson(Map.of("games",allGames));
+
 
 
         }
@@ -205,6 +206,7 @@ public class Server {
         if (this.games.length == 0) {
             return new Gson().toJson(Map.of("games",""));
         }
+
         return new Gson().toJson(Map.of("games",this.games));
     }
     private Object createGame(Request req, Response res) throws DataAccessException {

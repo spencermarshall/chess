@@ -1,13 +1,17 @@
 package client;
+import chess.ChessBoard;
+import chess.ChessGame;
 import chess.JoinRegister;
 import com.google.gson.Gson;
 //import exception.ResponseException;
+import com.google.gson.internal.LinkedTreeMap;
 import model.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -63,6 +67,11 @@ public class ServerFacade {
         var path = "/game";
         record listGameResponse() { }
         var response = this.makeRequest("GET", path, null, Object.class, this.thisAuth.getAuthString()); ///todo idk if this last parameter is correct
+        LinkedTreeMap temp = (LinkedTreeMap)response;
+        ArrayList temp2 =(ArrayList) temp.get("games");
+        if (temp2.size() == 0) {
+            return "";
+        }
         return response;
     }
 
@@ -73,30 +82,33 @@ public class ServerFacade {
 
 
     //pretty sure this function below is incorrect tbh
-    public void joinGame(int gameID, String color) throws Exception {
+    public Object joinGame(int gameID, String color) throws Exception {
         try {
             //if color is "" then it's observer
             String path= "/game";
-          /*  String selectedGame = null;
-            //create game data
-            //request is JSON string, pass it in as a request
 
-
-            Map list = (Map) listGames();
-            ArrayList addingGame2 =(ArrayList) list.get("games");
-            Object test = addingGame2.get(0);
-            String json = new Gson().toJson(test);
-          //  Map test =(Map) addingGame2.get(0);
-        //    Object test2 = test.get("myGame");
-            GameData addingGame = new Gson().fromJson(json, GameData.class);*/
             String realColor = color.toUpperCase();
             JoinRegister join = new JoinRegister(realColor, gameID);
-
-
+            Map item =(Map) listGames();
+            ArrayList temp =(ArrayList) item.get("games");
+            LinkedTreeMap temp2 =(LinkedTreeMap) temp.get(0);
             this.makeRequest("PUT", path, join, null, this.thisAuth.getAuthString());
+            LinkedTreeMap temp3 =(LinkedTreeMap) temp2.get("myGame");
+            ChessGame retGame = new ChessGame();
+            boolean isWhite =(boolean) temp3.get("isWhiteTurn");
+            if (isWhite) {
+                retGame.setTeamTurn(ChessGame.TeamColor.WHITE);
+            }
+            else {
+                retGame.setTeamTurn(ChessGame.TeamColor.BLACK);
+            }
+            ChessBoard at = new ChessBoard();;
+            LinkedTreeMap temp4 =(LinkedTreeMap) temp3.get("board");
+            Object board = temp4.get("squares");
+            return board;
 
         } catch (Exception exception) {
-            throw new Exception(exception.getMessage());
+            throw new Exception(exception.getMessage()+" Someone already took that color :/");
         }
     }
 

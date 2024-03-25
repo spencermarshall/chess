@@ -61,8 +61,8 @@ public class ChessClient {
     public String list() throws Exception {
        assert this.alreadyLoggedIn;
        var allGames = server.listGames();
-       if (allGames == null) {
-           return "no games lol";
+       if (allGames == "") {
+           return "There are no games to display :)";
        }
        StringBuilder output = new StringBuilder();
        Map<String, ArrayList> test =(Map<String, ArrayList>) allGames;
@@ -171,15 +171,23 @@ public class ChessClient {
 
 
         if (observe) {
-            server.joinGame(gameID, "");
+            color="";
+        }
+        ArrayList joinedGame = (ArrayList) server.joinGame(gameID,color);
+        for (int r = 0; r < joinedGame.size(); ++r) {
+            ArrayList row =(ArrayList) joinedGame.get(r);
+            for (int c = 0; c < row.size(); ++c) {
+                Object item = row.get(c);
+                if (item == null) {
+                    continue;
+                }
+                int h = 3;
+            }
+        }
 
-          //  server.observeGame(gameID);
-            return "successfully observing";
-        }
-        else {
-            server.joinGame(gameID,color);
-            return "successfully joined";
-        }
+        return joinedGame.toString();
+
+
     }
 
 
