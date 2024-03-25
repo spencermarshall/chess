@@ -122,7 +122,7 @@ public class ChessClient {
             visitorName = String.join("-", params);
           //  this.authToken = server.usernameAuth.get(loginUser);
 
-            return String.format("You signed in as %s.\n You may know play Chess games :)\n These are the available commands \n"+help(), visitorName);
+            return String.format("You signed in as %s.\n You may know play Chess games :)\n These are the available commands \n"+help(), username);
         }
         throw new Exception("Expected: your username and password lol");
     }
@@ -152,7 +152,7 @@ public class ChessClient {
         this.alreadyLoggedIn = false; //now we are logged out
         this.username = "";
         this.authToken = null;
-        return String.format("%s left the arena", visitorName);
+        return String.format("%s left the chess arena", username);
 
     }
 
